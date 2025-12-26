@@ -32,7 +32,52 @@
 /**
  * 模板系统版本号，每次更新 templates.js 或 banks.js 时请更新此版本号
  */
-export const SYSTEM_DATA_VERSION = "0.7.4";
+export const SYSTEM_DATA_VERSION = "0.7.5";
+
+export const TEMPLATE_BRAND_CONCEPT_OBJECT = {
+  cn: `### 品牌概念单品 (Brand Concept Object)
+一张由 {{company}} 设计并概念化的高端、光滑的概念艺术杂志编辑照片，展示一个独特且出乎意料的功能性物品。
+
+**1. 概念与物品 (AI 发明):**
+基于 {{company}} 的设计哲学、品牌传承和材料语言，通过品牌的视角重新诠释并设计一个全新的实用单品：{{design_item}}。该物品应具有雕塑感，同时具备功能性，且绝非该品牌常规生产的服装或包袋。
+
+**2. 材质与细节:**
+该物品由 {{company}} 标志性的超优质、高触感材料制成（例如：具有岁月的异域皮革、拉丝航空级钛金属、雕刻哑光陶瓷、模制碳纤维或高科技时尚面料）。每个细节都超写实：清晰的缝线、微观材料纹理、精密刻印以及复杂的材质对比。
+
+**3. 摄影与灯光:**
+使用飞思中画幅相机配合 100mm 微距镜头拍摄。极浅的景深，焦点清晰地聚集在物品的核心细节上，背景呈现出奶油般细腻平滑的虚化效果。灯光是复杂的工作室柔光箱布光：柔和、包裹式的补光，配合精准的轮廓光，以突出轮廓和材质纹理。
+
+**4. 环境:**
+纯净、超浅的马卡龙色调（如：脱饱和薄荷绿、浅粉色或乳白色）的无缝工作室环形背景，无阴影。
+
+**5. 布局与 UI 元素:**
+- **右下角:** {{company}} 的小型、低调、单色灰色 Logo。
+- **左下角:** 小型、极简的单色灰色文本描述。格式：“CONCEPT STUDY: [产品名称]. MATERIAL: [主要材质]. SS25。”字体风格类似 Manrope Regular，字间距紧凑。
+
+**规格:**
+- **画幅:** {{ratio}}`,
+  en: `### Brand Concept Object
+A high-end, glossy concept art magazine editorial photograph of a unique, unexpected functional object conceptualized and designed by {{company}}.
+
+**1. The Concept & Object (AI Invention):**
+Based on the design philosophy, heritage, and material vocabulary of {{company}}, reinterpret and design a novel utility product: {{design_item}}. The object should feel sculptural yet functional, and definitely NOT a standard item like clothing or bags usually produced by the brand.
+
+**2. Materials & Details (Hyper-Premium):**
+The object is constructed from ultra-premium, highly tactile materials characteristic of {{company}} (e.g., patinated exotic leather, brushed aerospace-grade titanium, sculpted matte ceramics, molded carbon fiber, or technical high-fashion textiles). Every detail is hyper-realistic: visible stitching, microscopic material grain, precision engravings, and complex texture contrasts.
+
+**3. Photography & Lighting (Cinematic Studio):**
+Shot on a medium format Phase One camera with a 100mm macro lens. Extremely shallow depth of field, with sharp focus on the hero details of the object and a creamy, smooth bokeh background. The lighting is sophisticated studio softbox lighting: gentle, enveloping fill light with precise rim lighting to accentuate contours and material textures.
+
+**4. Environment:**
+A seamless, impeccably clean studio cyclorama background in a pure, ultra-light pastel tone (e.g., desaturated mint, pale blush, or off-white), free of shadows.
+
+**5. Layout & UI Elements (Strict Placement):**
+- **Bottom Right Corner:** A small, understated, monochrome gray logo of {{company}}.
+- **Bottom Left Corner:** Small, minimalist monochrome gray text. Format: "CONCEPT STUDY: [Invented Product Name]. MATERIAL: [Main Materials]. SS25." Font styled like Manrope Regular with very tight tracking.
+
+**Specifications:**
+- **Ratio:** {{ratio}}`
+};
 
 export const TEMPLATE_WOODEN_ART_XMAS = {
   cn: `### 激光切割木质层叠艺术 (Wood Art & Xmas)
@@ -1135,6 +1180,20 @@ export const INITIAL_TEMPLATES_CONFIG = [
     selections: {
       "xmas_theme": { cn: "抽象圣诞树", en: "an abstract Christmas Tree" },
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
+    },
+    tags: ["产品", "创意", "摄影"],
+    language: ["cn", "en"]
+  },
+  {
+    id: "tpl_brand_concept_object",
+    name: { cn: "品牌概念单品", en: "Brand Concept Object" },
+    content: TEMPLATE_BRAND_CONCEPT_OBJECT,
+    imageUrl: "https://s3.bmp.ovh/imgs/2025/12/26/5d4f93892d119335.png",
+    author: "官方",
+    selections: {
+      "company": { cn: "Apple", en: "Apple" },
+      "design_item": { cn: "无人机", en: "Drone" },
+      "ratio": { cn: "1:1", en: "1:1 Square" }
     },
     tags: ["产品", "创意", "摄影"],
     language: ["cn", "en"]
