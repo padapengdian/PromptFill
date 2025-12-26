@@ -19,6 +19,18 @@ export const SettingsView = ({
   
   const updateLogs = language === 'cn' ? [
     { 
+      version: 'V0.6.1', 
+      date: '2025年12月26日', 
+      time: '11:00 AM',
+      title: '联动组逻辑修复与版本升级',
+      type: 'UPDATE',
+      content: [
+        '修复了联动组匹配过于宽松的 Bug，现在仅限相同组号联动。',
+        '全站版本号同步升级至 V0.6.1，包含浏览器标题及各处 UI 标识。',
+        '优化了暗色模式下的部分图标对比度及 UI 细节。'
+      ]
+    },
+    { 
       version: 'V0.6.0', 
       date: '2025年12月24日', 
       time: '02:00 PM',
@@ -118,6 +130,18 @@ export const SettingsView = ({
       ]
     }
   ] : [
+    { 
+      version: 'V0.6.1', 
+      date: 'Dec 26, 2025', 
+      time: '11:00 AM',
+      title: 'Linkage Group Fix & Version Bump',
+      type: 'UPDATE',
+      content: [
+        'Fixed bug where linkage groups were too loose; now only same groupId syncs.',
+        'Synchronized versioning to V0.6.1 across the entire app.',
+        'Optimized icon contrast and minor UI details in Dark Mode.'
+      ]
+    },
     { 
       version: 'V0.6.0', 
       date: 'Dec 24, 2025', 
@@ -261,7 +285,7 @@ export const SettingsView = ({
           </h1>
           <div className="flex items-center gap-3 mt-1">
             <span className={`text-[9px] font-black tracking-[0.1em] uppercase ${isDarkMode ? 'text-gray-600' : 'text-gray-500'}`}>
-              System V0.6.0
+              System V0.6.1
             </span>
             <div className={`w-1 h-1 rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}`} />
             <span className="text-[9px] font-black text-orange-500/80 tracking-[0.1em] uppercase">

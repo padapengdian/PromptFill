@@ -3,7 +3,7 @@
 一个专为 AI 绘画（GPT、Nano Banana 等）设计的**结构化提示词生成工具**。通过可视化的"填空"交互方式，帮助用户快速构建、管理和迭代复杂的 Prompt。
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/Version-0.6.0-orange.svg)
+![Version](https://img.shields.io/badge/Version-0.6.1-orange.svg)
 ![Data](https://img.shields.io/badge/Data-0.7.2-green.svg)
 ![React](https://img.shields.io/badge/React-18.x-61DAFB.svg)
 ![Vite](https://img.shields.io/badge/Vite-5.x-646CFF.svg)
@@ -15,7 +15,7 @@
 
 ## 📝 写在前面
 
-Prompt Fill 现已迭代至 **v0.6.0** 版本。本项目初衷是解决 AI 绘画过程中提示词难记忆、难管理、修改繁琐的问题。通过将 Prompt 结构化，让创作变得像"填空"一样简单。
+Prompt Fill 现已迭代至 **v0.6.1** 版本。本项目初衷是解决 AI 绘画过程中提示词难记忆、难管理、修改繁琐的问题。通过将 Prompt 结构化，让创作变得像"填空"一样简单。
 
 ### 🌟 目前进度与核心功能
 - **✅ 全面暗色模式支持**：支持桌面端与移动端的一键主题切换，夜间创作更护眼。
@@ -177,6 +177,11 @@ Prompt Fill 现已迭代至 **v0.6.0** 版本。本项目初衷是解决 AI 绘�
     *   引入更先进的模版分类与标签管理模式，支持无限层级的词库组织。
 
 ## 📝 更新日志
+
+### Version 0.6.1 (2025-12-26)
+*   **🔗 联动组逻辑修复**：修复了联动组匹配过于宽松的 Bug，现在仅限相同组号的相同变量联动，避免了 `_1` 和 `_2` 组互相影响。
+*   **🆙 全站版本号对齐**：同步升级了浏览器标题、桌面端/移动端设置页面、模版预览页等各处的版本号标识。
+*   **🎨 UI 细节微调**：优化了暗色模式下的部分图标对比度及 UI 交互反馈。
 
 ### Version 0.6.0 (2025-12-25)
 *   **🎨 UI 全面升级与暗色模式**：

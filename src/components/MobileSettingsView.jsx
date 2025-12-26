@@ -19,14 +19,21 @@ export const MobileSettingsView = ({
   // 完善后的更新日志 (同步桌面端内容)
   const updateLogs = language === 'cn' ? [
     { 
+      version: 'V0.6.1', 
+      date: '2025-12-26', 
+      title: '联动组逻辑修复',
+      content: [
+        '修复了联动组匹配过于宽松的 Bug，现在仅限相同组号联动',
+        '全站版本号同步升级至 V0.6.1'
+      ]
+    },
+    { 
       version: 'V0.6.0', 
       date: '2025-12-23', 
       title: 'UI 全面升级与极简重构',
       content: [
         '侧边栏采用 Morandi 色系重构，视觉更温暖优雅',
-        '模版列表引入极简标签与搜索框设计',
-        '词库配置卡片重绘，支持左侧主题色条',
-        '设置面板增加更新日志时间轴，风格高度统一'
+        '全面支持暗色模式，支持桌面端与移动端切换'
       ]
     },
     { 
@@ -51,14 +58,21 @@ export const MobileSettingsView = ({
     }
   ] : [
     { 
+      version: 'V0.6.1', 
+      date: '2025-12-26', 
+      title: 'Linkage Group Fix',
+      content: [
+        'Fixed bug where linkage groups were too loose',
+        'Updated version to V0.6.1 across the app'
+      ]
+    },
+    { 
       version: 'V0.6.0', 
       date: '2025-12-23', 
       title: 'UI Upgrade & Minimalist Refactor',
       content: [
-        'Sidebar refactored with Morandi palette for a warmer feel',
-        'Minimalist tags and search box for template list',
-        'Redrawn bank cards with theme color bars',
-        'Unified update log timeline in settings'
+        'Sidebar refactored with Morandi palette',
+        'Full support for Dark Mode'
       ]
     },
     { 
@@ -240,7 +254,7 @@ export const MobileSettingsView = ({
       )}
 
       <div className={`text-center pb-8 ${isDarkMode ? 'opacity-10' : 'opacity-20'}`}>
-        <p className={`text-[10px] font-black tracking-[0.3em] uppercase ${isDarkMode ? 'text-white' : 'text-black'}`}>Prompt Fill V0.6.0</p>
+        <p className={`text-[10px] font-black tracking-[0.3em] uppercase ${isDarkMode ? 'text-white' : 'text-black'}`}>Prompt Fill V0.6.1</p>
         <p className={`text-[9px] font-bold mt-1 ${isDarkMode ? 'text-white' : 'text-black'}`}>Made by CornerStudio</p>
       </div>
     </div>

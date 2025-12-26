@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Settings, List, Check, ChevronRight, ChevronDown, Plus, Trash2, X, ChevronUp, Pencil } from 'lucide-react';
+import { Settings, List, Check, ChevronRight, ChevronDown, Plus, Trash2, X, ChevronUp, Pencil, Search } from 'lucide-react';
 import { CATEGORY_STYLES, PREMIUM_STYLES } from '../constants/styles';
 import { getLocalized } from '../utils/helpers';
 
@@ -8,13 +8,27 @@ import { PremiumButton } from './PremiumButton';
 /**
  * 组件：词库分类块
  */
-const CategorySection = ({ catId, categories, banks, onInsert, onDeleteOption, onAddOption, onDeleteBank, onUpdateBankCategory, onStartAddBank, t, language, onTouchDragStart, isDarkMode }) => {
+const CategorySection = ({ catId, categories, banks, onInsert, onDeleteOption, onAddOption, onDeleteBank, onUpdateBankCategory, onStartAddBank, t, language, onTouchDragStart, isDarkMode, bankSearchQuery }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const category = categories[catId];
   
   if (!category) return null;
 
-  const catBanks = Object.entries(banks).filter(([_, bank]) => (bank.category || 'other') === catId);
+  const catBanks = Object.entries(banks).filter(([key, bank]) => {
+    const isInCategory = (bank.category || 'other') === catId;
+    if (!isInCategory) return false;
+    
+    if (!bankSearchQuery) return true;
+    
+    const query = bankSearchQuery.toLowerCase();
+    const bankLabel = getLocalized(bank.label, language).toLowerCase();
+    const matchesBankName = bankLabel.includes(query) || key.toLowerCase().includes(query);
+    const matchesOptions = bank.options.some(opt => 
+      getLocalized(opt, language).toLowerCase().includes(query)
+    );
+    
+    return matchesBankName || matchesOptions;
+  });
   
   // 如果该分类下没有词库，不显示
   if (catBanks.length === 0) return null;
@@ -56,18 +70,21 @@ const CategorySection = ({ catId, categories, banks, onInsert, onDeleteOption, o
                         language={language}
                         onTouchDragStart={onTouchDragStart}
                         isDarkMode={isDarkMode}
+                        bankSearchQuery={bankSearchQuery}
                     />
                 ))}
                 
                 {/* 新建词组按钮 */}
-                <button
-                    onClick={() => onStartAddBank(catId)}
-                    className={`w-full py-2.5 border-2 border-dashed rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 group/add mb-4 ${isDarkMode ? 'border-white/5 text-gray-600 hover:text-orange-400 hover:border-orange-500/30 hover:bg-orange-500/5' : 'border-gray-200/60 text-gray-400 hover:text-orange-600 hover:border-orange-300/50 hover:bg-orange-50/30'}`}
-                    title={t('add_bank_group')}
-                >
-                    <Plus size={16} className={`transition-colors ${isDarkMode ? 'text-gray-700 group-hover/add:text-orange-500' : 'text-gray-300 group-hover/add:text-orange-500'}`} />
-                    <span className="text-[11px] font-black uppercase tracking-widest">{t('add_bank_group')}</span>
-                </button>
+                {!bankSearchQuery && (
+                    <button
+                        onClick={() => onStartAddBank(catId)}
+                        className={`w-full py-2.5 border-2 border-dashed rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 group/add mb-4 ${isDarkMode ? 'border-white/5 text-gray-600 hover:text-orange-400 hover:border-orange-500/30 hover:bg-orange-500/5' : 'border-gray-200/60 text-gray-400 hover:text-orange-600 hover:border-orange-300/50 hover:bg-orange-50/30'}`}
+                        title={t('add_bank_group')}
+                    >
+                        <Plus size={16} className={`transition-colors ${isDarkMode ? 'text-gray-700 group-hover/add:text-orange-500' : 'text-gray-300 group-hover/add:text-orange-500'}`} />
+                        <span className="text-[11px] font-black uppercase tracking-widest">{t('add_bank_group')}</span>
+                    </button>
+                )}
             </div>
         )}
     </div>
@@ -77,10 +94,17 @@ const CategorySection = ({ catId, categories, banks, onInsert, onDeleteOption, o
 /**
  * 组件：可折叠的词库组
  */
-const BankGroup = ({ bankKey, bank, onInsert, onDeleteOption, onAddOption, onDeleteBank, onUpdateBankCategory, categories, t, language, onTouchDragStart, isDarkMode }) => {
+const BankGroup = ({ bankKey, bank, onInsert, onDeleteOption, onAddOption, onDeleteBank, onUpdateBankCategory, categories, t, language, onTouchDragStart, isDarkMode, bankSearchQuery }) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [isEditingCategory, setIsEditingCategory] = useState(false);
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+    // 如果有搜索词，且搜索词匹配到了词库名称或选项，则默认展开
+    React.useEffect(() => {
+        if (bankSearchQuery) {
+            setIsCollapsed(false);
+        }
+    }, [bankSearchQuery]);
 
     const categoryId = bank.category || 'other';
     const colorKey = categories[categoryId]?.color || 'slate';
@@ -95,6 +119,16 @@ const BankGroup = ({ bankKey, bank, onInsert, onDeleteOption, onAddOption, onDel
         // 移动端拖拽过于敏感，根据用户反馈，禁用移动端拖拽插入功能
         return;
     };
+
+    // 过滤选项
+    const filteredOptions = bank.options.filter(opt => {
+        if (!bankSearchQuery) return true;
+        const query = bankSearchQuery.toLowerCase();
+        // 如果词库名称已经匹配，则显示所有选项；否则只显示匹配的选项
+        const bankLabel = getLocalized(bank.label, language).toLowerCase();
+        if (bankLabel.includes(query) || bankKey.toLowerCase().includes(query)) return true;
+        return getLocalized(opt, language).toLowerCase().includes(query);
+    });
 
     return (
         <div 
@@ -199,7 +233,7 @@ const BankGroup = ({ bankKey, bank, onInsert, onDeleteOption, onAddOption, onDel
                         )}
 
                         <div className="flex flex-col gap-1.5 mb-4">
-                            {bank.options.map((opt, idx) => (
+                            {filteredOptions.map((opt, idx) => (
                                 <div key={idx} className={`group/opt flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl text-[14px] font-semibold transition-all duration-200 ${isDarkMode ? 'bg-transparent hover:bg-white/5 text-gray-400 hover:text-gray-200' : 'bg-transparent hover:bg-white/60 text-gray-700 hover:text-gray-900'}`}>
                                     <span className="truncate select-text" title={getLocalized(opt, language)}>{getLocalized(opt, language)}</span>
                                     <button 
@@ -562,6 +596,7 @@ export const BanksSidebar = React.memo(({
   globalContainerStyle
 }) => {
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const [bankSearchQuery, setBankSearchQuery] = useState("");
 
   return (
     <>
@@ -613,7 +648,32 @@ export const BanksSidebar = React.memo(({
               {t('manage_categories')}
           </PremiumButton>
         </div>
-        <p className={`text-[13px] font-bold leading-relaxed px-1 opacity-80 ${isDarkMode ? 'text-gray-600' : 'text-gray-500'}`}>{t('bank_subtitle')}</p>
+        <div className="flex flex-col gap-4">
+            {/* 搜索框 */}
+            <div className="relative group">
+                <Search className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors pointer-events-none ${isDarkMode ? 'text-gray-600 group-focus-within:text-orange-500' : 'text-gray-400 group-focus-within:text-orange-500'}`} size={16} />
+                <input 
+                  type="text" 
+                  placeholder={t('search_templates')} // 这里可以考虑新增一个翻译项 search_banks
+                  value={bankSearchQuery} 
+                  onChange={(e) => setBankSearchQuery(e.target.value)} 
+                  style={isDarkMode ? {
+                    background: '#2A2726',
+                    border: '1px solid transparent',
+                    backgroundImage: 'linear-gradient(#2A2726, #2A2726), linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%)',
+                    backgroundOrigin: 'border-box',
+                    backgroundClip: 'padding-box, border-box',
+                  } : {
+                    background: '#E8E3DD',
+                    border: '1px solid transparent',
+                    backgroundImage: 'linear-gradient(#E8E3DD, #E8E3DD), linear-gradient(0deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%)',
+                    backgroundOrigin: 'border-box',
+                    backgroundClip: 'padding-box, border-box',
+                  }}
+                  className={`w-full pl-11 pr-4 py-3 rounded-2xl text-[14px] font-medium transition-all outline-none focus:ring-4 focus:ring-orange-500/5 ${isDarkMode ? 'text-gray-200 placeholder-gray-600' : 'text-gray-700 placeholder-gray-400'}`} 
+                />
+            </div>
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto p-5 pb-24 md:pb-20 custom-scrollbar">
@@ -636,6 +696,7 @@ export const BanksSidebar = React.memo(({
                         language={language}
                         onTouchDragStart={onTouchDragStart}
                         isDarkMode={isDarkMode}
+                        bankSearchQuery={bankSearchQuery}
                     />
                 ))}
              </div>
@@ -656,6 +717,7 @@ export const BanksSidebar = React.memo(({
                         language={language}
                         onTouchDragStart={onTouchDragStart}
                         isDarkMode={isDarkMode}
+                        bankSearchQuery={bankSearchQuery}
                     />
                 ))}
              </div>
@@ -678,6 +740,7 @@ export const BanksSidebar = React.memo(({
                       language={language}
                       onTouchDragStart={onTouchDragStart}
                       isDarkMode={isDarkMode}
+                      bankSearchQuery={bankSearchQuery}
                   />
               ))}
           </div>

@@ -586,7 +586,7 @@ const MobileAnimatedSlogan = React.memo(({ isActive, language, isDarkMode }) => 
 
 const App = () => {
   // 当前应用代码版本 (必须与 package.json 和 version.json 一致)
-  const APP_VERSION = "0.6.0";
+  const APP_VERSION = "0.6.1";
 
   // 临时功能：瀑布流样式管理
   const [masonryStyleKey, setMasonryStyleKey] = useState('poster');
@@ -707,6 +707,8 @@ const App = () => {
     setIsLampHovered(true);
   };
   
+  const [updateNoticeType, setUpdateNoticeType] = useState(null); // 'app' | 'data' | null
+  
   // 检查系统模版更新
   // 检测数据版本更新 (模板与词库)
   useEffect(() => {
@@ -731,15 +733,17 @@ const App = () => {
         if (response.ok) {
           const data = await response.json();
           
-          // 检查应用版本更新 - 使用代码内常量 APP_VERSION 进行比对
+          // 检查应用版本更新
           if (data.appVersion && data.appVersion !== APP_VERSION) {
+            setUpdateNoticeType('app');
             setShowAppUpdateNotice(true);
+            return; // 优先提示程序更新
           }
           
-          // 检查数据版本更新（模板和词库）
-          // 只有当服务器版本不同于已应用版本，且我们也还没在代码里包含这个版本时才提示
-          if (data.dataVersion && data.dataVersion !== lastAppliedDataVersion && data.dataVersion !== SYSTEM_DATA_VERSION) {
-            setShowDataUpdateNotice(true);
+          // 检查数据定义更新 (存在于代码中，但服务器上更新了)
+          if (data.dataVersion && data.dataVersion !== SYSTEM_DATA_VERSION) {
+            setUpdateNoticeType('data');
+            setShowAppUpdateNotice(true);
           }
         }
       } catch (e) {
@@ -2708,6 +2712,7 @@ const App = () => {
             posterScrollRef={posterScrollRef}
             setIsPosterAutoScrollPaused={setIsPosterAutoScrollPaused}
             currentMasonryStyle={MASONRY_STYLES[masonryStyleKey]}
+            masonryStyleKey={masonryStyleKey}
             AnimatedSlogan={isMobileDevice ? MobileAnimatedSlogan : AnimatedSlogan}
             isSloganActive={!zoomedImage}
             t={t}
@@ -3541,7 +3546,7 @@ const App = () => {
             </div>
             <div className="flex-1">
               <p className="text-sm font-medium leading-snug">
-                {t('app_update_available_msg')}
+                {updateNoticeType === 'app' ? t('app_update_available_msg') : t('data_update_available_msg')}
               </p>
             </div>
             <button

@@ -31,10 +31,42 @@ export const DiscoveryView = React.memo(({
   setIsSortMenuOpen,
   sortOrder,
   setSortOrder,
-  setRandomSeed,
-  globalContainerStyle
-}) => {
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    setRandomSeed,
+    globalContainerStyle,
+    masonryStyleKey
+  }) => {
+    const [columnCount, setColumnCount] = useState(1);
+    const [columnGap, setColumnGap] = useState(20); // Default to gap-5 (20px)
+  
+    useEffect(() => {
+      const getColumnInfo = () => {
+        const width = window.innerWidth;
+        if (masonryStyleKey === 'poster') {
+          return { count: width >= 1280 ? 3 : (width >= 640 ? 2 : 1), gap: 20 };
+        } else if (masonryStyleKey === 'classic' || masonryStyleKey === 'minimal') {
+          const count = width >= 1280 ? 4 : (width >= 1024 ? 3 : (width >= 640 ? 2 : 1));
+          return { count, gap: 24 }; // gap-6
+        } else if (masonryStyleKey === 'compact') {
+          const count = width >= 1280 ? 5 : (width >= 1024 ? 4 : (width >= 640 ? 3 : 2));
+          return { count, gap: 12 }; // gap-3
+        } else if (masonryStyleKey === 'list') {
+          return { count: 1, gap: 16 }; // gap-4
+        }
+        return { count: 1, gap: 20 };
+      };
+  
+      const handleResize = () => {
+        const info = getColumnInfo();
+        setColumnCount(info.count);
+        setColumnGap(info.gap);
+      };
+  
+      handleResize();
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, [masonryStyleKey]);
+  
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   if (isMobile) {
     // ... 保持移动端逻辑不变
@@ -125,39 +157,45 @@ export const DiscoveryView = React.memo(({
                   onMouseLeave={() => setIsPosterAutoScrollPaused(false)}
               >
                   <div className="h-full w-full py-8 lg:py-12 px-6 lg:px-12">
-                      <div className={currentMasonryStyle.container}>
-                          {filteredTemplates.map(t_item => (
-                                  <div 
-                                      key={t_item.id}
-                                      onClick={() => {
-                                          setZoomedImage(t_item.imageUrl);
-                                      }}
-                                      className={`break-inside-avoid cursor-pointer group mb-5 transition-shadow duration-300 relative overflow-hidden rounded-2xl isolate border-2 hover:shadow-[0_0_25px_rgba(251,146,60,0.6)] will-change-transform ${isDarkMode ? 'border-white/10' : 'border-white'}`}
-                                  >
-                                      <div className={`relative w-full overflow-hidden rounded-xl ${isDarkMode ? 'bg-[#2A2726]' : 'bg-gray-100'}`} style={{ transform: 'translateZ(0)' }}>
-                                          {t_item.imageUrl ? (
-                                              <img 
-                                                  src={t_item.imageUrl} 
-                                                  alt={getLocalized(t_item.name, language)} 
-                                                  className="w-full h-auto object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-                                                  referrerPolicy="no-referrer"
-                                                  loading="lazy"
-                                              />
-                                          ) : (
-                                          <div className="w-full aspect-[3/4] bg-gray-100/5 flex items-center justify-center text-gray-300">
-                                              <ImageIcon size={32} />
-                                          </div>
-                                      )}
-                                      
-                                      {/* Hover Overlay: Bottom Glass Mask */}
-                                      <div className="absolute inset-x-0 bottom-0 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-[opacity,transform] duration-500 ease-out z-20 rounded-b-xl overflow-hidden">
-                                          <div className={`backdrop-blur-md border-t py-4 px-6 shadow-2xl rounded-b-xl ${isDarkMode ? 'bg-black/60 border-white/10' : 'bg-white/40 border-white/40'}`}>
-                                              <p className={`font-bold text-base leading-snug text-center ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}>
-                                                  {getLocalized(t_item.name, language)}
-                                              </p>
+                      <div className={`flex w-full ${masonryStyleKey === 'list' ? 'flex-col' : ''}`} style={{ gap: `${columnGap}px` }}>
+                          {Array.from({ length: columnCount }).map((_, colIndex) => (
+                              <div key={colIndex} className="flex-1 flex flex-col" style={{ gap: `${columnGap}px` }}>
+                                  {filteredTemplates
+                                      .filter((_, index) => index % columnCount === colIndex)
+                                      .map(t_item => (
+                                          <div 
+                                              key={t_item.id}
+                                              onClick={() => {
+                                                  setZoomedImage(t_item.imageUrl);
+                                              }}
+                                              className={`cursor-pointer group transition-shadow duration-300 relative overflow-hidden rounded-2xl isolate border-2 hover:shadow-[0_0_25px_rgba(251,146,60,0.6)] will-change-transform ${isDarkMode ? 'border-white/10' : 'border-white'}`}
+                                          >
+                                              <div className={`relative w-full overflow-hidden rounded-xl ${isDarkMode ? 'bg-[#2A2726]' : 'bg-gray-100'}`} style={{ transform: 'translateZ(0)' }}>
+                                                  {t_item.imageUrl ? (
+                                                      <img 
+                                                          src={t_item.imageUrl} 
+                                                          alt={getLocalized(t_item.name, language)} 
+                                                          className="w-full h-auto object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                                                          referrerPolicy="no-referrer"
+                                                          loading="lazy"
+                                                      />
+                                                  ) : (
+                                                  <div className="w-full aspect-[3/4] bg-gray-100/5 flex items-center justify-center text-gray-300">
+                                                      <ImageIcon size={32} />
+                                                  </div>
+                                              )}
+                                              
+                                              {/* Hover Overlay: Bottom Glass Mask */}
+                                              <div className="absolute inset-x-0 bottom-0 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-[opacity,transform] duration-500 ease-out z-20 rounded-b-xl overflow-hidden">
+                                                  <div className={`backdrop-blur-md border-t py-4 px-6 shadow-2xl rounded-b-xl ${isDarkMode ? 'bg-black/60 border-white/10' : 'bg-white/40 border-white/40'}`}>
+                                                      <p className={`font-bold text-base leading-snug text-center ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}>
+                                                          {getLocalized(t_item.name, language)}
+                                                      </p>
+                                                  </div>
+                                              </div>
                                           </div>
                                       </div>
-                                  </div>
+                                  ))}
                               </div>
                           ))}
                       </div>

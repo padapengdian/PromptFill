@@ -82,7 +82,7 @@ export const TemplatesSidebar = React.memo(({
              <div className="flex flex-col items-start gap-1">
                   <h1 className={`${isMobile ? 'text-[18px]' : 'text-[22px]'} font-black tracking-tight text-orange-500 flex items-baseline gap-2`}>
                       提示词填空器
-                      <span className={`${isDarkMode ? 'text-gray-600' : 'text-gray-400'} text-xs font-bold tracking-widest`}>V0.6.0</span>
+                      <span className={`${isDarkMode ? 'text-gray-600' : 'text-gray-400'} text-xs font-bold tracking-widest`}>V0.6.1</span>
                   </h1>
              </div>
              

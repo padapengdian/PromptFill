@@ -311,7 +311,7 @@ export const TemplatePreview = React.memo(({
                         {/* Tags / Meta */}
                         <div className="flex flex-wrap items-center gap-2 mb-2">
                             <span className={`px-2.5 py-1 rounded-md text-xs font-bold tracking-wide border ${isDarkMode ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' : 'bg-orange-50 text-orange-600 border-orange-100/50'}`}>
-                                V0.5.1
+                                V0.6.1
                             </span>
                             {(activeTemplate.tags || []).map(tag => (
                                 <span 

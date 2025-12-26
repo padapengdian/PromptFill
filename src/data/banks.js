@@ -747,6 +747,77 @@ export const INITIAL_BANKS = {
       { cn: "干枯的桉树叶", en: "Dried eucalyptus leaves" },
       { cn: "鲜艳的向日葵", en: "Vibrant sunflowers" }
     ]
+  },
+  character_type_pixar: {
+    label: { cn: "角色模式", en: "Character Mode" },
+    category: "character",
+    options: [
+      { cn: "单人角色：聚焦于个人生活方式", en: "Single: Focus on personal lifestyle" },
+      { cn: "情侣角色：每人18件物品，用爱心符号连接，冷暖对比", en: "Couple: 18 items each, heart connectors, contrast" },
+      { cn: "孕妇角色：包含孕期用品、婴儿图标及B超照片", en: "Pregnant: Includes pregnancy items, baby icons, ultrasound" },
+      { cn: "亲子角色：包含成人与儿童用品，体现家庭温馨", en: "Family: Includes adult and child items, family warmth" }
+    ]
+  },
+  theme_pixar: {
+    label: { cn: "配色主题", en: "Theme & Color" },
+    category: "visual",
+    options: [
+      { cn: "女性/时尚主题：香槟金、玫瑰金、奶油色、樱花粉", en: "Female/Fashion: Champagne Gold, Rose Gold, Cream, Cherry Pink" },
+      { cn: "男性/科技主题：钢蓝色、深灰色、电光蓝、银色", en: "Male/Tech: Steel Blue, Dark Grey, Electric Blue, Silver" },
+      { cn: "正式/奢华主题：纯黑、24K金、深红色、象牙白", en: "Formal/Luxury: Pure Black, 24K Gold, Deep Red, Ivory White" },
+      { cn: "情侣/对比主题：冷暖色调对比", en: "Couple/Contrast: Contrast of warm and cool tones" }
+    ]
+  },
+  item_layout_pixar: {
+    label: { cn: "物品布局", en: "Item Layout" },
+    category: "visual",
+    options: [
+      { cn: "90度直角整齐排列 (Knolling)", en: "90-degree Knolling layout" },
+      { cn: "放射式构图 (Radial)", en: "Radial composition" },
+      { cn: "阶梯式错落布局 (Step)", en: "Step-like staggered layout" },
+      { cn: "网格对称布局 (Grid)", en: "Grid symmetrical layout" }
+    ]
+  },
+  fashion_parts: {
+    label: { cn: "时尚穿搭拆解", en: "Fashion Deconstruction" },
+    category: "item",
+    options: [
+      { cn: "风衣拆解：翻领、肩章、腰带、袖口束带、主衣身", en: "Trench coat: Lapel, epaulets, belt, cuffs, main body" },
+      { cn: "西装拆解：驳领、口袋、内衬、袖扣、垫肩", en: "Suit: Lapel, pockets, lining, cufflinks, shoulder pads" },
+      { cn: "运动鞋拆解：鞋底、鞋面、鞋带、气垫、鞋垫", en: "Sneakers: Sole, upper, laces, air cushion, insole" },
+      { cn: "连衣裙拆解：蕾丝边、拉链、腰部剪裁、裙摆、领口", en: "Dress: Lace trim, zipper, waist cut, hem, neckline" },
+      { cn: "包袋拆解：五金锁扣、肩带、内袋、缝线细节、手柄", en: "Bag: Metal lock, strap, inner pocket, stitching, handle" }
+    ]
+  },
+  beauty_items: {
+    label: { cn: "美妆个护拆解", en: "Beauty Deconstruction" },
+    category: "item",
+    options: [
+      { cn: "彩妆：口红（带切面）、眼影盘、粉饼、腮红刷", en: "Makeup: Lipstick (cut), eyeshadow palette, compact, blush brush" },
+      { cn: "护肤：精华液瓶、面霜罐、美容仪、面膜", en: "Skincare: Serum bottle, cream jar, beauty device, mask" },
+      { cn: "香氛：香水瓶（带液体折射）、香薰蜡烛、扩香器", en: "Fragrance: Perfume bottle (refraction), scented candle, diffuser" },
+      { cn: "洗护：洗面奶、爽肤水、卸妆油、洁面仪", en: "Cleansing: Cleanser, toner, cleansing oil, facial device" }
+    ]
+  },
+  digital_items: {
+    label: { cn: "数码生活拆解", en: "Digital Deconstruction" },
+    category: "item",
+    options: [
+      { cn: "手机拆解：手机壳、屏幕内容、摄像头模组、主板组件", en: "Phone: Case, screen content, camera module, motherboard" },
+      { cn: "相机拆解：镜头组、机身、闪光灯、存储卡、肩带", en: "Camera: Lens set, body, flash, memory card, strap" },
+      { cn: "影音：无线耳机、智能手表、平板电脑、蓝牙音箱", en: "Audio: Wireless headphones, smartwatch, tablet, speaker" },
+      { cn: "办公：笔记本电脑、键盘轴体、鼠标、手绘板", en: "Office: Laptop, keyboard switches, mouse, drawing tablet" }
+    ]
+  },
+  luxury_hobby_items: {
+    label: { cn: "个人爱好/奢华", en: "Hobby & Luxury" },
+    category: "item",
+    options: [
+      { cn: "珠宝：项链、耳环、戒指（宝石带色散效果）", en: "Jewelry: Necklace, earrings, ring (gemstone dispersion)" },
+      { cn: "艺术：画笔、调色盘、素描本、颜料软管", en: "Art: Brushes, palette, sketchbook, paint tubes" },
+      { cn: "生活：咖啡机、磨豆机、高档手办组件、限量书籍", en: "Life: Coffee machine, grinder, high-end figure parts, limited books" },
+      { cn: "运动：网球拍、滑板、滑雪镜、运动相机、水壶", en: "Sports: Tennis racket, skateboard, ski goggles, action cam, bottle" }
+    ]
   }
 };
 
@@ -815,5 +886,12 @@ export const INITIAL_DEFAULTS = {
   character_name: { cn: "龙猫", en: "Totoro" },
   fruit: { cn: "柠檬", en: "Lemon" },
   jewelry_style: { cn: "精美的金色背链", en: "Fine gold back necklace" },
-  flower_type: { cn: "一束深红色玫瑰", en: "A bouquet of deep red roses" }
+  flower_type: { cn: "一束深红色玫瑰", en: "A bouquet of deep red roses" },
+  character_type_pixar: { cn: "单人角色：聚焦于个人生活方式", en: "Single: Focus on personal lifestyle" },
+  theme_pixar: { cn: "女性/时尚主题：香槟金、玫瑰金、奶油色、樱花粉", en: "Female/Fashion: Champagne Gold, Rose Gold, Cream, Cherry Pink" },
+  item_layout_pixar: { cn: "90度直角整齐排列 (Knolling)", en: "90-degree Knolling layout" },
+  fashion_parts: { cn: "风衣拆解：翻领、肩章、腰带、袖口束带、主衣身", en: "Trench coat: Lapel, epaulets, belt, cuffs, main body" },
+  beauty_items: { cn: "彩妆：口红（带切面）、眼影盘、粉饼、腮红刷", en: "Makeup: Lipstick (cut), eyeshadow palette, compact, blush brush" },
+  digital_items: { cn: "手机拆解：手机壳、屏幕内容、摄像头模组、主板组件", en: "Phone: Case, screen content, camera module, motherboard" },
+  luxury_hobby_items: { cn: "珠宝：项链、耳环、戒指（宝石带色散效果）", en: "Jewelry: Necklace, earrings, ring (gemstone dispersion)" }
 };

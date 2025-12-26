@@ -32,7 +32,7 @@
 /**
  * 模板系统版本号，每次更新 templates.js 或 banks.js 时请更新此版本号
  */
-export const SYSTEM_DATA_VERSION = "0.7.2";
+export const SYSTEM_DATA_VERSION = "0.7.3";
 
 export const DEFAULT_TEMPLATE_CONTENT = {
   cn: `### Role (角色设定)
@@ -695,6 +695,53 @@ Eye-level to slightly above shoulder height. 85mm portrait lens look. Shallow de
 Luxury fashion magazine aesthetic. Elegant, restrained, timeless. Natural refined skin texture, not over-smoothed.`
 };
 
+export const TEMPLATE_PIXAR_DECONSTRUCTION = {
+  cn: `### 角色本质·艺术拆解升级版
+
+**核心任务：** 创作一张电影级 3D {{render_style}} 风格的角色拆解海报。将 {{subject}} 转换为风格化写实的动画角色。
+
+**📷 角色与模式：**
+- **角色模式：** {{character_type_pixar}}。根据参考图高度一致还原身份、面部结构与气质。
+
+**📷 物品布局 (Item Layout)：**
+采用 {{item_layout_pixar}}，总物品数 30-36 件，围绕角色有序排列。
+- **分类1：时尚穿搭 (Fashion Atelier)** - {{fashion_parts}}。要求全部分离悬浮，展现精细材质。
+- **分类2：美妆个护 (Beauty Collection)** - {{beauty_items}}。展现玻璃通透感与液体折射。
+- **分类3：数码生活 (Modern Essentials)** - {{digital_items}}。展现金属与玻璃的 PBR 材质。
+- **分类4：个人爱好 (Luxury & Hobbies)** - {{luxury_hobby_items}}。宝石需有色散效果。
+
+**📷 技术规格 (Technical Specs)：**
+- **爆炸视图：** 使用优雅的虚线/实线连接悬浮部件，带有 01-36 的圆形编号标签。
+- **设计元素：** 包含材质样本微距特写、测量标尺、属性雷达图。
+- **标题设计：** 主标题 "📷 角色拆解艺术 · THE ART OF DECONSTRUCTION 📷"，副标题 "角色本质·艺术拆解 / Character Essence Unveiled"。
+- **色调方案：** {{theme_pixar}}。
+- **画质渲染：** 4K 分辨率，路径追踪渲染，PBR 材质流程，极致的毛发与皮肤细节。
+
+{{ratio}}`,
+  en: `### Character Essence Unveiled Upgrade Version
+
+**CORE TASK:** Create a cinematic 3D {{render_style}} style character deconstruction poster. Transform {{subject}} into a stylized realistic animated character.
+
+**📷 CHARACTER & MODE:**
+- **Character Mode:** {{character_type_pixar}}. Strictly maintain identity, facial structure, and aura based on the reference image.
+
+**📷 ITEM LAYOUT:**
+Using {{item_layout_pixar}}, a total of 30-36 items arranged orderly around the character.
+- **Category 1: Fashion Atelier** - {{fashion_parts}}. All parts suspended and separated, showing fine material textures.
+- **Category 2: Beauty Collection** - {{beauty_items}}. Showing glass transparency and liquid refraction.
+- **Category 3: Modern Essentials** - {{digital_items}}. Showing PBR materials of metal and glass.
+- **Category 4: Luxury & Hobbies** - {{luxury_hobby_items}}. Gemstones must have dispersion effects.
+
+**📷 TECHNICAL SPECIFICATIONS:**
+- **Exploded View:** Use elegant dashed/solid lines to connect floating parts, with circular numbered tags 01-36.
+- **Design Elements:** Includes macro material samples, measurement rulers, and attribute radar charts.
+- **Typography:** Main title "📷 THE ART OF DECONSTRUCTION 📷", subtitle "Character Essence Unveiled".
+- **Color Scheme:** {{theme_pixar}}.
+- **Rendering:** 4K resolution, path-traced rendering, PBR material workflow, extreme hair and skin details.
+
+{{ratio}}`
+};
+
 export const TEMPLATE_STREET_DIALOGUE = {
   cn: `### 街头的自我“对话”
 
@@ -951,7 +998,7 @@ export const INITIAL_TEMPLATES_CONFIG = [
     name: { cn: "雨滴定格艺术", en: "Raindrop Art" },
     content: TEMPLATE_RAINDROP_ART,
     imageUrl: "https://s3.bmp.ovh/imgs/2025/12/19/6b6e14845635b168.jpg",
-    author: "@tanshilong",
+    author: "@tanshilong（MarioTan）",
     selections: {
       "rain_shape": { cn: "芭蕾舞者", en: "Ballerina" },
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
@@ -978,7 +1025,7 @@ export const INITIAL_TEMPLATES_CONFIG = [
     name: { cn: "窗边书桌微缩场景", en: "Window Desk Miniature" },
     content: TEMPLATE_MINIATURE_DESK,
     imageUrl: "https://s3.bmp.ovh/imgs/2025/12/20/8e9c9c28b3d2cf1b.jpg",
-    author: "@tanshilong",
+    author: "@tanshilong（MarioTan）",
     selections: {
       "show_name": { cn: "龙猫", en: "My Neighbor Totoro" },
       "character_name": { cn: "龙猫", en: "Totoro" },
@@ -1018,11 +1065,26 @@ export const INITIAL_TEMPLATES_CONFIG = [
     language: ["cn", "en"]
   },
   {
+    id: "tpl_pixar_deconstruction",
+    name: { cn: "角色艺术拆解升级版", en: "Role Deconstruction" },
+    content: TEMPLATE_PIXAR_DECONSTRUCTION,
+    imageUrl: "https://s3.bmp.ovh/imgs/2025/12/26/1931582fcfb9d1e5.png",
+    author: "berryxia（Berryxia.AI）",
+    selections: {
+      "render_style": { cn: "Pixar 卡通渲染", en: "Pixar Cartoon Rendering" },
+      "subject": { cn: "时尚女性角色", en: "Fashionable Female Character" },
+      "character_type_pixar": { cn: "单人角色：聚焦于个人生活方式", en: "Single: Focus on personal lifestyle" },
+      "ratio": { cn: "16:9横构图", en: "16:9 Horizontal" }
+    },
+    tags: ["人物", "创意", "卡通", "图表"],
+    language: ["cn", "en"]
+  },
+  {
     id: "tpl_street_self_dialogue",
     name: { cn: "街头的自我对话", en: "Street Self-Dialogue" },
     content: TEMPLATE_STREET_DIALOGUE,
     imageUrl: "https://s3.bmp.ovh/imgs/2025/12/25/fd3cbc98f5afa970.png",
-    author: "@MarioTan",
+    author: "@tanshilong（MarioTan）",
     selections: {
       "building_cluster": { cn: "纽约摩天大楼群", en: "New York skyscraper cluster" },
       "lighting_atmosphere": { cn: "夕阳余晖", en: "Sunset afterglow" },
