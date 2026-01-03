@@ -51,7 +51,7 @@ export const copyToClipboard = async (text) => {
 };
 
 // 压缩模板数据
-export const compressTemplate = (data) => {
+export const compressTemplate = (data, banks = null, categories = null) => {
   try {
     if (!data) return null;
 
@@ -64,6 +64,35 @@ export const compressTemplate = (data) => {
       l: data.language || ['cn', 'en'],
       i: (typeof data.imageUrl === 'string' && data.imageUrl.startsWith('http')) ? data.imageUrl : ""
     };
+
+    // 2. 如果提供了 banks，提取模板中使用的自定义词库
+    if (banks) {
+      const contentStr = typeof simplifiedData.c === 'object' 
+        ? Object.values(simplifiedData.c).join(' ') 
+        : simplifiedData.c;
+      
+      const varRegex = /{{(.*?)}}/g;
+      const matches = [...contentStr.matchAll(varRegex)];
+      const baseKeys = [...new Set(matches.map(m => m[1].trim().split('_')[0]))];
+      
+      const relevantBanks = {};
+      const relevantCategories = {};
+      
+      baseKeys.forEach(key => {
+        if (banks[key]) {
+          relevantBanks[key] = banks[key];
+          const catId = banks[key].category;
+          if (categories && categories[catId]) {
+            relevantCategories[catId] = categories[catId];
+          }
+        }
+      });
+      
+      if (Object.keys(relevantBanks).length > 0) {
+        simplifiedData.b = relevantBanks; // b for banks
+        simplifiedData.cg = relevantCategories; // cg for categories
+      }
+    }
 
     const jsonStr = JSON.stringify(simplifiedData);
     const uint8Array = new TextEncoder().encode(jsonStr);
@@ -123,6 +152,8 @@ export const decompressTemplate = (compressedBase64) => {
       author: data.a || 'User',
       language: data.l || ['cn', 'en'],
       imageUrl: data.i || "",
+      banks: data.b || null,
+      categories: data.cg || null,
       selections: {}
     };
   } catch (error) {

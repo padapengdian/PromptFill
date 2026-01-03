@@ -11,7 +11,7 @@ const API_BASE_URL =
  * 分享功能 Hook
  * 提供模版分享、导入相关的功能
  * 支持链接分享和口令分享两种方式
- * 已升级支持私有短链服务器
+ * 已升级支持私有短链服务器与自定义词库分享
  *
  * @param {Object} activeTemplate - 当前激活的模版
  * @param {Function} setTemplates - 更新模版的函数
@@ -21,6 +21,10 @@ const API_BASE_URL =
  * @param {Function} setMobileTab - 设置移动端标签的函数
  * @param {string} language - 当前语言
  * @param {Function} t - 翻译函数
+ * @param {Object} banks - 词库数据
+ * @param {Function} setBanks - 更新词库的函数
+ * @param {Object} categories - 分类数据
+ * @param {Function} setCategories - 更新分类的函数
  * @returns {Object} 分享相关的状态和函数
  */
 export const useShareFunctions = (
@@ -31,7 +35,11 @@ export const useShareFunctions = (
   isMobileDevice,
   setMobileTab,
   language,
-  t
+  t,
+  banks,
+  setBanks,
+  categories,
+  setCategories
 ) => {
   // 分享功能相关状态
   const [sharedTemplateData, setSharedTemplateData] = useState(null);
@@ -45,14 +53,14 @@ export const useShareFunctions = (
   const shareUrlMemo = useMemo(() => {
     if (!activeTemplate) return "";
 
-    const compressed = compressTemplate(activeTemplate);
+    const compressed = compressTemplate(activeTemplate, banks, categories);
     const base = PUBLIC_SHARE_URL || (window.location.origin + window.location.pathname);
 
     if (!compressed) return base;
 
     const fullUrl = `${base}${base.endsWith('/') ? '' : '/'}#/share?share=${compressed}`;
     return fullUrl;
-  }, [activeTemplate]);
+  }, [activeTemplate, banks, categories]);
 
   // 检查分享参数（在 URL 中检测分享链接）
   useEffect(() => {
@@ -190,19 +198,144 @@ export const useShareFunctions = (
   /**
    * 导入分享的模版
    * 将分享的模版数据添加到用户的模版列表中
+   * 同时也导入相关的词库和分类，并处理键名冲突
    */
   const handleImportSharedTemplate = useCallback(() => {
     if (!sharedTemplateData) return;
 
-    const newTpl = {
+    let templateToImport = {
       ...sharedTemplateData,
       id: `tpl_shared_${Date.now()}`,
       selections: sharedTemplateData.selections || {},
       author: sharedTemplateData.author || t('official')
     };
 
-    setTemplates(prev => [...prev, newTpl]);
-    setActiveTemplateId(newTpl.id);
+    const keyMap = {};
+    const banksToImport = sharedTemplateData.banks || {};
+    const categoriesToImport = sharedTemplateData.categories || {};
+
+    // 1. 预扫描冲突的词库键名并建立映射
+    // 按键名长度降序排序，避免替换时前缀冲突（如 bank 和 bank_extra）
+    const sortedOldKeys = Object.keys(banksToImport).sort((a, b) => b.length - a.length);
+
+    sortedOldKeys.forEach(oldKey => {
+      const bank = banksToImport[oldKey];
+      if (banks[oldKey]) {
+        // 如果本地已存在同名键，且内容不完全一致，则需要重命名导入的词库
+        const existingBank = banks[oldKey];
+        const isSame = JSON.stringify(existingBank.options) === JSON.stringify(bank.options);
+        
+        if (!isSame) {
+          let newKey = oldKey;
+          let charCode = 65; // 'A' 的 ASCII 码
+          
+          // 辅助函数：根据数字生成字母后缀 (0 -> A, 1 -> B, 26 -> AA ...)
+          const getLetterSuffix = (num) => {
+            let suffix = '';
+            let n = num;
+            while (n >= 0) {
+              suffix = String.fromCharCode((n % 26) + 65) + suffix;
+              n = Math.floor(n / 26) - 1;
+            }
+            return suffix;
+          };
+
+          let index = 0;
+          // 确保新生成的键名在本地和本次导入中都是唯一的
+          while (banks[newKey] || banksToImport[newKey] || Object.values(keyMap).includes(newKey)) {
+             newKey = `${oldKey}_${getLetterSuffix(index)}`;
+             index++;
+          }
+          keyMap[oldKey] = newKey;
+        }
+      }
+    });
+
+    // 2. 如果有重命名，同步更新模板内容和已选状态
+    if (Object.keys(keyMap).length > 0) {
+      const updateContentText = (text) => {
+        if (typeof text !== 'string') return text;
+        let newText = text;
+        // 按照排序后的键名依次替换，确保逻辑正确
+        sortedOldKeys.forEach(oldKey => {
+          if (keyMap[oldKey]) {
+            const newKey = keyMap[oldKey];
+            // 匹配 {{oldKey}} 或 {{oldKey_xxx}} 或 {{ oldKey }}
+            // 这里的正则要足够精确，只替换变量名部分
+            const regex = new RegExp(`({{\\s*)${oldKey}((?=[_\\s}])|(?=}))`, 'g');
+            newText = newText.replace(regex, `$1${newKey}`);
+          }
+        });
+        return newText;
+      };
+
+      const updateContent = (content) => {
+        if (!content) return content;
+        if (typeof content === 'string') {
+          return updateContentText(content);
+        } else if (typeof content === 'object') {
+          const newContent = {};
+          Object.keys(content).forEach(lang => {
+            newContent[lang] = updateContentText(content[lang]);
+          });
+          return newContent;
+        }
+        return content;
+      };
+
+      templateToImport.content = updateContent(templateToImport.content);
+      
+      // 更新 selections 中的键名 (通常格式为 key_index)
+      const newSelections = {};
+      Object.entries(templateToImport.selections).forEach(([selKey, val]) => {
+        let newSelKey = selKey;
+        sortedOldKeys.forEach(oldKey => {
+          if (keyMap[oldKey]) {
+            const newKey = keyMap[oldKey];
+            if (selKey.startsWith(`${oldKey}_`)) {
+              newSelKey = selKey.replace(new RegExp(`^${oldKey}_`), `${newKey}_`);
+            } else if (selKey === oldKey) {
+              newSelKey = newKey;
+            }
+          }
+        });
+        newSelections[newSelKey] = val;
+      });
+      templateToImport.selections = newSelections;
+    }
+
+    // 3. 执行词库导入（合并到本地词库，使用处理冲突后的键名）
+    setBanks(prevBanks => {
+      const newBanks = { ...prevBanks };
+      let hasChange = false;
+      Object.entries(banksToImport).forEach(([oldKey, bank]) => {
+        const finalKey = keyMap[oldKey] || oldKey;
+        if (!newBanks[finalKey]) {
+          newBanks[finalKey] = bank;
+          hasChange = true;
+        }
+      });
+      return hasChange ? newBanks : prevBanks;
+    });
+
+    // 4. 执行分类导入
+    if (Object.keys(categoriesToImport).length > 0) {
+      setCategories(prevCats => {
+        const newCats = { ...prevCats };
+        let hasChange = false;
+        Object.entries(categoriesToImport).forEach(([id, cat]) => {
+          if (!newCats[id]) {
+            newCats[id] = cat;
+            hasChange = true;
+          }
+        });
+        return hasChange ? newCats : prevCats;
+      });
+    }
+
+    // 5. 完成模板导入
+    setTemplates(prev => [...prev, templateToImport]);
+    setActiveTemplateId(templateToImport.id);
     setShowShareImportModal(false);
     setSharedTemplateData(null);
     setDiscoveryView(false);
@@ -210,7 +343,7 @@ export const useShareFunctions = (
     if (isMobileDevice) {
       setMobileTab('editor');
     }
-  }, [sharedTemplateData, setTemplates, setActiveTemplateId, setDiscoveryView, isMobileDevice, setMobileTab, t]);
+  }, [sharedTemplateData, setTemplates, setActiveTemplateId, setDiscoveryView, isMobileDevice, setMobileTab, t, setBanks, setCategories, banks]);
 
   /**
    * 打开分享选项弹窗
@@ -226,7 +359,7 @@ export const useShareFunctions = (
     if (!activeTemplate) return;
     setIsGenerating(true);
 
-    const compressed = compressTemplate(activeTemplate);
+    const compressed = compressTemplate(activeTemplate, banks, categories);
     const shortCode = await getShortCodeFromServer(compressed);
     
     const base = PUBLIC_SHARE_URL || (window.location.origin + window.location.pathname);
@@ -243,7 +376,7 @@ export const useShareFunctions = (
     } else {
       alert(language === 'cn' ? '复制失败，请手动长按复制' : 'Copy failed, please copy manually');
     }
-  }, [activeTemplate, getShortCodeFromServer, t, language]);
+  }, [activeTemplate, getShortCodeFromServer, t, language, banks, categories]);
 
   /**
    * 复制分享口令（微信友好格式，支持短码）
@@ -253,7 +386,7 @@ export const useShareFunctions = (
     if (!activeTemplate) return;
     setIsGenerating(true);
 
-    const compressed = compressTemplate(activeTemplate);
+    const compressed = compressTemplate(activeTemplate, banks, categories);
     const shortCode = await getShortCodeFromServer(compressed);
     const templateName = getLocalized(activeTemplate.name, language);
     
@@ -269,7 +402,7 @@ export const useShareFunctions = (
     } else {
       alert(language === 'cn' ? '复制失败，请尝试链接分享' : 'Copy failed, please try Link Share');
     }
-  }, [activeTemplate, language, getShortCodeFromServer]);
+  }, [activeTemplate, language, getShortCodeFromServer, banks, categories]);
 
   return {
     // 状态

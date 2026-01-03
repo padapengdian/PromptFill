@@ -512,7 +512,11 @@ const App = () => {
     isMobileDevice,
     setMobileTab,
     language,
-    t
+    t,
+    banks,
+    setBanks,
+    categories,
+    setCategories
   );
 
   // Template Management
@@ -1570,7 +1574,7 @@ const App = () => {
     let qrBase64 = "/QRCode.png";
     
     try {
-        const compressed = compressTemplate(activeTemplate);
+        const compressed = compressTemplate(activeTemplate, banks, categories);
         // 尝试向服务器换取短码
         const shortCode = await getShortCodeFromServer(compressed);
         const base = PUBLIC_SHARE_URL || displayUrl;
