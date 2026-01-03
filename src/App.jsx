@@ -144,6 +144,11 @@ const App = () => {
   }, [isMobileDevice, mobileTab]);
   
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isPosterAutoScrollPaused, setIsPosterAutoScrollPaused] = useState(false);
+  const posterScrollRef = useRef(null);
+  const popoverRef = useRef(null);
+  const textareaRef = useRef(null);
+  const sidebarRef = useRef(null);
   
   // 移动端：首页是否展示完全由 mobileTab 控制，避免 isDiscoveryView 残留导致其它 Tab 白屏
   // 桌面端：保持现有 isDiscoveryView 行为（不影响已正常的桌面端）
