@@ -32,7 +32,7 @@
 /**
  * 模板系统版本号，每次更新 templates.js 或 banks.js 时请更新此版本号
  */
-export const SYSTEM_DATA_VERSION = "0.7.6";
+export const SYSTEM_DATA_VERSION = "0.8.0";
 
 /**
  * 分享功能正式环境域名（扫码导入需使用公网可访问地址）
@@ -984,6 +984,33 @@ Everyone is busy with their own task in the living room without interfering with
 **7. Emotion & Story:** Conveys a complex sense of identity multiplicity and introspection within solitude. The image freezes a quiet philosophical moment amidst dynamic activity.`
 };
 
+export const TEMPLATE_CHARACTER_SHEET_ART = {
+  cn: `### 角色设定稿 (Character Sheet)
+**核心内容:** 角色设定稿，基于 {{character_originality}}。
+
+**构图:** 多角度视角 (Multiple angles)，丰富的表情变化 (Expressive facial variations)。
+
+**媒介:** {{art_tool}}。
+
+**背景:** {{background_style}}。
+
+**风格:** {{draw_style}}，线条利落 (Sharp linework)。
+
+**色彩:** 柔和淡彩色 (Soft pastel color palette)，高对比度 (High contrast)。`,
+  en: `### Character Sheet
+**Core Content:** Character Sheet, based on {{character_originality}}.
+
+**Composition:** Multiple angles, expressive facial variations.
+
+**Medium:** {{art_tool}}.
+
+**Background:** {{background_style}}.
+
+**Style:** {{draw_style}}, sharp linework.
+
+**Color:** Soft pastel color palette, high contrast.`
+};
+
 /**
  * 可用的模板标签
  */
@@ -1397,6 +1424,21 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
     },
     tags: ["人物", "摄影", "创意"],
+    language: ["cn", "en"]
+  },
+  {
+    id: "tpl_character_sheet_art",
+    name: { cn: "角色设定稿", en: "Character Sheet" },
+    content: TEMPLATE_CHARACTER_SHEET_ART,
+    imageUrl: "https://s3.bmp.ovh/imgs/2026/01/04/d530d1e38098944e.png",
+    author: "@tanshilong",
+    selections: {
+      "character_originality": { cn: "创作一个原创人物", en: "Create an original character" },
+      "art_tool": { cn: "毛笔", en: "Ink Brush" },
+      "background_style": { cn: "极简纯色背景", en: "Minimalist solid color background" },
+      "draw_style": { cn: "手绘漫画风格", en: "Hand-drawn Manga Style" }
+    },
+    tags: ["人物", "创意"],
     language: ["cn", "en"]
   }
 ];

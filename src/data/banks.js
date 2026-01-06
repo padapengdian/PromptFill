@@ -612,6 +612,16 @@ export const INITIAL_BANKS = {
       { cn: "在修剪巨大的室内绿植", en: "trimming a giant indoor plant" }
     ]
   },
+  draw_style: {
+    label: { cn: "绘画风格", en: "Drawing Style" },
+    category: "visual",
+    options: [
+      { cn: "手绘漫画风格", en: "Hand-drawn Manga Style" },
+      { cn: "Disney手绘草稿风格", en: "Disney Hand-drawn Sketch Style" },
+      { cn: "吉卜力手绘风格", en: "Ghibli Hand-drawn Style" },
+      { cn: "美式漫画风格", en: "American Comic Style" }
+    ]
+  },
   fingernail_detail: {
     label: { cn: "手指甲细节", en: "Fingernail Detail" },
     category: "visual",
@@ -987,5 +997,6 @@ export const INITIAL_DEFAULTS = {
   dominant_colors: { cn: "传统的京都红与古朴的墨黑色", en: "Traditional Kyoto red and antique ink black" },
   background_color_clean: { cn: "纯白", en: "Pure White" },
   city_glimpse_subtitle: { cn: "古韵悠长的千年古都", en: "The thousand-year-old ancient capital" },
-  action_status: { cn: "玩PS5", en: "playing PS5" }
+  action_status: { cn: "玩PS5", en: "playing PS5" },
+  draw_style: { cn: "手绘漫画风格", en: "Hand-drawn Manga Style" }
 };
