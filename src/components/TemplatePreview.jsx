@@ -235,7 +235,13 @@ export const TemplatePreview = React.memo(({
   const renderedContent = useMemo(() => {
     const contentToRender = getLocalized(activeTemplate?.content, language);
     if (!contentToRender) return null;
-    
+
+    // 类型检查：确保 contentToRender 是字符串
+    if (typeof contentToRender !== 'string') {
+      console.error('TemplatePreview: content is not a string:', contentToRender);
+      return null;
+    }
+
     const lines = contentToRender.split('\n');
     const counters = {}; 
     
@@ -246,7 +252,15 @@ export const TemplatePreview = React.memo(({
       let Type = 'div';
       let className = `${isDarkMode ? 'text-gray-300' : 'text-gray-700'} mb-3 leading-10`;
 
-      if (line.startsWith('### ')) {
+      if (line.startsWith('# ')) {
+        Type = 'h1';
+        className = `text-2xl md:text-3xl font-black mt-8 mb-4 border-b-2 pb-3 ${isDarkMode ? 'text-white border-white/10' : 'text-gray-900 border-gray-200'}`;
+        content = line.replace('# ', '');
+      } else if (line.startsWith('## ')) {
+        Type = 'h2';
+        className = `text-xl md:text-2xl font-bold mt-7 mb-3 border-b pb-2 ${isDarkMode ? 'text-white border-white/10' : 'text-gray-900 border-gray-100'}`;
+        content = line.replace('## ', '');
+      } else if (line.startsWith('### ')) {
         Type = 'h3';
         className = `text-lg font-bold mt-6 mb-3 border-b pb-2 ${isDarkMode ? 'text-white border-white/10' : 'text-gray-900 border-gray-100'}`;
         content = line.replace('### ', '');

@@ -271,7 +271,7 @@ export const Variable = ({
                   disabled={isAILoading}
                   className="group relative flex items-center gap-1.5 transition-all duration-300"
                 >
-                  <span 
+                  <span
                     style={{
                       fontVariationSettings: '"opsz" auto',
                       fontFeatureSettings: '"kern" on',
@@ -286,19 +286,22 @@ export const Variable = ({
                   >
                     {getLocalized(AI_SECTION_TITLE, language)}
                   </span>
+                  <span className="text-[9px] font-medium text-orange-500/80">
+                    Beta
+                  </span>
                   {isAILoading ? (
                     <Loader2 size={14} className="animate-spin text-orange-500" />
                   ) : (
                     hasGeneratedOnce ? (
-                      <RefreshIcon 
+                      <RefreshIcon
                         ref={refreshIconRef}
-                        size={14} 
-                        className={`transition-all duration-500 ${isAiButtonHovered ? 'rotate-180 text-orange-500' : 'text-orange-400/50'}`} 
+                        size={14}
+                        className={`transition-all duration-500 ${isAiButtonHovered ? 'rotate-180 text-orange-500' : 'text-orange-400/50'}`}
                       />
                     ) : (
-                      <AtomIcon 
+                      <AtomIcon
                         ref={atomIconRef}
-                        size={18} 
+                        size={18}
                         className={`transition-all duration-500 ${isAiButtonHovered ? 'scale-110 text-orange-500' : 'text-orange-400/50'}`}
                       />
                     )
@@ -311,9 +314,9 @@ export const Variable = ({
                 {isAILoading && (
                   <div className="space-y-1">
                     {[1, 2, 3].map((i) => (
-                      <div 
+                      <div
                         key={`skeleton-${i}`}
-                        className={`w-full h-10 rounded-xl animate-pulse ${isDarkMode ? 'bg-white/5' : 'bg-white/60'}`}
+                        className={`w-full h-7 rounded-lg animate-pulse ${isDarkMode ? 'bg-white/5' : 'bg-white/60'}`}
                       />
                     ))}
                   </div>

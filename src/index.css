@@ -351,6 +351,53 @@ body {
   }
 }
 
+/* Text Processing Animation for Smart Split */
+.text-processing-mask {
+  position: relative;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+.text-processing-mask::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(150, 150, 150, 0.1) 25%,
+    rgba(200, 200, 200, 0.3) 50%,
+    rgba(150, 150, 150, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 2s infinite linear;
+  z-index: 50;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.text-processing-mask .premium-button-inner,
+.text-processing-mask span,
+.text-processing-mask h1,
+.text-processing-mask h2,
+.text-processing-mask h3,
+.text-processing-mask p,
+.text-processing-mask li,
+.text-processing-mask textarea,
+.text-processing-mask pre {
+  filter: grayscale(1) contrast(0.5) opacity(0.4) !important;
+  transition: filter 0.5s ease;
+}
+
+/* Dark mode specific for text processing */
+.dark .text-processing-mask::after {
+  background: linear-gradient(
+    90deg,
+    rgba(50, 50, 50, 0.1) 25%,
+    rgba(100, 100, 100, 0.2) 50%,
+    rgba(50, 50, 50, 0.1) 75%
+  );
+}
+
 /* Premium Button Styles */
 .premium-button-outer {
   position: relative;
@@ -367,6 +414,39 @@ body {
   background: none;
   outline: none;
   text-align: center;
+}
+
+/* Rainbow Variant for AI Smart Split */
+.premium-button-outer.rainbow {
+  border: 1.5px solid transparent !important;
+  background-clip: padding-box, border-box !important;
+  background-origin: padding-box, border-box !important;
+  background-size: 200% 100% !important;
+  animation: rainbow-border 3s linear infinite !important;
+  /* 增强辉光效果 - 浅色模式 */
+  box-shadow: 0 0 12px rgba(234, 88, 12, 0.25), 0 0 4px rgba(251, 146, 60, 0.15);
+}
+
+.premium-button-outer.rainbow.light {
+  background-image: linear-gradient(#E8E3DD, #E8E3DD),
+                    linear-gradient(90deg, #ff2400, #e8b71d, #ff3c3c, #dd1de8, #2b1de8, #ff2400) !important;
+}
+
+.premium-button-outer.rainbow.dark {
+  background-image: linear-gradient(#252525, #252525),
+                    linear-gradient(90deg, #ff2400, #e8b71d, #ff3c3c, #dd1de8, #2b1de8, #ff2400) !important;
+  /* 显著增强辉光效果 - 深色模式 */
+  box-shadow: 0 0 20px rgba(251, 146, 60, 0.45), 0 0 8px rgba(251, 146, 60, 0.3);
+}
+
+.premium-button-outer.rainbow:hover {
+  /* 悬停时辉光更亮 */
+  box-shadow: 0 0 25px rgba(251, 146, 60, 0.5), 0 0 10px rgba(251, 146, 60, 0.3);
+}
+
+@keyframes rainbow-border {
+  0% { background-position: 0% 50%, 0% 50%; }
+  100% { background-position: 200% 50%, 200% 50%; }
 }
 
 .premium-button-outer.is-active {

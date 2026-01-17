@@ -12,11 +12,12 @@ import { INITIAL_BANKS, INITIAL_DEFAULTS, INITIAL_CATEGORIES } from './data/bank
 import { TRANSLATIONS } from './constants/translations';
 import { PREMIUM_STYLES, CATEGORY_STYLES, TAG_STYLES, TAG_LABELS } from './constants/styles';
 import { MASONRY_STYLES } from './constants/masonryStyles';
+import { SMART_SPLIT_CONFIRM_MESSAGE, SMART_SPLIT_CONFIRM_TITLE, SMART_SPLIT_BUTTON_TEXT } from './constants/modalMessages';
 
 // ====== 导入工具函数 ======
 import { deepClone, makeUniqueKey, waitForImageLoad, getLocalized, getSystemLanguage, compressTemplate, decompressTemplate, copyToClipboard, saveDirectoryHandle } from './utils';
 import { mergeTemplatesWithSystem, mergeBanksWithSystem } from './utils/merge';
-import { generateAITerms } from './utils/aiService';  // AI 服务
+import { generateAITerms, polishAndSplitPrompt } from './utils/aiService';  // AI 服务
 
 // ====== 导入自定义 Hooks ======
 import { useStickyState, useAsyncStickyState, useEditorHistory, useLinkageGroups, useShareFunctions, useTemplateManagement } from './hooks';
@@ -25,7 +26,7 @@ import { useStickyState, useAsyncStickyState, useEditorHistory, useLinkageGroups
 import { Variable, VisualEditor, PremiumButton, EditorToolbar, Lightbox, TemplatePreview, TemplateEditor, TemplatesSidebar, BanksSidebar, InsertVariableModal, AddBankModal, DiscoveryView, MobileSettingsView, SettingsView, Sidebar, TagSidebar } from './components';
 import { ImagePreviewModal, AnimatedSlogan, MobileAnimatedSlogan } from './components/preview';
 import { MobileBottomNav } from './components/mobile';
-import { ShareOptionsModal, ImportTokenModal, ShareImportModal, CategoryManagerModal } from './components/modals';
+import { ShareOptionsModal, ImportTokenModal, ShareImportModal, CategoryManagerModal, ConfirmModal } from './components/modals';
 import { DataUpdateNotice, AppUpdateNotice } from './components/notifications';
 
 
@@ -39,7 +40,7 @@ import { DataUpdateNotice, AppUpdateNotice } from './components/notifications';
 
 const App = () => {
   // 当前应用代码版本 (必须与 package.json 和 version.json 一致)
-  const APP_VERSION = "0.7.2";
+  const APP_VERSION = "0.8.0";
 
   // 临时功能：瀑布流样式管理
   const [masonryStyleKey, setMasonryStyleKey] = useState('poster');
@@ -57,6 +58,17 @@ const App = () => {
   const [language, setLanguage] = useStickyState(getSystemLanguage(), "app_language_v1"); // 全局UI语言
   const [templateLanguage, setTemplateLanguage] = useStickyState(getSystemLanguage(), "app_template_language_v1"); // 模板内容语言
   const [activeTemplateId, setActiveTemplateId] = useStickyState("tpl_default", "app_active_template_id_v4");
+
+  const [isSmartSplitLoading, setIsSmartSplitLoading] = useState(false);
+  const [isSmartSplitConfirmOpen, setIsSmartSplitConfirmOpen] = useState(false);
+
+  // 包装 setActiveTemplateId，在智能拆分期间防止切换
+  const handleSetActiveTemplateId = React.useCallback((id) => {
+    if (isSmartSplitLoading) {
+      return; // 正在拆分时，静默忽略切换请求，或者可以添加提示
+    }
+    setActiveTemplateId(id);
+  }, [isSmartSplitLoading, setActiveTemplateId]);
   
   // Derived State: Current Active Template
   const activeTemplate = useMemo(() => {
@@ -707,6 +719,114 @@ const App = () => {
   }, [handleAddCustomAndSelectFromHook]);
 
   // AI 生成词条处理函数（增强版：支持上下文感知 + 联动组清理）
+  const performSmartSplit = React.useCallback(async () => {
+    if (!activeTemplate) return;
+    
+    const rawPrompt = getLocalized(activeTemplate.content, templateLanguage);
+    
+    setIsSmartSplitLoading(true);
+    try {
+      // 提取现有词库的特征上下文（键名、中文名称、示例词组）
+      // 我们只提取前 2 个选项作为示例，避免上下文过长
+      const existingBankContext = Object.entries(banks).map(([key, bank]) => {
+        const label = typeof bank.label === 'object' ? (bank.label.cn || bank.label.en) : bank.label;
+        const samples = (bank.options || [])
+          .slice(0, 2)
+          .map(opt => typeof opt === 'object' ? (opt.cn || opt.en) : opt)
+          .join(', ');
+        return `- {{${key}}} (${label}) [示例: ${samples}]`;
+      }).join('\n');
+
+      const result = await polishAndSplitPrompt({
+        rawPrompt,
+        existingBankContext, // 发送详细上下文
+        availableTags: TEMPLATE_TAGS,
+        language: templateLanguage
+      });
+
+      console.log('[App] Smart Split Result:', result);
+
+      if (result) {
+        // 1. 更新模板内容
+        const newContent = typeof activeTemplate.content === 'object'
+          ? { ...activeTemplate.content, [templateLanguage]: result.content }
+          : result.content;
+        
+        // 2. 批量处理变量和词库
+        const newBanks = { ...banks };
+        const newDefaults = { ...defaults };
+        const newSelections = { ...activeTemplate.selections };
+
+        if (result.variables && Array.isArray(result.variables)) {
+          result.variables.forEach(v => {
+            // 如果是新词库，添加到 banks
+            if (!newBanks[v.key]) {
+              newBanks[v.key] = {
+                label: typeof v.label === 'string' ? { cn: v.label, en: v.label } : v.label,
+                category: v.category || 'other',
+                options: v.options.map(opt => (typeof opt === 'string' ? { cn: opt, en: opt } : opt))
+              };
+              // 添加到 defaults
+              newDefaults[v.key] = typeof v.default === 'string' ? { cn: v.default, en: v.default } : v.default;
+            }
+            
+            // 设置当前模板的选择值
+            const defaultValue = v.default || (v.options && v.options[0]);
+            newSelections[v.key] = typeof defaultValue === 'string' ? { cn: defaultValue, en: defaultValue } : defaultValue;
+          });
+        }
+
+        // 3. 更新全局状态
+        setBanks(newBanks);
+        setDefaults(newDefaults);
+
+        // 4. 更新当前模板
+        setTemplates(prev => prev.map(t => {
+          if (t.id === activeTemplateId) {
+            // 过滤标签，确保只使用系统中存在的标签
+            const filteredTags = result.tags 
+              ? result.tags.filter(tag => TEMPLATE_TAGS.includes(tag))
+              : t.tags;
+
+            return {
+              ...t,
+              name: result.name || t.name,
+              content: newContent,
+              selections: newSelections,
+              tags: filteredTags
+            };
+          }
+          return t;
+        }));
+
+        // 5. 特殊处理：如果名称更新了，也同步到临时编辑状态
+        if (result.name) {
+          setTempTemplateName(typeof result.name === 'string' ? result.name : (result.name[language] || result.name.cn || result.name.en));
+        }
+
+        // 提示成功
+        console.log('[App] Smart Split Success');
+      }
+    } catch (error) {
+      console.error('[App] Smart Split Error:', error);
+      alert(language === 'cn' ? `智能拆分失败: ${error.message}` : `Smart Split failed: ${error.message}`);
+    } finally {
+      setIsSmartSplitLoading(false);
+    }
+  }, [activeTemplate, templateLanguage, language, banks, defaults, setBanks, setDefaults, setTemplates, activeTemplateId, setTempTemplateName]);
+
+  const handleSmartSplit = React.useCallback(async () => {
+    if (!activeTemplate) return;
+    
+    const rawPrompt = getLocalized(activeTemplate.content, templateLanguage);
+    if (!rawPrompt || rawPrompt.trim().length < 10) {
+      alert(language === 'cn' ? '提示词太短了，请先输入一些内容再尝试智能拆分' : 'Prompt too short, please enter more text first.');
+      return;
+    }
+
+    setIsSmartSplitConfirmOpen(true);
+  }, [activeTemplate, templateLanguage, language]);
+
   const handleGenerateAITerms = React.useCallback(async (params) => {
     console.log('[App] AI Generation Request:', params);
 
@@ -2420,7 +2540,7 @@ const App = () => {
         ) : showDiscoveryOverlay ? (
           <DiscoveryView
             filteredTemplates={filteredTemplates}
-            setActiveTemplateId={setActiveTemplateId}
+            setActiveTemplateId={handleSetActiveTemplateId}
             setDiscoveryView={handleSetDiscoveryView}
             setZoomedImage={setZoomedImage}
             posterScrollRef={posterScrollRef}
@@ -2476,7 +2596,7 @@ const App = () => {
               setIsTemplatesDrawerOpen={setIsTemplatesDrawerOpen}
               setDiscoveryView={handleSetDiscoveryView}
               activeTemplateId={activeTemplateId}
-              setActiveTemplateId={setActiveTemplateId}
+              setActiveTemplateId={handleSetActiveTemplateId}
               filteredTemplates={filteredTemplates}
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -2594,6 +2714,8 @@ const App = () => {
               textareaRef={textareaRef}
               // AI 相关
               onGenerateAITerms={handleGenerateAITerms}
+              onSmartSplitClick={handleSmartSplit}
+              isSmartSplitLoading={isSmartSplitLoading}
             />
 
             {/* Mobile Side Drawer Triggers - 保持在 TemplateEditor 外部 */}
@@ -2780,6 +2902,18 @@ const App = () => {
         isDarkMode={isDarkMode}
       />
 
+      {/* --- Smart Split Confirm Modal --- */}
+      <ConfirmModal
+        isOpen={isSmartSplitConfirmOpen}
+        onClose={() => setIsSmartSplitConfirmOpen(false)}
+        onConfirm={performSmartSplit}
+        title={SMART_SPLIT_CONFIRM_TITLE[language]}
+        message={SMART_SPLIT_CONFIRM_MESSAGE[language]}
+        confirmText={SMART_SPLIT_BUTTON_TEXT.confirm[language]}
+        cancelText={SMART_SPLIT_BUTTON_TEXT.cancel[language]}
+        isDarkMode={isDarkMode}
+      />
+
       {/* --- Insert Variable Modal --- */}
       <InsertVariableModal
         isOpen={isInsertModalOpen}
@@ -2804,7 +2938,7 @@ const App = () => {
         t={t}
         TAG_STYLES={TAG_STYLES}
         displayTag={displayTag}
-        setActiveTemplateId={setActiveTemplateId}
+        setActiveTemplateId={handleSetActiveTemplateId}
         setDiscoveryView={setDiscoveryView}
         setZoomedImage={setZoomedImage}
         setMobileTab={setMobileTab}
@@ -2854,7 +2988,7 @@ const App = () => {
           setThemeMode={setThemeMode}
           templates={templates}
           activeTemplateId={activeTemplateId}
-          setActiveTemplateId={setActiveTemplateId}
+          setActiveTemplateId={handleSetActiveTemplateId}
         />
       )}
       <Analytics />

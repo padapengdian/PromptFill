@@ -78,6 +78,59 @@ export const generateAITerms = async (params) => {
 };
 
 /**
+ * 智能一键润色与拆分
+ * @param {Object} params - 参数
+ * @param {string} params.rawPrompt - 原始提示词
+ * @param {string} params.existingBankContext - 现有词库上下文信息
+ * @param {Array} params.availableTags - 可选标签列表
+ * @param {string} params.language - 语言
+ * @returns {Promise<Object>} - AI 处理结果
+ */
+export const polishAndSplitPrompt = async (params) => {
+  const { rawPrompt, existingBankContext = '', availableTags = [], language = 'cn' } = params;
+
+  // 检查功能开关
+  if (!AI_FEATURE_ENABLED) {
+    console.warn('[AI Service] AI feature is disabled');
+    throw new Error('AI 功能已禁用');
+  }
+
+  try {
+    const CLOUD_API_URL = "https://data.tanshilong.com/api/ai/process";
+
+    const response = await fetch(CLOUD_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        action: 'polish-and-split',
+        language: language,
+        payload: {
+          rawPrompt,
+          existingBankContext,
+          availableTags
+        }
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `AI Server Error: ${response.status}`);
+    }
+
+    const result = await response.json();
+    if (result.success && result.data) {
+      return result.data;
+    }
+    throw new Error('AI 返回数据格式错误');
+  } catch (error) {
+    console.error('[AI Service] Polish and Split failed:', error);
+    throw error;
+  }
+};
+
+/**
  * 以下函数由于采用了后端代理，且 Key 存储在服务器环境变量中，
  * 前端不再直接管理 API Key。保留空实现或按需移除。
  */

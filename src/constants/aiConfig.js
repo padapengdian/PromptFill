@@ -5,7 +5,10 @@
 
 // ===== 功能开关 =====
 // 测试功能开关：设置为 false 即可完全关闭 AI 智能词组功能
-export const AI_FEATURE_ENABLED = false;
+export const AI_FEATURE_ENABLED = true;
+
+// 智能拆分功能开关
+export const AI_SMART_SPLIT_ENABLED = true;
 
 // ===== AI 提供商配置 =====
 // 支持的 AI 提供商类型

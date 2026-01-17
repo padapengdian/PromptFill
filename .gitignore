@@ -41,6 +41,8 @@ Backup/
 *.git_latest
 App-clean.jsx
 重构完成-*.md
+测试用例-智能拆分.md
+PRD/
 
 # Tauri (Desktop App)
 src-tauri/

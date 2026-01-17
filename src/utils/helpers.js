@@ -214,7 +214,18 @@ export const makeUniqueKey = (base, existingKeys, suffix = "custom") => {
 export const getLocalized = (obj, language) => {
   if (!obj) return "";
   if (typeof obj === 'string') return obj;
-  return obj[language] || obj.cn || obj.en || "";
+
+  // 处理对象格式
+  const localized = obj[language] || obj.cn || obj.en;
+
+  // 如果获取到的值不是字符串，转换为字符串
+  if (localized === null || localized === undefined) return "";
+  if (typeof localized !== 'string') {
+    console.warn('getLocalized: localized value is not a string, converting:', localized);
+    return String(localized);
+  }
+
+  return localized;
 };
 
 // 获取系统语言 (非中文环境默认返回 en)

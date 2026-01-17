@@ -32,7 +32,7 @@
 /**
  * 模板系统版本号，每次更新 templates.js 或 banks.js 时请更新此版本号
  */
-export const SYSTEM_DATA_VERSION = "0.8.4";
+export const SYSTEM_DATA_VERSION = "0.8.5";
 
 /**
  * 分享功能正式环境域名（扫码导入需使用公网可访问地址）
@@ -1383,6 +1383,107 @@ Aspect Ratio: {{ratio}} --niji 7`
 };
 
 /**
+ * 微缩场景模型
+ */
+export const TEMPLATE_MINIATURE_MODEL = {
+  cn: `### 微缩场景模型
+
+一个微缩场景模型，展现了渺小的 {{miniature_character}} 与一个超大的 {{giant_object}} 互动的场景。
+
+夸张的比例对比、富有表现力的姿势、电影级的光影效果。极其精细的道具、手工制作的逼真质感、微距镜头视角。
+
+**画幅比例**：{{ratio}}`,
+
+  en: `### Miniature Scene Model
+
+A miniature scene model showcasing a tiny {{miniature_character}} interacting with a giant {{giant_object}}.
+
+Exaggerated scale contrast, expressive poses, cinematic lighting. Extremely detailed props, handmade realistic textures, macro lens perspective.
+
+**Aspect Ratio**: {{ratio}}`
+};
+
+export const TEMPLATE_POP_MART_PLUSH = {
+  cn: `### Pop Mart 盲盒风格毛绒玩具壁纸
+
+一张垂直手机壁纸，展示一群可爱的拟人化马毛绒玩具堆叠在 {{festive_archway}} 内。Pop Mart 盲盒风格，柔软毛绒质感，C4D 渲染。
+
+高度多样化和有趣表情：{{plush_expression}}。
+
+丰富多样的独特配饰和装饰：{{cute_accessory}}。
+
+色彩丰富、温暖照明、超精细细节，可爱有趣的氛围。`,
+
+  en: `### Pop Mart Blind Box Style Plush Toys Wallpaper
+
+A vertical phone wallpaper featuring a crowded group of cute anthropomorphic horse plush toys stacked inside a {{festive_archway}}. Pop Mart blind box style, soft fuzzy fur texture, C4D render.
+
+Highly diverse and funny expressions: {{plush_expression}}.
+
+Wide variety of unique accessories and decorations: {{cute_accessory}}.
+
+Colorful, warm lighting, ultra-detailed, cute and playful vibe.`
+};
+
+export const TEMPLATE_3D_ISOMETRIC_DIORAMA = {
+  cn: `### 3D等距透视模型展台
+
+一个干净、极简的3D等距透视模型展台，展示{{exhibition_type}}，特色是{{display_objects}}布置在{{pod_structure}}内，微妙的光照点缀，光滑的地板表面，柔和的摄影棚灯光，逼真的材质，圆润的边缘，微型建筑模型风格，高细节，中性背景。`,
+
+  en: `### 3D Isometric Diorama
+
+A clean, minimal 3D isometric diorama of a {{exhibition_type}}, featuring {{display_objects}} arranged within a {{pod_structure}}, subtle lighting accents, smooth floor surfaces, soft studio lighting, realistic materials, rounded edges, miniature architectural model style, high detail, neutral background.`
+};
+
+export const TEMPLATE_CHINESE_BRIDAL_PORTRAIT = {
+  cn: `### 中国传统新娘肖像摄影
+
+一张传统中式新娘肖像摄影作品。女性主体盘着发髻，装饰着{{bridal_hair_decoration}}，身穿{{traditional_bridal_attire}}，佩戴{{bridal_jewelry}}。
+
+写实的人体比例，平视视角，带有纸剪装饰前景的近距离肖像。
+
+**核心材质**：光滑缎面质感、精致纸剪纹理、光泽珍珠表面。
+
+**光影氛围**：柔和侧光、柔和阴影、温暖优雅的传统中式喜庆氛围。
+
+**技术参数**：50mm镜头`,
+
+  en: `### Chinese Traditional Bridal Portrait Photography
+
+A traditional Chinese bridal portrait photograph. A woman with an updo hairstyle adorned with {{bridal_hair_decoration}}, wearing {{traditional_bridal_attire}} and {{bridal_jewelry}}.
+
+Realistic human proportion, eye-level perspective, close-up portrait with paper-cut decorative foreground.
+
+**Key Materials**: Smooth satin texture, delicate paper-cut texture, glossy pearl surface.
+
+**Lighting & Atmosphere**: Soft side lighting, soft shadows, warm and elegant traditional Chinese festive atmosphere.
+
+**Technical Parameters**: 50mm lens`
+};
+
+export const TEMPLATE_PREMIUM_FOOD_ADVERTISING = {
+  cn: `### 高端食品广告摄影
+
+{{premium_food_subject}}，高端食品广告，白色无缝背景，高调摄影棚灯光，悬浮堆叠构图，飘浮的食品块，散落着{{ingredient_bits}}，干净极简布局，表面清晰柔和阴影，超写实，微距产品摄影，100mm镜头观感，f/8清晰焦点，微妙纹理细节，编辑商业风格，8k分辨率。`,
+
+  en: `{{premium_food_subject}}, premium food advertising, white seamless background, high key studio lighting, floating stacked composition, levitating pieces, {{ingredient_bits}} scattered, clean minimal layout, crisp soft shadow on surface, ultra realistic, macro product photography, 100mm lens look, f/8 sharp focus, subtle texture detail, editorial commercial, 8k`
+};
+
+export const TEMPLATE_FORBIDDEN_CITY_PHOENIX = {
+  cn: `### 紫禁城雪夜人形凤凰
+
+在{{imperial_palace_scene}}中，一位"人形凤凰"化身宫殿的灵魂。她头戴{{phoenix_crown}}，身披{{flowing_garment}}，{{festive_props}}。
+
+构图上将华丽繁复的头饰与流动的丝绸华服与身后辉煌的建筑相呼应，形成强烈的视觉共鸣。背光在漫天飞雪中极大地增强了神话般的氛围，营造出穿越时空、华美而庄严的梦幻意境。`,
+
+  en: `### Forbidden City Snow Night Phoenix
+
+In {{imperial_palace_scene}}, a "human phoenix" embodies the soul of the palace. She wears {{phoenix_crown}} and {{flowing_garment}}, {{festive_props}}.
+
+The composition creates a strong visual resonance between the ornate headdress and flowing robes with the magnificent architecture behind. The backlight amidst falling snow greatly enhances the mythical atmosphere, creating a dreamlike artistic conception that transcends time and space with magnificence and solemnity.`
+};
+
+/**
  * 可用的模板标签
  */
 export const TEMPLATE_TAGS = [
@@ -1945,6 +2046,90 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 vertical portrait" }
     },
     tags: ["人物", "摄影", "卡通"],
+    language: ["cn", "en"]
+  },
+  {
+    id: "tpl_miniature_model",
+    name: { cn: "微缩场景模型", en: "Miniature Scene Model" },
+    content: TEMPLATE_MINIATURE_MODEL,
+    imageUrl: "https://s3.bmp.ovh/imgs/2026/01/16/9dae0828037cbf5d.jpg",
+    author: "@aleenaamiir",
+    selections: {
+      "miniature_character": { cn: "消防员", en: "Firefighter" },
+      "giant_object": { cn: "燃烧的火柴棍", en: "Burning Matchstick" },
+      "ratio": { cn: "16:9横构图", en: "16:9 horizontal landscape" }
+    },
+    tags: ["创意", "产品", "摄影"],
+    language: ["cn", "en"]
+  },
+  {
+    id: "tpl_pop_mart_plush",
+    name: { cn: "马年春节毛绒玩具", en: "Pop Mart Plush Toys" },
+    content: TEMPLATE_POP_MART_PLUSH,
+    imageUrl: "https://s3.bmp.ovh/imgs/2026/01/17/1e75e6702b92266c.jpg",
+    author: "两斤 (@0x00_Krypt)",
+    selections: {
+      "plush_expression": { cn: "眨眼俏皮表情", en: "winking with playful expression" },
+      "cute_accessory": { cn: "针织帽", en: "beanie hats" },
+      "festive_archway": { cn: "中国传统拱门", en: "traditional Chinese archway" }
+    },
+    tags: ["卡通", "创意", "节日"],
+    language: ["cn", "en"]
+  },
+  {
+    id: "tpl_3d_isometric_diorama",
+    name: { cn: "3D等距透视展台", en: "3D Isometric Diorama" },
+    content: TEMPLATE_3D_ISOMETRIC_DIORAMA,
+    imageUrl: "https://s3.bmp.ovh/imgs/2026/01/17/214fca0da3c13139.jpg",
+    author: "Aleena Amir (@aleenaamiir)",
+    selections: {
+      "exhibition_type": { cn: "现代艺术展览", en: "modern art exhibition" },
+      "display_objects": { cn: "抽象雕塑和装置艺术", en: "abstract sculptures and installation art" },
+      "pod_structure": { cn: "玻璃立方体展台", en: "glass cube pod" }
+    },
+    tags: ["产品", "创意"],
+    language: ["cn", "en"]
+  },
+  {
+    id: "tpl_chinese_bridal_portrait",
+    name: { cn: "中式新娘肖像", en: "Chinese Bridal Portrait" },
+    content: TEMPLATE_CHINESE_BRIDAL_PORTRAIT,
+    imageUrl: "https://s3.bmp.ovh/imgs/2026/01/17/fa745814a2980164.jpg",
+    author: "ttmouse-豆爸 (@ttmouse)",
+    selections: {
+      "bridal_hair_decoration": { cn: "红色纸剪花和蝴蝶装饰", en: "red paper-cut flowers and butterflies" },
+      "traditional_bridal_attire": { cn: "红色缎面旗袍", en: "red satin cheongsam" },
+      "bridal_jewelry": { cn: "白色珍珠首饰和小珍珠耳环", en: "white pearl jewelry and small pearl earrings" }
+    },
+    tags: ["人物", "摄影", "节日"],
+    language: ["cn", "en"]
+  },
+  {
+    id: "tpl_premium_food_advertising",
+    name: { cn: "高端食品广告", en: "Premium Food Advertising" },
+    content: TEMPLATE_PREMIUM_FOOD_ADVERTISING,
+    imageUrl: "https://s3.bmp.ovh/imgs/2026/01/17/416c81356ded66d4.jpg",
+    author: "Amira Zairi (@azed_ai)",
+    selections: {
+      "premium_food_subject": { cn: "手工巧克力球", en: "handcrafted chocolate truffles" },
+      "ingredient_bits": { cn: "可可粉和金箔碎屑", en: "cocoa powder and gold flakes" }
+    },
+    tags: ["产品", "摄影"],
+    language: ["cn", "en"]
+  },
+  {
+    id: "tpl_forbidden_city_phoenix",
+    name: { cn: "紫禁城雪夜凤凰", en: "Forbidden City Snow Night Phoenix" },
+    content: TEMPLATE_FORBIDDEN_CITY_PHOENIX,
+    imageUrl: "https://s3.bmp.ovh/imgs/2026/01/17/3665163b0de1bf93.jpg",
+    author: "Sidona (@sidona)",
+    selections: {
+      "imperial_palace_scene": { cn: "紫禁城雪夜，飞雪飘零", en: "Forbidden City snow night with falling snowflakes" },
+      "phoenix_crown": { cn: "华丽繁复的金凤冠", en: "ornate golden phoenix crown" },
+      "flowing_garment": { cn: "流动的红橙色丝绸华服", en: "flowing red-orange silk robes" },
+      "festive_props": { cn: "口中叼着中式红包，手中拿着展开的春节祝福", en: "holding red envelope in mouth and unfolded spring festival blessing in hand" }
+    },
+    tags: ["人物", "摄影", "节日", "创意"],
     language: ["cn", "en"]
   }
 ];

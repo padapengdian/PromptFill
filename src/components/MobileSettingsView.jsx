@@ -37,6 +37,17 @@ export const MobileSettingsView = ({
   // 完善后的更新日志 (同步桌面端内容)
   const updateLogs = language === 'cn' ? [
     { 
+      version: 'V0.8.0', 
+      date: '2026-01-17', 
+      title: '智能词条正式上线与多项增强',
+      content: [
+        '✨ 智能词条正式版：支持 AI 驱动的提示词自动生成',
+        '🧩 智能拆分工具：一键转化文本为结构化模版变量',
+        '📚 官方模版扩充：新增紫禁城、食品广告等多款模版',
+        '🚀 性能优化：优化瀑布流加载与移动端交互体验'
+      ]
+    },
+    { 
       version: 'V0.7.2', 
       date: '2026-01-13', 
       title: '系统架构优化与数据更新',
@@ -117,6 +128,17 @@ export const MobileSettingsView = ({
       ]
     }
   ] : [
+    { 
+      version: 'V0.8.0', 
+      date: '2026-01-17', 
+      title: 'AI Official Launch & Improvements',
+      content: [
+        '✨ AI Terms Official: AI-powered prompt generation is live',
+        '🧩 Smart Split Tool: Convert raw text to variables instantly',
+        '📚 Library Expansion: Added new high-quality presets',
+        '🚀 Performance: Faster loading and smoother UI/UX'
+      ]
+    },
     { 
       version: 'V0.7.2', 
       date: '2026-01-13', 
@@ -481,7 +503,7 @@ export const MobileSettingsView = ({
       )}
 
       <div className={`text-center pb-8 ${isDarkMode ? 'opacity-10' : 'opacity-20'}`}>
-        <p className={`text-[10px] font-black tracking-[0.3em] uppercase ${isDarkMode ? 'text-white' : 'text-black'}`}>Prompt Fill V0.7.2</p>
+        <p className={`text-[10px] font-black tracking-[0.3em] uppercase ${isDarkMode ? 'text-white' : 'text-black'}`}>Prompt Fill V0.8.0</p>
         <p className={`text-[9px] font-bold mt-1 ${isDarkMode ? 'text-white' : 'text-black'}`}>Made by CornerStudio</p>
       </div>
     </div>

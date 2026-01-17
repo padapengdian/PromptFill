@@ -1,10 +1,13 @@
 // EditorToolbar 组件 - 编辑器工具栏
 import React, { useState } from 'react';
-import { Plus, Undo, Redo, Link, Unlink, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, Undo, Redo, Link, Unlink, ChevronDown, ChevronUp, Sparkles, Loader2 } from 'lucide-react';
 import { PremiumButton } from './PremiumButton';
+import { AI_SMART_SPLIT_ENABLED } from '../constants/aiConfig';
 
 export const EditorToolbar = ({ 
   onInsertClick, 
+  onSmartSplitClick,
+  isSmartSplitLoading = false,
   canUndo, 
   canRedo, 
   onUndo, 
@@ -15,7 +18,8 @@ export const EditorToolbar = ({
   cursorInVariable = false,
   currentGroupId = null,
   onSetGroup,
-  onRemoveGroup
+  onRemoveGroup,
+  language = 'cn'
 }) => {
   const [isGroupsExpanded, setIsGroupsExpanded] = useState(false);
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
@@ -29,7 +33,7 @@ export const EditorToolbar = ({
           <div className="flex items-center gap-2">
             <PremiumButton 
               onClick={onUndo} 
-              disabled={!canUndo} 
+              disabled={!canUndo || isSmartSplitLoading} 
               title={t('undo') || "撤消"} 
               icon={Undo} 
               isDarkMode={isDarkMode}
@@ -37,7 +41,7 @@ export const EditorToolbar = ({
             />
             <PremiumButton 
               onClick={onRedo} 
-              disabled={!canRedo} 
+              disabled={!canRedo || isSmartSplitLoading} 
               title={t('redo') || "重做"} 
               icon={Redo} 
               isDarkMode={isDarkMode}
@@ -106,12 +110,32 @@ export const EditorToolbar = ({
           )}
         </div>
 
-        {/* Right: Insert */}
+        {/* Right: AI Smart Split & Insert */}
         <div className="flex items-center gap-2">
+          {AI_SMART_SPLIT_ENABLED && (
+            <PremiumButton
+              onClick={onSmartSplitClick}
+              disabled={isSmartSplitLoading}
+              isDarkMode={isDarkMode}
+              className={`rainbow ${isSmartSplitLoading ? 'opacity-80' : ''}`}
+              title={language === 'cn' ? '一键润色与智能拆分' : 'Smart Polish & Split'}
+            >
+              <span className={`flex items-center gap-1.5 ${isSmartSplitLoading ? 'animate-pulse' : ''}`}>
+                {isSmartSplitLoading
+                  ? (language === 'cn' ? '正在智能拆分...' : 'Splitting...')
+                  : (language === 'cn' ? '智能拆分' : 'Smart Split')}
+                <span className="text-[9px] font-medium text-orange-500/80">
+                  Beta
+                </span>
+              </span>
+            </PremiumButton>
+          )}
+
           <PremiumButton 
             onClick={onInsertClick} 
             icon={Plus} 
             isDarkMode={isDarkMode}
+            disabled={isSmartSplitLoading}
           >
             {t('insert')}
           </PremiumButton>
