@@ -42,7 +42,6 @@ export const MobileSettingsView = ({
       title: '智能词条正式上线与多项增强',
       content: [
         '✨ 智能词条正式版：支持 AI 驱动的提示词自动生成',
-        '🧩 智能拆分工具：一键转化文本为结构化模版变量',
         '📚 官方模版扩充：新增紫禁城、食品广告等多款模版',
         '🚀 性能优化：优化瀑布流加载与移动端交互体验'
       ]
@@ -134,7 +133,6 @@ export const MobileSettingsView = ({
       title: 'AI Official Launch & Improvements',
       content: [
         '✨ AI Terms Official: AI-powered prompt generation is live',
-        '🧩 Smart Split Tool: Convert raw text to variables instantly',
         '📚 Library Expansion: Added new high-quality presets',
         '🚀 Performance: Faster loading and smoother UI/UX'
       ]

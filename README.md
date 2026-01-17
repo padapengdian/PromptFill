@@ -26,7 +26,7 @@ Prompt Fill is now at version **v0.8.0**. The original intention of this project
 
 ### 🌟 Progress & Core Features
 
-*   **✅ Official AI Support**: AI-powered prompt expansion and smart text splitting features are now live.
+*   **✅ Official AI Support**: AI-powered prompt expansion feature is now live.
 *   **✅ Full Dark Mode Support**: One-click theme switching for desktop and mobile.
 *   **✅ IndexedDB Storage**: Now uses IndexedDB for large data, overcoming the 5MB LocalStorage limit.
 *   **✅ Linkage Groups**: Sync modifications globally within groups (e.g., `{{color}}_1`).
@@ -177,7 +177,7 @@ Copy the final prompt or save as a long image. JSON Import/Export is available f
 ## 📝 Change Log
 
 ### Version 0.8.0 (2026-01-17)
-*   **✨ Official AI Features**: AI-powered prompt generation and "Smart Split" tool are now available.
+*   **✨ Official AI Features**: AI-powered prompt generation is now available.
 *   **📚 Library Expansion**: Significant expansion of the template library with high-quality artistic styles.
 *   **🚀 Performance**: Enhanced masonry layout performance and smoother UI transitions.
 
@@ -259,7 +259,7 @@ Prompt Fill 现已迭代至 **v0.8.0** 版本。本项目初衷是解决 AI 绘�
 
 ### 🌟 目前进度与核心功能
 
-*   **✅ 正式 AI 赋能**：智能词条扩充与文本智能拆分功能正式上线。
+*   **✅ 正式 AI 赋能**：智能词条扩充功能正式上线。
 *   **✅ 全面暗色模式支持**：支持桌面端与移动端的一键主题切换。
 *   **✅ IndexedDB 存储升级**：核心数据已迁移至 IndexedDB，彻底解决 5MB 存储上限问题。
 *   **✅ 词组联动系统**：支持变量成组联动，修改一处，全局同步。
@@ -411,7 +411,6 @@ Prompt Fill 现已迭代至 **v0.8.0** 版本。本项目初衷是解决 AI 绘�
 
 ### Version 0.8.0 (2026-01-17)
 *   **✨ 智能词条正式上线**：支持 AI 驱动的词条自动生成与扩展。
-*   **🧩 智能拆分功能**：新增文本智能拆分，大幅提升模版制作效率。
 *   **📚 模版库大扩充**：新增多款精选高质量 AI 艺术模版。
 *   **🚀 极致性能优化**：优化大数据量下的发现页浏览体验。
 

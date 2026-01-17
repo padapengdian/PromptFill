@@ -43,7 +43,6 @@ export const SettingsView = ({
       type: 'MAJOR',
       content: [
         '✨ 智能词条正式版：AI 驱动的提示词自动生成与词库扩充功能正式上线。',
-        '🧩 智能拆分工具：支持一键将长文本拆分为结构化模版变量，大幅提升模版制作效率。',
         '📚 官方模版扩充：新增紫禁城雪夜、高端食品广告、中式新娘肖像等多款精美艺术模版。',
         '🚀 性能与体验优化：优化了瀑布流加载性能与移动端交互细节，提升系统整体稳定性。'
       ]
@@ -220,7 +219,6 @@ export const SettingsView = ({
       type: 'MAJOR',
       content: [
         '✨ AI Terms Official: AI-powered prompt generation and library expansion are now officially live.',
-        '🧩 Smart Split Tool: Instantly convert long text into structured variables to accelerate template creation.',
         '📚 Library Expansion: Added new high-quality templates including Forbidden City Snow, Premium Food Ad, and more.',
         '🚀 UX & Performance: Optimized masonry layout loading and refined mobile interactions for better stability.'
       ]
