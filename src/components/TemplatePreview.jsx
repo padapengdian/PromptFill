@@ -3,28 +3,29 @@ import { Variable } from './Variable';
 import { VisualEditor } from './VisualEditor';
 import { EditorToolbar } from './EditorToolbar';
 import { ImageIcon, ArrowUpRight, Upload, Globe, RotateCcw, Pencil, Check, X, ChevronLeft, ChevronRight, Plus, Trash2 } from 'lucide-react';
+import { WaypointsIcon } from './icons/WaypointsIcon';
 import { getLocalized } from '../utils/helpers';
 
 /**
  * TemplatePreview 组件 - 负责渲染模版的预览内容，包括变量交互
  */
-export const TemplatePreview = React.memo(({ 
-  activeTemplate, 
-  banks, 
-  defaults, 
-  categories, 
-  activePopover, 
-  setActivePopover, 
-  handleSelect, 
-  handleAddCustomAndSelect, 
-  popoverRef, 
-  t, 
-  displayTag, 
-  TAG_STYLES, 
-  setZoomedImage, 
-  fileInputRef, 
-  setShowImageUrlInput, 
-  handleResetImage, 
+export const TemplatePreview = React.memo(({
+  activeTemplate,
+  banks,
+  defaults,
+  categories,
+  activePopover,
+  setActivePopover,
+  handleSelect,
+  handleAddCustomAndSelect,
+  popoverRef,
+  t,
+  displayTag,
+  TAG_STYLES,
+  setZoomedImage,
+  fileInputRef,
+  setShowImageUrlInput,
+  handleResetImage,
   handleDeleteImage,
   language,
   setLanguage,
@@ -40,8 +41,8 @@ export const TemplatePreview = React.memo(({
   editingTemplateNameId,
   tempTemplateName,
   setTempTemplateName,
-  saveTemplateName, 
-  startRenamingTemplate, 
+  saveTemplateName,
+  startRenamingTemplate,
   setEditingTemplateNameId,
   tempTemplateAuthor,
   setTempTemplateAuthor,
@@ -61,8 +62,12 @@ export const TemplatePreview = React.memo(({
   updateActiveTemplateContent,
   textareaRef,
   templateLanguage,
+  handleShareLink, // 新增：分享处理函数
+  // AI 相关（预留接口）
+  onGenerateAITerms = null,  // AI 生成词条的回调函数
 }) => {
   const [editImageIndex, setEditImageIndex] = React.useState(0);
+  const previewShareIconRef = React.useRef(null);
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   // 统一的底层容器样式
@@ -90,6 +95,15 @@ export const TemplatePreview = React.memo(({
   }, [activeTemplate.imageUrls, activeTemplate.imageUrl]);
 
   const currentImageUrl = allImages[editImageIndex] || activeTemplate?.imageUrl;
+
+  // 当多图数组长度增加时（即添加了新图），自动切换到最后一张
+  const lastImageCount = React.useRef(allImages.length);
+  React.useEffect(() => {
+    if (allImages.length > lastImageCount.current) {
+      setEditImageIndex(allImages.length - 1);
+    }
+    lastImageCount.current = allImages.length;
+  }, [allImages.length]);
 
   // 当模板切换或图片索引切换时，同步编辑索引给父组件
   React.useEffect(() => {
@@ -122,7 +136,7 @@ export const TemplatePreview = React.memo(({
     return { baseKey: varName, groupId: null };
   };
 
-  const parseLineWithVariables = (text, lineKeyPrefix, counters) => {
+  const parseLineWithVariables = (text, lineKeyPrefix, counters, fullContext = "") => {
     const parts = text.split(/({{[^}]+}})/g);
     return parts.map((part, idx) => {
       if (part.startsWith('{{') && part.endsWith('}}')) {
@@ -183,7 +197,7 @@ export const TemplatePreview = React.memo(({
         }
 
         return (
-          <Variable 
+          <Variable
             key={`${lineKeyPrefix}-${idx}`}
             id={fullKey}
             index={varIndex}
@@ -202,6 +216,8 @@ export const TemplatePreview = React.memo(({
             language={language}
             isDarkMode={isDarkMode}
             groupId={parsed.groupId}  // 传递 groupId 用于显示分组标识
+            onGenerateAITerms={onGenerateAITerms}  // 传递 AI 生成回调
+            templateContext={fullContext} // 传递全文内容
           />
         );
       }
@@ -219,7 +235,13 @@ export const TemplatePreview = React.memo(({
   const renderedContent = useMemo(() => {
     const contentToRender = getLocalized(activeTemplate?.content, language);
     if (!contentToRender) return null;
-    
+
+    // 类型检查：确保 contentToRender 是字符串
+    if (typeof contentToRender !== 'string') {
+      console.error('TemplatePreview: content is not a string:', contentToRender);
+      return null;
+    }
+
     const lines = contentToRender.split('\n');
     const counters = {}; 
     
@@ -230,7 +252,15 @@ export const TemplatePreview = React.memo(({
       let Type = 'div';
       let className = `${isDarkMode ? 'text-gray-300' : 'text-gray-700'} mb-3 leading-10`;
 
-      if (line.startsWith('### ')) {
+      if (line.startsWith('# ')) {
+        Type = 'h1';
+        className = `text-2xl md:text-3xl font-black mt-8 mb-4 border-b-2 pb-3 ${isDarkMode ? 'text-white border-white/10' : 'text-gray-900 border-gray-200'}`;
+        content = line.replace('# ', '');
+      } else if (line.startsWith('## ')) {
+        Type = 'h2';
+        className = `text-xl md:text-2xl font-bold mt-7 mb-3 border-b pb-2 ${isDarkMode ? 'text-white border-white/10' : 'text-gray-900 border-gray-100'}`;
+        content = line.replace('## ', '');
+      } else if (line.startsWith('### ')) {
         Type = 'h3';
         className = `text-lg font-bold mt-6 mb-3 border-b pb-2 ${isDarkMode ? 'text-white border-white/10' : 'text-gray-900 border-gray-100'}`;
         content = line.replace('### ', '');
@@ -239,7 +269,7 @@ export const TemplatePreview = React.memo(({
         content = (
           <React.Fragment key={lineIdx}>
             <span className={`${isDarkMode ? 'text-gray-600' : 'text-gray-400'} mt-2.5`}>•</span>
-            <span className="flex-1">{parseLineWithVariables(line.replace('- ', '').trim(), lineIdx, counters)}</span>
+            <span className="flex-1">{parseLineWithVariables(line.replace('- ', '').trim(), lineIdx, counters, contentToRender)}</span>
           </React.Fragment>
         );
         return <div key={lineIdx} className={className}>{content}</div>;
@@ -250,14 +280,14 @@ export const TemplatePreview = React.memo(({
          content = (
             <React.Fragment key={lineIdx}>
               <span className={`font-mono mt-1 min-w-[20px] ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`}>{number}</span>
-              <span className="flex-1">{parseLineWithVariables(text, lineIdx, counters)}</span>
+              <span className="flex-1">{parseLineWithVariables(text, lineIdx, counters, contentToRender)}</span>
             </React.Fragment>
         );
         return <div key={lineIdx} className={className}>{content}</div>;
       }
 
       if (typeof content === 'string') {
-          return <Type key={lineIdx} className={className}>{parseLineWithVariables(content, lineIdx, counters)}</Type>;
+          return <Type key={lineIdx} className={className}>{parseLineWithVariables(content, lineIdx, counters, contentToRender)}</Type>;
       }
       return <Type key={lineIdx} className={className}>{content}</Type>;
     });
@@ -269,7 +299,7 @@ export const TemplatePreview = React.memo(({
         <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700 opacity-30 blur-[60px] scale-110 pointer-events-none"
             style={{ 
-                backgroundImage: activeTemplate.imageUrl ? `url(${activeTemplate.imageUrl})` : 'none',
+                backgroundImage: currentImageUrl ? `url(${currentImageUrl})` : 'none',
             }}
         ></div>
         <div className={`absolute inset-0 pointer-events-none ${isDarkMode ? 'bg-black/30' : 'bg-white/5'}`}></div>
@@ -277,9 +307,26 @@ export const TemplatePreview = React.memo(({
         <div className="w-full h-full overflow-y-auto px-3 py-4 md:px-4 lg:p-8 custom-scrollbar relative z-10">
             <div 
                 id="preview-card"
-                className={`max-w-4xl mx-auto p-4 sm:p-6 md:p-8 lg:p-12 min-h-[500px] md:min-h-[600px] transition-all duration-500 relative ${isMobile ? (isDarkMode ? 'bg-[#242120]/90 border border-white/5 rounded-2xl shadow-2xl' : 'bg-white/90 border border-white/60 rounded-2xl shadow-xl') : (isDarkMode ? 'bg-black/20 backdrop-blur-md rounded-2xl border border-white/5 shadow-2xl' : 'bg-white/40 backdrop-blur-sm rounded-2xl border border-white/40 shadow-sm')}`}
+                className={`max-w-4xl mx-auto p-4 sm:p-6 md:p-8 lg:p-12 min-h-[500px] md:min-h-[600px] transition-all duration-500 relative ${isMobile ? (isDarkMode ? 'bg-[#242120]/90 border border-white/5 rounded-2xl shadow-2xl overflow-visible' : 'bg-white/90 border border-white/60 rounded-2xl shadow-xl overflow-visible') : (isDarkMode ? 'bg-black/20 backdrop-blur-md rounded-2xl border border-white/5 shadow-2xl' : 'bg-white/40 backdrop-blur-sm rounded-2xl border border-white/40 shadow-sm')}`}
             >
                 {/* --- Top Section: Title & Image --- */}
+                {isEditing && (
+                    <div className={`backdrop-blur-sm mb-6 rounded-xl overflow-hidden border ${isDarkMode ? 'bg-white/5 border-white/5' : 'bg-white/30 border-gray-100'}`}>
+                        <EditorToolbar
+                            onInsertClick={() => setIsInsertModalOpen(true)}
+                            canUndo={historyPast.length > 0}
+                            canRedo={historyFuture.length > 0}
+                            onUndo={handleUndo}
+                            onRedo={handleRedo}
+                            t={t}
+                            isDarkMode={isDarkMode}
+                            cursorInVariable={cursorInVariable}
+                            currentGroupId={currentGroupId}
+                            onSetGroup={handleSetGroup}
+                            onRemoveGroup={handleRemoveGroup}
+                        />
+                    </div>
+                )}
                 <div className={`flex flex-col md:flex-row justify-between items-start mb-6 md:mb-10 relative ${isEditing ? 'border-b pb-8' : ''} ${isDarkMode ? 'border-white/5' : 'border-gray-100'}`}>
                     {/* Left: Title & Meta Info */}
                     <div className="flex-1 min-w-0 pr-4 z-10 pt-2">
@@ -341,6 +388,18 @@ export const TemplatePreview = React.memo(({
                                     title={t('rename')}
                                 >
                                     <Pencil size={18} />
+                                </button>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleShareLink && handleShareLink();
+                                    }}
+                                    onMouseEnter={() => previewShareIconRef.current?.startAnimation()}
+                                    onMouseLeave={() => previewShareIconRef.current?.stopAnimation()}
+                                    className="p-2 rounded-xl transition-all duration-200 opacity-0 group-hover/title-edit:opacity-100 dark:text-gray-600 dark:hover:text-orange-400 dark:hover:bg-white/5 text-gray-300 hover:text-orange-500 hover:bg-orange-50"
+                                    title={language === 'cn' ? '分享模版' : t('share_link')}
+                                >
+                                    <WaypointsIcon ref={previewShareIconRef} size={18} />
                                 </button>
                             </div>
                         )}
@@ -428,13 +487,15 @@ export const TemplatePreview = React.memo(({
                                                     : [...currentTags, tag];
                                                 setEditingTemplateTags({ id: activeTemplate.id, tags: newTags });
                                             }}
-                                            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
+                                            className={`px-4 py-3 rounded-2xl text-xs font-bold transition-all duration-300 group ${
                                                 (editingTemplateTags.tags || []).includes(tag)
-                                                    ? 'bg-orange-500 text-white border-orange-500 shadow-md shadow-orange-200 scale-105'
-                                                    : (isDarkMode ? 'bg-white/5 text-gray-500 border-white/5 hover:border-orange-500/50 hover:text-orange-400' : 'bg-white text-gray-500 border-gray-100 hover:border-orange-200 hover:text-orange-500')
+                                                    ? (isDarkMode ? 'bg-[#F48B42]/10 text-[#FB923C]' : 'bg-[#F9BC8F]/20 text-[#EA580C]')
+                                                    : (isDarkMode ? 'text-gray-400 hover:text-white hover:bg-white/5' : 'text-gray-500 hover:text-orange-600 hover:bg-orange-50/50')
                                             }`}
                                         >
-                                            {displayTag(tag)}
+                                            <span className={`inline-block ${ (editingTemplateTags.tags || []).includes(tag) ? 'translate-x-1' : 'group-hover:translate-x-1'} transition-transform`}>
+                                                {displayTag(tag)}
+                                            </span>
                                         </button>
                                     ))}
                                 </div>

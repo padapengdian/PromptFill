@@ -9,6 +9,7 @@ import {
 export const MobileSettingsView = ({ 
   language, setLanguage, 
   storageMode, setStorageMode,
+  directoryHandle,
   handleImportTemplate, handleExportAllTemplates,
   handleCompleteBackup, handleImportAllData,
   handleResetSystemData, handleClearAllData,
@@ -19,9 +20,52 @@ export const MobileSettingsView = ({
 }) => {
   const [showWechatQR, setShowWechatQR] = useState(false);
   const [showCredits, setShowCredits] = useState(false);
+  const [storageStats, setStorageStats] = React.useState(null);
+
+  React.useEffect(() => {
+    if (storageMode === 'browser' && navigator.storage && navigator.storage.estimate) {
+      navigator.storage.estimate().then(estimate => {
+        setStorageStats({
+          usage: estimate.usage,
+          quota: estimate.quota,
+          percent: Math.round((estimate.usage / estimate.quota) * 100) || 0
+        });
+      });
+    }
+  }, [storageMode]);
   
   // 完善后的更新日志 (同步桌面端内容)
   const updateLogs = language === 'cn' ? [
+    { 
+      version: 'V0.8.0', 
+      date: '2026-01-17', 
+      title: '智能词条正式上线与多项增强',
+      content: [
+        '✨ 智能词条正式版：支持 AI 驱动的提示词自动生成',
+        '📚 官方模版扩充：新增紫禁城、食品广告等多款模版',
+        '🚀 性能优化：优化瀑布流加载与移动端交互体验'
+      ]
+    },
+    { 
+      version: 'V0.7.2', 
+      date: '2026-01-13', 
+      title: '系统架构优化与数据更新',
+      content: [
+        '全站版本号同步升级至 V0.7.2',
+        '数据版本升级至 V0.8.4，扩充词库模版',
+        '优化系统运行效率与核心交互性能'
+      ]
+    },
+    { 
+      version: 'V0.7.1', 
+      date: '2026-01-07', 
+      title: '存储架构升级与系统维护',
+      content: [
+        '核心数据迁移至 IndexedDB，解决 5MB 限制',
+        '暂时下线“智能词条”功能，优化存储稳定性',
+        '全站版本号对齐升级至 V0.7.1'
+      ]
+    },
     { 
       version: 'V0.7.0', 
       date: '2026-01-03', 
@@ -83,6 +127,36 @@ export const MobileSettingsView = ({
       ]
     }
   ] : [
+    { 
+      version: 'V0.8.0', 
+      date: '2026-01-17', 
+      title: 'AI Official Launch & Improvements',
+      content: [
+        '✨ AI Terms Official: AI-powered prompt generation is live',
+        '📚 Library Expansion: Added new high-quality presets',
+        '🚀 Performance: Faster loading and smoother UI/UX'
+      ]
+    },
+    { 
+      version: 'V0.7.2', 
+      date: '2026-01-13', 
+      title: 'System Optimization & Data Update',
+      content: [
+        'Bumped system version to V0.7.2',
+        'Data version upgraded to V0.8.4',
+        'Optimized system performance and efficiency'
+      ]
+    },
+    { 
+      version: 'V0.7.1', 
+      date: '2026-01-07', 
+      title: 'Storage & Maintenance',
+      content: [
+        'Migrated core data to IndexedDB (unlimited storage)',
+        'Temporarily disabled AI Terms feature',
+        'Bumped system version to V0.7.1'
+      ]
+    },
     { 
       version: 'V0.7.0', 
       date: '2026-01-03', 
@@ -157,7 +231,7 @@ export const MobileSettingsView = ({
     </div>
   );
 
-  const SettingItem = ({ icon: Icon, label, value, onClick, disabled = false, danger = false }) => (
+  const SettingItem = ({ icon: Icon, label, value, onClick, disabled = false, danger = false, description = null }) => (
     <button 
       disabled={disabled}
       onClick={onClick}
@@ -168,10 +242,15 @@ export const MobileSettingsView = ({
       }`}
     >
       <div className="flex items-center gap-3">
-        <div className={`p-2 rounded-xl ${danger ? 'bg-red-50 text-red-500' : (isDarkMode ? 'bg-white/10 text-gray-300' : 'bg-gray-50 text-gray-600')}`}>
+        <div className={`p-2 rounded-xl flex-shrink-0 ${danger ? 'bg-red-50 text-red-500' : (isDarkMode ? 'bg-white/10 text-gray-300' : 'bg-gray-50 text-gray-600')}`}>
           <Icon size={18} />
         </div>
-        <span className={`text-sm font-bold ${danger ? 'text-red-500' : (isDarkMode ? 'text-gray-200' : 'text-gray-700')}`}>{label}</span>
+        <div className="flex flex-col items-start min-w-0">
+          <span className={`text-sm font-bold truncate ${danger ? 'text-red-500' : (isDarkMode ? 'text-gray-200' : 'text-gray-700')}`}>{label}</span>
+          {description && (
+            <span className={`text-[10px] opacity-50 truncate max-w-[180px] ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>{description}</span>
+          )}
+        </div>
       </div>
       <div className="flex items-center gap-2">
         {value && <span className={`text-xs font-medium ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>{value}</span>}
@@ -181,7 +260,7 @@ export const MobileSettingsView = ({
   );
 
   return (
-    <div className={`flex-1 overflow-y-auto pb-32 relative transition-colors duration-300 ${isDarkMode ? 'bg-[#181716]' : 'bg-white'}`}>
+    <div className={`flex-1 overflow-y-auto pb-32 relative transition-colors duration-300 ${isDarkMode ? 'bg-[#2A2928]' : 'bg-white'}`}>
       <div className="pt-12 pb-8 px-8">
         <h1 className={`text-3xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{t('settings')}</h1>
         <p className={`text-xs font-medium mt-1 uppercase tracking-widest ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>{t('template_subtitle')}</p>
@@ -225,9 +304,28 @@ export const MobileSettingsView = ({
         <SettingItem 
           icon={Database} 
           label={t('storage_mode')} 
-          value={t('use_browser_storage')} 
-          disabled={true} // 移动端暂不支持本地文件夹
+          description={language === 'cn' ? '使用 IndexedDB 模式 (无限容量)' : 'IndexedDB Mode (Unlimited)'}
+          value={storageMode === 'browser' ? (language === 'cn' ? '浏览器' : 'Browser') : (language === 'cn' ? '本地文件夹' : 'Local Folder')} 
+          disabled={true} // 移动端暂不支持切换到本地文件夹
         />
+        {storageMode === 'browser' && storageStats && (
+          <div className="px-5 mb-4 mt-2">
+            <div className="flex justify-between items-center mb-1.5">
+              <span className={`text-[10px] font-bold ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                {language === 'cn' ? '存储空间已用' : 'Storage Used'}
+              </span>
+              <span className={`text-[10px] font-bold ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                {(storageStats.usage / 1024 / 1024).toFixed(1)}MB / {(storageStats.quota / 1024 / 1024 / 1024).toFixed(1)}GB
+              </span>
+            </div>
+            <div className={`h-1.5 w-full rounded-full overflow-hidden ${isDarkMode ? 'bg-white/5' : 'bg-gray-100'}`}>
+              <div 
+                className="h-full bg-orange-500/50 transition-all duration-500" 
+                style={{ width: `${Math.max(1, storageStats.percent)}%` }}
+              />
+            </div>
+          </div>
+        )}
       </SettingSection>
 
       {/* 2. 数据管理 */}
@@ -403,7 +501,7 @@ export const MobileSettingsView = ({
       )}
 
       <div className={`text-center pb-8 ${isDarkMode ? 'opacity-10' : 'opacity-20'}`}>
-        <p className={`text-[10px] font-black tracking-[0.3em] uppercase ${isDarkMode ? 'text-white' : 'text-black'}`}>Prompt Fill V0.7.0</p>
+        <p className={`text-[10px] font-black tracking-[0.3em] uppercase ${isDarkMode ? 'text-white' : 'text-black'}`}>Prompt Fill V0.8.0</p>
         <p className={`text-[9px] font-bold mt-1 ${isDarkMode ? 'text-white' : 'text-black'}`}>Made by CornerStudio</p>
       </div>
     </div>

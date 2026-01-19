@@ -4,11 +4,12 @@ import { CATEGORY_STYLES, PREMIUM_STYLES } from '../constants/styles';
 import { getLocalized } from '../utils/helpers';
 
 import { PremiumButton } from './PremiumButton';
+import { CategoryManagerModal } from './modals/CategoryManagerModal';
 
 /**
  * 组件：词库分类块
  */
-const CategorySection = ({ catId, categories, banks, onInsert, onDeleteOption, onAddOption, onDeleteBank, onUpdateBankCategory, onStartAddBank, t, language, onTouchDragStart, isDarkMode, bankSearchQuery }) => {
+const CategorySection = ({ catId, categories, banks, onInsert, onDeleteOption, onAddOption, onUpdateOption, onDeleteBank, onUpdateBankCategory, onStartAddBank, t, language, onTouchDragStart, isDarkMode, bankSearchQuery }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const category = categories[catId];
   
@@ -47,6 +48,21 @@ const CategorySection = ({ catId, categories, banks, onInsert, onDeleteOption, o
             <h3 className={`text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-3 flex-1 transition-colors ${isDarkMode ? 'text-gray-600 group-hover:text-gray-400' : 'text-gray-400 group-hover:text-gray-600'}`}>
                 <span className={`w-1.5 h-1.5 rounded-full ${style.dotBg} opacity-60`}></span>
                 {getLocalized(category.label, language)}
+                
+                {/* 快捷添加按钮：点击后执行新建变量组逻辑 */}
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onStartAddBank(catId);
+                    }}
+                    className={`p-1 rounded-md opacity-0 group-hover:opacity-100 transition-all hover:scale-110 active:scale-95 ${
+                        isDarkMode ? 'hover:bg-white/10 text-orange-500' : 'hover:bg-black/5 text-orange-600'
+                    }`}
+                    title={t('add_bank_group')}
+                >
+                    <Plus size={12} strokeWidth={3} />
+                </button>
+
                 <span className="ml-auto tabular-nums opacity-40 font-bold">
                     {catBanks.length}
                 </span>
@@ -63,6 +79,7 @@ const CategorySection = ({ catId, categories, banks, onInsert, onDeleteOption, o
                         onInsert={onInsert}
                         onDeleteOption={onDeleteOption}
                         onAddOption={onAddOption}
+                        onUpdateOption={onUpdateOption}
                         onDeleteBank={onDeleteBank}
                         onUpdateBankCategory={onUpdateBankCategory}
                         categories={categories}
@@ -94,9 +111,11 @@ const CategorySection = ({ catId, categories, banks, onInsert, onDeleteOption, o
 /**
  * 组件：可折叠的词库组
  */
-const BankGroup = ({ bankKey, bank, onInsert, onDeleteOption, onAddOption, onDeleteBank, onUpdateBankCategory, categories, t, language, onTouchDragStart, isDarkMode, bankSearchQuery }) => {
+const BankGroup = ({ bankKey, bank, onInsert, onDeleteOption, onAddOption, onUpdateOption, onDeleteBank, onUpdateBankCategory, categories, t, language, onTouchDragStart, isDarkMode, bankSearchQuery }) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [isEditingCategory, setIsEditingCategory] = useState(false);
+    const [editingOptionIdx, setEditingOptionIdx] = useState(null);
+    const [tempOptionVal, setTempOptionVal] = useState("");
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
     // 如果有搜索词，且搜索词匹配到了词库名称或选项，则默认展开
@@ -157,8 +176,8 @@ const BankGroup = ({ bankKey, bank, onInsert, onDeleteOption, onAddOption, onDel
                     gap: '10px',
                     background: `${
                         isDarkMode 
-                            ? 'linear-gradient(180deg, #393939 9%, #242220 99%)' 
-                            : 'linear-gradient(180deg, #F0EAE5 9%, #DEDCDC 96%)'
+                            ? 'linear-gradient(180deg, #393939 9%, #242220 99%) padding-box, linear-gradient(0deg, #1A1A1A 0%, #494949 96%) border-box' 
+                            : 'linear-gradient(180deg, #F0EAE5 9%, #DEDCDC 96%) padding-box, linear-gradient(0deg, #BFBFBF 0%, #FFFFFF 100%) border-box'
                     } padding-box, ${
                         isDarkMode 
                             ? 'linear-gradient(0deg, #1A1A1A 0%, #494949 96%)' 
@@ -242,17 +261,65 @@ const BankGroup = ({ bankKey, bank, onInsert, onDeleteOption, onAddOption, onDel
                         )}
 
                         <div className="flex flex-col gap-1.5 mb-4">
-                            {filteredOptions.map((opt, idx) => (
-                                <div key={idx} className={`group/opt flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl text-[14px] font-semibold transition-all duration-200 ${isDarkMode ? 'bg-transparent hover:bg-white/5 text-gray-400 hover:text-gray-200' : 'bg-transparent hover:bg-white/60 text-gray-700 hover:text-gray-900'}`}>
-                                    <span className="truncate select-text" title={getLocalized(opt, language)}>{getLocalized(opt, language)}</span>
-                                    <button 
-                                        onClick={() => onDeleteOption(bankKey, opt)}
-                                        className="opacity-0 group-hover/opt:opacity-100 text-gray-400 hover:text-red-500 p-1 rounded-lg transition-all flex-shrink-0"
-                                    >
-                                        <X size={14} />
-                                    </button>
-                                </div>
-                            ))}
+                            {filteredOptions.map((opt, idx) => {
+                                const isEditing = editingOptionIdx === idx;
+                                const optLabel = getLocalized(opt, language);
+
+                                return (
+                                    <div key={idx} className={`group/opt flex items-center justify-between gap-2 px-3.5 py-2 rounded-xl text-[14px] font-semibold transition-all duration-200 ${isDarkMode ? 'bg-transparent hover:bg-white/5 text-gray-400 hover:text-gray-200' : 'bg-transparent hover:bg-white/60 text-gray-700 hover:text-gray-900'} ${isEditing ? (isDarkMode ? 'bg-white/5 ring-1 ring-orange-500/50' : 'bg-white ring-1 ring-orange-500/30 shadow-sm') : ''}`}>
+                                        {isEditing ? (
+                                            <input
+                                                autoFocus
+                                                type="text"
+                                                value={tempOptionVal}
+                                                onChange={(e) => setTempOptionVal(e.target.value)}
+                                                onBlur={() => {
+                                                    if (tempOptionVal.trim() && tempOptionVal !== optLabel) {
+                                                        onUpdateOption(bankKey, opt, tempOptionVal.trim());
+                                                    }
+                                                    setEditingOptionIdx(null);
+                                                }}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        if (tempOptionVal.trim() && tempOptionVal !== optLabel) {
+                                                            onUpdateOption(bankKey, opt, tempOptionVal.trim());
+                                                        }
+                                                        setEditingOptionIdx(null);
+                                                    } else if (e.key === 'Escape') {
+                                                        setEditingOptionIdx(null);
+                                                    }
+                                                }}
+                                                className={`flex-1 bg-transparent border-none outline-none py-1 text-[14px] font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                                            />
+                                        ) : (
+                                            <span className="truncate select-text flex-1 py-1" title={optLabel}>{optLabel}</span>
+                                        )}
+                                        
+                                        <div className="flex items-center gap-1">
+                                            {!isEditing && (
+                                                <button 
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setEditingOptionIdx(idx);
+                                                        setTempOptionVal(optLabel);
+                                                    }}
+                                                    className="opacity-0 group-hover/opt:opacity-100 text-gray-400 hover:text-orange-500 p-1.5 rounded-lg transition-all flex-shrink-0"
+                                                    title={t('edit')}
+                                                >
+                                                    <Pencil size={13} />
+                                                </button>
+                                            )}
+                                            <button 
+                                                onClick={() => onDeleteOption(bankKey, opt)}
+                                                className="opacity-0 group-hover/opt:opacity-100 text-gray-400 hover:text-red-500 p-1.5 rounded-lg transition-all flex-shrink-0"
+                                                title={t('delete')}
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
 
                         <div className="flex gap-2">
@@ -283,161 +350,6 @@ const BankGroup = ({ bankKey, bank, onInsert, onDeleteOption, onAddOption, onDel
             </div>
         </div>
     );
-};
-
-/**
- * 核心组件：分类管理器
- */
-export const CategoryManager = ({ isOpen, onClose, categories, setCategories, banks, setBanks, t, language, isDarkMode }) => {
-  const [newCatName, setNewCatName] = useState("");
-  const [newCatColor, setNewCatColor] = useState("slate");
-  const [editingCatId, setEditingCatId] = useState(null);
-  const [tempCatName, setTempCatName] = useState("");
-  
-  const availableColors = Object.keys(CATEGORY_STYLES);
-
-  if (!isOpen) return null;
-
-  const handleAddCategory = () => {
-    if (!newCatName.trim()) return;
-    const newId = `cat_${Date.now()}`;
-    
-    setCategories(prev => ({
-      ...prev,
-      [newId]: { id: newId, label: newCatName, color: newCatColor }
-    }));
-    setNewCatName("");
-    setNewCatColor("slate");
-  };
-
-  const handleDeleteCategory = (catId) => {
-    if (catId === 'other') return; // Cannot delete default
-    
-    const catName = getLocalized(categories[catId].label, language);
-    if (window.confirm(t('delete_category_confirm', { name: catName }))) {
-       // 1. Update banks to use 'other'
-       const updatedBanks = { ...banks };
-       Object.keys(updatedBanks).forEach(key => {
-           if (updatedBanks[key].category === catId) {
-               updatedBanks[key].category = 'other';
-           }
-       });
-       setBanks(updatedBanks);
-
-       // 2. Remove category
-       const updatedCats = { ...categories };
-       delete updatedCats[catId];
-       setCategories(updatedCats);
-    }
-  };
-
-  const startEditing = (cat) => {
-      setEditingCatId(cat.id);
-      setTempCatName(getLocalized(cat.label, language));
-  };
-
-  const saveEditing = () => {
-      if (!tempCatName.trim()) return;
-      setCategories(prev => {
-          const cat = prev[editingCatId];
-          const newLabel = typeof cat.label === 'object' ? { ...cat.label, [language]: tempCatName } : tempCatName;
-          return {
-            ...prev,
-            [editingCatId]: { ...cat, label: newLabel }
-          };
-      });
-      setEditingCatId(null);
-  };
-
-  const changeColor = (catId, color) => {
-      setCategories(prev => ({
-          ...prev,
-          [catId]: { ...prev[catId], color }
-      }));
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
-      <div className={`rounded-xl shadow-xl w-full max-w-md overflow-hidden flex flex-col max-h-[80vh] ${isDarkMode ? 'bg-[#242120] border border-white/5' : 'bg-white'}`}>
-        <div className={`p-4 border-b flex justify-between items-center ${isDarkMode ? 'border-white/5 bg-black/20' : 'border-gray-100 bg-gray-50'}`}>
-          <h3 className={`font-bold flex items-center gap-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>
-            <List size={18} /> {t('manage_categories')}
-          </h3>
-          <button onClick={onClose} className={`p-1 rounded transition-colors ${isDarkMode ? 'hover:bg-white/10 text-gray-500' : 'hover:bg-gray-200 text-gray-500'}`}><X size={18}/></button>
-        </div>
-        
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
-           {/* Add New */}
-           <div className={`flex gap-2 items-center mb-4 p-3 rounded-lg border ${isDarkMode ? 'bg-black/20 border-white/5' : 'bg-gray-50 border-gray-200'}`}>
-              <input 
-                value={newCatName}
-                onChange={(e) => setNewCatName(e.target.value)}
-                placeholder={t('category_name_placeholder')}
-                className={`flex-1 text-sm rounded px-2 py-1.5 focus:outline-none focus:border-orange-500 ${isDarkMode ? 'bg-white/5 border-white/10 text-gray-200' : 'border-gray-300'}`}
-              />
-              <select 
-                value={newCatColor}
-                onChange={(e) => setNewCatColor(e.target.value)}
-                className={`text-sm border rounded px-2 py-1.5 ${isDarkMode ? 'bg-[#2A2726] border-white/10 text-gray-300' : 'border-gray-300 bg-white'}`}
-              >
-                {availableColors.map(c => <option key={c} value={c}>{c}</option>)}
-              </select>
-              <button 
-                onClick={handleAddCategory}
-                disabled={!newCatName.trim()}
-                className="p-1.5 bg-orange-600 text-white rounded disabled:opacity-50 hover:bg-orange-700"
-              >
-                <Plus size={16} />
-              </button>
-           </div>
-
-           {/* List */}
-           <div className="space-y-2">
-             {Object.values(categories).map(cat => (
-               <div key={cat.id} className={`flex items-center gap-2 p-2 border rounded transition-colors ${isDarkMode ? 'border-white/5 bg-white/5 hover:border-white/10' : 'border-gray-100 bg-white hover:border-gray-200'}`}>
-                  <div className={`w-3 h-3 rounded-full ${CATEGORY_STYLES[cat.color].dotBg}`}></div>
-                  
-                  {editingCatId === cat.id ? (
-                      <input 
-                        autoFocus
-                        value={tempCatName}
-                        onChange={(e) => setTempCatName(e.target.value)}
-                        onBlur={saveEditing}
-                        onKeyDown={(e) => e.key === 'Enter' && saveEditing()}
-                        className={`flex-1 text-sm border rounded px-1 py-0.5 outline-none ${isDarkMode ? 'bg-black/40 border-orange-500 text-white' : 'border-orange-300'}`}
-                      />
-                  ) : (
-                      <span className={`flex-1 text-sm font-medium truncate ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{getLocalized(cat.label, language)}</span>
-                  )}
-
-                  <div className="flex items-center gap-1">
-                      {/* Color Picker */}
-                      <div className="relative group/color">
-                          <div className={`w-5 h-5 rounded cursor-pointer border ${isDarkMode ? 'border-white/10' : 'border-gray-200'} ${CATEGORY_STYLES[cat.color].bg}`}></div>
-                          <div className={`absolute right-0 top-full mt-1 hidden group-hover/color:grid grid-cols-5 gap-1 p-2 border shadow-lg rounded z-10 w-32 ${isDarkMode ? 'bg-[#2A2726] border-white/10 shadow-black/40' : 'bg-white border-gray-200 shadow-lg'}`}>
-                              {availableColors.map(c => (
-                                  <div 
-                                    key={c} 
-                                    onClick={() => changeColor(cat.id, c)}
-                                    className={`w-4 h-4 rounded-full cursor-pointer hover:scale-110 transition-transform ${CATEGORY_STYLES[c].dotBg}`}
-                                    title={c}
-                                  />
-                              ))}
-                          </div>
-                      </div>
-
-                      <button onClick={() => startEditing(cat)} className="p-1 text-gray-400 hover:text-orange-600 rounded"><Pencil size={14}/></button>
-                      {cat.id !== 'other' && (
-                          <button onClick={() => handleDeleteCategory(cat.id)} className="p-1 text-gray-400 hover:text-red-500 rounded"><Trash2 size={14}/></button>
-                      )}
-                  </div>
-               </div>
-             ))}
-           </div>
-        </div>
-      </div>
-    </div>
-  );
 };
 
 /**
@@ -594,6 +506,7 @@ export const BanksSidebar = React.memo(({
   insertVariableToTemplate, 
   handleDeleteOption, 
   handleAddOption, 
+  handleUpdateOption,
   handleDeleteBank, 
   handleUpdateBankCategory, 
   handleStartAddBank, 
@@ -682,6 +595,7 @@ export const BanksSidebar = React.memo(({
                         onInsert={insertVariableToTemplate}
                         onDeleteOption={handleDeleteOption}
                         onAddOption={handleAddOption}
+                        onUpdateOption={handleUpdateOption}
                         onDeleteBank={handleDeleteBank}
                         onUpdateBankCategory={handleUpdateBankCategory}
                         onStartAddBank={handleStartAddBank}
@@ -703,6 +617,7 @@ export const BanksSidebar = React.memo(({
                         onInsert={insertVariableToTemplate}
                         onDeleteOption={handleDeleteOption}
                         onAddOption={handleAddOption}
+                        onUpdateOption={handleUpdateOption}
                         onDeleteBank={handleDeleteBank}
                         onUpdateBankCategory={handleUpdateBankCategory}
                         onStartAddBank={handleStartAddBank}

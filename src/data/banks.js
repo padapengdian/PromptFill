@@ -18,7 +18,8 @@ export const INITIAL_BANKS = {
       { cn: "游戏与动漫概念美术设计大师", en: "Master of Game and Anime Concept Art" },
       { cn: "资深影视角色原画师", en: "Senior Film Character Concept Artist" },
       { cn: "赛博朋克风格设计师", en: "Cyberpunk Style Designer" },
-      { cn: "暗黑幻想风格插画师", en: "Dark Fantasy Style Illustrator" }
+      { cn: "暗黑幻想风格插画师", en: "Dark Fantasy Style Illustrator" },
+      { cn: "美术摄影与电影写实风格", en: "Fine-art photography blended with cinematic realism" }
     ]
   },
   subject: {
@@ -29,7 +30,20 @@ export const INITIAL_BANKS = {
       { cn: "男性角色", en: "Male Character" },
       { cn: "机甲少女", en: "Mecha Girl" },
       { cn: "怪物拟人化", en: "Monster Anthropomorphism" },
-      { cn: "奇幻种族(精灵/恶魔)", en: "Fantasy Race (Elf/Demon)" }
+      { cn: "奇幻种族(精灵/恶魔)", en: "Fantasy Race (Elf/Demon)" },
+      { cn: "女性，约20岁", en: "Female, around 20 years old" },
+      { cn: "年轻韩国女团偶像", en: "Young Korean female K-pop idol" }
+    ]
+  },
+  hair_style: {
+    label: { cn: "发型样式", en: "Hair Style" },
+    category: "character",
+    options: [
+      { cn: "短发，柔和凌乱的深色头发", en: "Short, softly tousled dark hair" },
+      { cn: "深色波浪长发", en: "Dark wavy long hair" },
+      { cn: "黑色直发，垂在肩上", en: "Black straight hair, falling over shoulders" },
+      { cn: "浅金色卷发", en: "Light blonde curly hair" },
+      { cn: "高马尾辫", en: "High ponytail" }
     ]
   },
   character_companion: {
@@ -98,7 +112,10 @@ export const INITIAL_BANKS = {
       { cn: "斜角拍摄的原始人像", en: "Raw portrait from an angle" },
       { cn: "双手置于锁骨附近的特写", en: "Close-up with hands near collarbones" },
       { cn: "坐姿半身侧面照", en: "Seated half-body profile shot" },
-      { cn: "侧面微距照", en: "Side macro shot" }
+      { cn: "侧面微距照", en: "Side macro shot" },
+      { cn: "上半身特写", en: "upper-body close-up" },
+      { cn: "平视、略微隐藏的中景镜头", en: "eye-level, slightly hidden intimate medium shot" },
+      { cn: "腰部以上的美术肖像", en: "Waist-up fine-art portrait" }
     ]
   },
   connectors: {
@@ -118,7 +135,8 @@ export const INITIAL_BANKS = {
       { cn: "成套的蕾丝内衣裤", en: "Matching lace lingerie set" },
       { cn: "运动风格纯棉内衣", en: "Athletic style cotton underwear" },
       { cn: "极简主义丝绸内衣", en: "Minimalist silk lingerie" },
-      { cn: "哥特风格绑带内衣", en: "Gothic style strappy lingerie" }
+      { cn: "哥特风格绑带内衣", en: "Gothic style strappy lingerie" },
+      { cn: "“纯欲风”服饰", en: "'pure-seductive' outfit style" }
     ]
   },
   clothing: {
@@ -129,7 +147,19 @@ export const INITIAL_BANKS = {
       { cn: "白色丝绸衬衫", en: "White silk shirt" },
       { cn: "黑色修身西装", en: "Black slim-fit suit" },
       { cn: "战术机能风外套", en: "Tactical techwear jacket" },
-      { cn: "复古碎花连衣裙", en: "Vintage floral print dress" }
+      { cn: "复古碎花连衣裙", en: "Vintage floral print dress" },
+      { cn: "略显成熟的“大姐姐”时尚风格", en: "Slightly mature 'onee-san' fashion style" },
+      { cn: "柔和青色复古碎花连衣裙", en: "Muted teal floral dress with subtle vintage patterns" }
+    ]
+  },
+  accessory_glasses: {
+    label: { cn: "眼镜配饰", en: "Glasses" },
+    category: "item",
+    options: [
+      { cn: "戴着有轻微镜面反射的眼镜", en: "wearing glasses with mild lens reflections" },
+      { cn: "戴着时尚的太阳镜", en: "wearing stylish sunglasses" },
+      { cn: "戴着黑框近视眼镜", en: "wearing black-rimmed glasses" },
+      { cn: "不戴眼镜", en: "no glasses" }
     ]
   },
   clothing_male: {
@@ -153,7 +183,8 @@ export const INITIAL_BANKS = {
       { cn: "机车皮衣与短裙", en: "Biker leather jacket and short skirt" },
       { cn: "白色蕾丝衬衫", en: "White lace blouse" },
       { cn: "黑色紧身连体衣", en: "Black tight bodysuit" },
-      { cn: "优雅的香奈儿风套装", en: "Elegant Chanel-style suit" }
+      { cn: "优雅的香奈儿风套装", en: "Elegant Chanel-style suit" },
+      { cn: "半脱的灰色大号连帽衫，露出白色吊带", en: "half-removed oversized grey hoodie, revealing white camisole" }
     ]
   },
   expressions: {
@@ -450,7 +481,8 @@ export const INITIAL_BANKS = {
       { cn: "1:1", en: "1:1 Square" },
       { cn: "4:3横构图", en: "4:3 Horizontal" },
       { cn: "16:9横构图", en: "16:9 Horizontal" },
-      { cn: "圆形画幅", en: "Circular Aspect Ratio" }
+      { cn: "圆形画幅", en: "Circular Aspect Ratio" },
+      { cn: "2:3竖构图", en: "2:3 Vertical" }
     ]
   },
   // Fashion Template additions
@@ -501,7 +533,10 @@ export const INITIAL_BANKS = {
       { cn: "自然窗光", en: "Natural window light" },
       { cn: "伦勃朗光", en: "Rembrandt lighting" },
       { cn: "赛博朋克霓虹光", en: "Cyberpunk neon lighting" },
-      { cn: "影棚硬光", en: "Studio hard light" }
+      { cn: "影棚硬光", en: "Studio hard light" },
+      { cn: "随意的肖像摄影，带有日常快照氛围", en: "Casual portrait photography with a daily snapshot vibe" },
+      { cn: "隐藏相机拍摄风格，Portra 400 胶片质感", en: "Hidden camera style, Portra 400 film grain aesthetic" },
+      { cn: "阴天下的柔和自然光", en: "Soft natural light under overcast sky" }
     ]
   },
   sticker_core: {
@@ -541,7 +576,10 @@ export const INITIAL_BANKS = {
       { cn: "俯瞰纽约市的复仇者大厦楼顶", en: "Rooftop of Avengers Tower overlooking New York City" },
       { cn: "废弃的工业仓库", en: "Abandoned industrial warehouse" },
       { cn: "熙熙攘攘的时代广场", en: "Bustling Times Square" },
-      { cn: "外太空飞船内部", en: "Inside a space-age spaceship" }
+      { cn: "外太空飞船内部", en: "Inside a space-age spaceship" },
+      { cn: "昏暗、平凡的房间，身后有一面素墙", en: "Dark, ordinary room with a plain wall behind the subject" },
+      { cn: "昏暗舒适的后台更衣室或私密宿舍", en: "dimly lit, cozy backstage dressing room or private dorm room" },
+      { cn: "盛开的郁郁葱葱的花园", en: "Lush garden in full bloom" }
     ]
   },
 
@@ -609,7 +647,10 @@ export const INITIAL_BANKS = {
       { cn: "穿潜水脚蹼", en: "putting on diving fins" },
       { cn: "正在调酒", en: "mixing a cocktail" },
       { cn: "在看一本厚厚的旧书", en: "reading a thick old book" },
-      { cn: "在修剪巨大的室内绿植", en: "trimming a giant indoor plant" }
+      { cn: "在修剪巨大的室内绿植", en: "trimming a giant indoor plant" },
+      { cn: "坐在沙发上，正随意地玩着手机", en: "Sitting on a sofa, casually playing on her phone" },
+      { cn: "换衣时惊讶地抬头直视镜头", en: "frozen in surprise, looking directly into the lens while changing" },
+      { cn: "温柔地凝视着镜头，带着淡淡的忧郁", en: "Looking gently toward the camera, with a touch of melancholy" }
     ]
   },
   draw_style: {
@@ -842,7 +883,8 @@ export const INITIAL_BANKS = {
       { cn: "淡粉色牡丹", en: "Pale pink peonies" },
       { cn: "名贵的深色兰花", en: "Exotic dark orchids" },
       { cn: "干枯的桉树叶", en: "Dried eucalyptus leaves" },
-      { cn: "鲜艳的向日葵", en: "Vibrant sunflowers" }
+      { cn: "鲜艳的向日葵", en: "Vibrant sunflowers" },
+      { cn: "白色和淡桃色花瓣在空中飘落", en: "White and pale peach flower petals drifting through the air" }
     ]
   },
   character_type_pixar: {
@@ -906,6 +948,26 @@ export const INITIAL_BANKS = {
       { cn: "办公：笔记本电脑、键盘轴体、鼠标、手绘板", en: "Office: Laptop, keyboard switches, mouse, drawing tablet" }
     ]
   },
+  underwater_color: {
+    label: { cn: "水下色调", en: "Underwater Color" },
+    category: "location",
+    options: [
+      { cn: "深青色透明水下", en: "deep teal transparent underwater" },
+      { cn: "晶莹剔透的浅蓝色", en: "crystal clear light blue" },
+      { cn: "神秘的深海蓝", en: "mysterious deep sea blue" },
+      { cn: "梦幻的翡翠绿", en: "dreamy emerald green" }
+    ]
+  },
+  creatures: {
+    label: { cn: "伴随生物", en: "Creatures" },
+    category: "character",
+    options: [
+      { cn: "许多银色小鱼", en: "many small silver fish" },
+      { cn: "发光的水母", en: "glowing jellyfish" },
+      { cn: "五彩斑斓的热带鱼", en: "colorful tropical fish" },
+      { cn: "巨大的蓝鲸(背景)", en: "a giant blue whale in the background" }
+    ]
+  },
   luxury_hobby_items: {
     label: { cn: "个人爱好/奢华", en: "Hobby & Luxury" },
     category: "item",
@@ -914,6 +976,538 @@ export const INITIAL_BANKS = {
       { cn: "艺术：画笔、调色盘、素描本、颜料软管", en: "Art: Brushes, palette, sketchbook, paint tubes" },
       { cn: "生活：咖啡机、磨豆机、高档手办组件、限量书籍", en: "Life: Coffee machine, grinder, high-end figure parts, limited books" },
       { cn: "运动：网球拍、滑板、滑雪镜、运动相机、水壶", en: "Sports: Tennis racket, skateboard, ski goggles, action cam, bottle" }
+    ]
+  },
+  // 新年海报相关词库
+  clothing_style_chinese: {
+    label: { cn: "中式服饰风格", en: "Chinese Clothing Style" },
+    category: "item",
+    options: [
+      { cn: "传统暗红色中式长袍", en: "Traditional dark red Chinese robe" },
+      { cn: "古典红色汉服", en: "Classical red Hanfu" },
+      { cn: "传统金色龙袍", en: "Traditional golden dragon robe" },
+      { cn: "深紫色唐装", en: "Deep purple Tang suit" },
+      { cn: "宝蓝色旗袍", en: "Sapphire blue Qipao" },
+      { cn: "墨绿色传统长衫", en: "Dark green traditional long gown" },
+      { cn: "朱红色将军战袍", en: "Vermilion general's battle robe" },
+      { cn: "紫金色锦缎华服", en: "Purple-gold brocade noble attire" }
+    ]
+  },
+  clothing_color_traditional: {
+    label: { cn: "传统服装颜色", en: "Traditional Clothing Color" },
+    category: "visual",
+    options: [
+      { cn: "暗红色", en: "Dark Red" },
+      { cn: "朱红色", en: "Vermilion" },
+      { cn: "宝蓝色", en: "Sapphire Blue" },
+      { cn: "金黄色", en: "Golden Yellow" },
+      { cn: "紫金色", en: "Purple Gold" },
+      { cn: "墨绿色", en: "Dark Green" },
+      { cn: "深紫色", en: "Deep Purple" },
+      { cn: "玄黑色", en: "Mystic Black" }
+    ]
+  },
+  year_number: {
+    label: { cn: "年份", en: "Year" },
+    category: "other",
+    options: [
+      { cn: "2025", en: "2025" },
+      { cn: "2026", en: "2026" },
+      { cn: "2027", en: "2027" },
+      { cn: "2028", en: "2028" },
+      { cn: "2029", en: "2029" },
+      { cn: "2030", en: "2030" }
+    ]
+  },
+  greeting_new_year: {
+    label: { cn: "新年祝福语", en: "New Year Greeting" },
+    category: "other",
+    options: [
+      { cn: "马到成功", en: "Immediate Success" },
+      { cn: "龙马精神", en: "Vigorous Spirit" },
+      { cn: "马不停蹄", en: "Unremitting Efforts" },
+      { cn: "一马当先", en: "Take the Lead" },
+      { cn: "龙腾虎跃", en: "Dragon Soaring and Tiger Leaping" },
+      { cn: "新年快乐", en: "Happy New Year" },
+      { cn: "万事如意", en: "May All Go Well" },
+      { cn: "恭喜发财", en: "Wishing You Prosperity" }
+    ]
+  },
+  background_color_festive: {
+    label: { cn: "节日背景颜色", en: "Festive Background Color" },
+    category: "visual",
+    options: [
+      { cn: "红色背景", en: "Red background" },
+      { cn: "金色背景", en: "Gold background" },
+      { cn: "红金渐变背景", en: "Red-gold gradient background" },
+      { cn: "深红背景", en: "Deep red background" },
+      { cn: "朱红背景", en: "Vermilion background" },
+      { cn: "暖橙红背景", en: "Warm orange-red background" }
+    ]
+  },
+  character_heroic: {
+    label: { cn: "人物类型", en: "Character Type" },
+    category: "character",
+    options: [
+      { cn: "年轻学生", en: "Young Student" },
+      { cn: "都市白领", en: "Urban Professional" },
+      { cn: "文艺青年", en: "Artistic Youth" },
+      { cn: "普通上班族", en: "Office Worker" },
+      { cn: "威武将军", en: "Mighty General" },
+      { cn: "英勇武者", en: "Brave Warrior" },
+      { cn: "传奇英雄", en: "Legendary Hero" },
+      { cn: "武侠高手", en: "Martial Arts Master" }
+    ]
+  },
+  room_style_cute: {
+    label: { cn: "可爱房间风格", en: "Cute Room Style" },
+    category: "location",
+    options: [
+      { cn: "可爱粉色房间，粉彩床和墙壁，原创动物玩偶，妖精灯光，可爱海报，毛绒地毯", en: "Cute pink room, pastel pink bed and walls, original cute animal plushies, fairy lights, cute posters, fluffy rug" },
+      { cn: "简约白色房间，白色家具，绿植，自然光，木质地板", en: "Minimalist white room, white furniture, plants, natural light, wooden floor" },
+      { cn: "复古粉色房间，复古家具，丝绒窗帘，古典装饰，温暖氛围", en: "Vintage pink room, vintage furniture, velvet curtains, classic decor, warm atmosphere" },
+      { cn: "梦幻紫色房间，紫色床单，星星灯串，梦幻壁纸，柔软地毯", en: "Dreamy purple room, purple sheets, star lights, dreamy wallpaper, soft carpet" },
+      { cn: "清新蓝色房间，蓝色床品，海洋装饰，贝壳元素，清爽感觉", en: "Fresh blue room, blue bedding, ocean decor, shell elements, refreshing feel" },
+      { cn: "温暖橙色房间，橙色家具，阳光充足，活力装饰，舒适地毯", en: "Warm orange room, orange furniture, abundant sunlight, energetic decor, cozy rug" },
+      { cn: "北欧风格房间，灰色床品，简约设计，自然材质，柔和灯光", en: "Nordic style room, grey bedding, minimalist design, natural materials, soft lighting" },
+      { cn: "日式和风房间，榻榻米，纸灯笼，竹子装饰，禅意氛围", en: "Japanese style room, tatami, paper lanterns, bamboo decor, zen atmosphere" }
+    ]
+  },
+  cute_outfit: {
+    label: { cn: "可爱服装", en: "Cute Outfit" },
+    category: "item",
+    options: [
+      { cn: "黑色紧身吊带连衣裙，长度到臀部，无袖，细肩带", en: "Black tight camisole dress, hip-length, sleeveless, thin straps" },
+      { cn: "白色蕾丝连衣裙，及膝长度，短袖，优雅设计", en: "White lace dress, knee-length, short sleeves, elegant design" },
+      { cn: "粉色学院风制服，百褶裙，领结，长袖衬衫", en: "Pink school uniform, pleated skirt, bow tie, long-sleeved shirt" },
+      { cn: "蓝色吊带裙，A字型，及膝长度，夏天风格", en: "Blue spaghetti strap dress, A-line, knee-length, summer style" },
+      { cn: "红色紧身连衣裙，高领，长袖，修身设计", en: "Red tight dress, high neck, long sleeves, slim-fit design" },
+      { cn: "黄色背带裤裙，可爱风格，短款，休闲设计", en: "Yellow overall dress, cute style, short length, casual design" },
+      { cn: "紫色睡裙，丝绸材质，吊带，舒适款", en: "Purple nightgown, silk material, spaghetti straps, comfortable style" },
+      { cn: "格子图案连衣裙，英伦风格，及膝，长袖", en: "Plaid dress, British style, knee-length, long sleeves" }
+    ]
+  },
+  cute_pose_dynamic: {
+    label: { cn: "可爱动态姿势", en: "Cute Dynamic Pose" },
+    category: "action",
+    options: [
+      { cn: "向前走时回望，从正上方自信俏皮地俯视，迷人微笑", en: "Walking forward while looking back, confidently and playfully looking down from directly above, charming smile" },
+      { cn: "坐在床边，双腿交叉，手玩头发，温柔微笑", en: "Sitting on bed edge, legs crossed, playing with hair, gentle smile" },
+      { cn: "站立姿势，手放在臀部，自信直视镜头", en: "Standing pose, hands on hips, confidently looking at camera" },
+      { cn: "躺在床上，侧身支撑头部，俏皮表情", en: "Lying on bed, propping head with hand, playful expression" },
+      { cn: "跪坐姿势，双手放在膝盖上，无辜表情", en: "Kneeling pose, hands on knees, innocent expression" },
+      { cn: "靠着墙站立，一只脚抬起，酷酷的表情", en: "Leaning against wall, one foot raised, cool expression" },
+      { cn: "坐在地板上，双腿伸直，看书，专注表情", en: "Sitting on floor, legs extended, reading book, focused expression" },
+      { cn: "跳跃姿势，双手举起，快乐笑容，动态感", en: "Jumping pose, hands raised, happy smile, dynamic feel" }
+    ]
+  },
+  fitness_location: {
+    label: { cn: "健身场景", en: "Fitness Location" },
+    category: "location",
+    options: [
+      { cn: "繁忙的健身房，镜子和器械随处可见", en: "Busy gym with mirrors and equipment visible" },
+      { cn: "现代健身房，有氧区和力量区", en: "Modern gym with cardio and weight areas" },
+      { cn: "瑜伽教室，木地板和镜子", en: "Yoga studio with wooden floor and mirrors" },
+      { cn: "家庭健身区，简洁整洁", en: "Home workout area, clean and organized" },
+      { cn: "户外跑步机平台，城市天际线背景", en: "Outdoor treadmill platform with city skyline" }
+    ]
+  },
+  fitness_pose: {
+    label: { cn: "健身姿势", en: "Fitness Pose" },
+    category: "action",
+    options: [
+      { cn: "半蹲姿势，侧身对镜子", en: "Half-squat pose, turned sideways to mirror" },
+      { cn: "站立伸展，手臂高举", en: "Standing stretch with arms raised" },
+      { cn: "平板支撑姿势，侧视镜头", en: "Plank pose, side view to camera" },
+      { cn: "弓步姿势，肌肉紧绷", en: "Lunge pose, muscles tensed" },
+      { cn: "哑铃推举，专注表情", en: "Dumbbell press, focused expression" },
+      { cn: "瑜伽树式姿势，单腿站立", en: "Yoga tree pose, standing on one leg" },
+      { cn: "深蹲底部姿势，大腿发力", en: "Bottom of squat position, leg muscles engaged" },
+      { cn: "壶铃摆动，动态姿态", en: "Kettlebell swing, dynamic pose" }
+    ]
+  },
+  fitness_clothing: {
+    label: { cn: "健身服装", en: "Fitness Clothing" },
+    category: "item",
+    options: [
+      { cn: "运动裙，紧身贴身", en: "Sports skirt, tight and form-fitting" },
+      { cn: "运动短裤和运动背心", en: "Athletic shorts and sports bra" },
+      { cn: "紧身瑜伽裤和运动上衣", en: "Tight yoga leggings and athletic top" },
+      { cn: "运动套装，舒适透气", en: "Athletic set, comfortable and breathable" },
+      { cn: "健身连衣裙，时尚运动风", en: "Fitness dress, sporty and stylish" },
+      { cn: "骑行短裤和运动内衣", en: "Cycling shorts and sports bra" },
+      { cn: "压缩衣和运动长裤", en: "Compression shirt and athletic pants" },
+      { cn: "无袖运动背心和紧身裤", en: "Sleeveless sports tank and tight pants" }
+    ]
+  },
+  selfie_style: {
+    label: { cn: "自拍风格", en: "Selfie Style" },
+    category: "visual",
+    options: [
+      { cn: "原始真实的镜子自拍", en: "Raw, authentic mirror selfie" },
+      { cn: "随意的生活抓拍", en: "Candid daily life snapshot" },
+      { cn: "自然不做摆拍", en: "Natural, unposed shot" },
+      { cn: "日常生活氛围", en: "Authentic daily life atmosphere" },
+      { cn: "真实记录瞬间", en: "Genuine moment captured" }
+    ]
+  },
+  photo_effect: {
+    label: { cn: "拍照效果", en: "Photo Effect" },
+    category: "visual",
+    options: [
+      { cn: "机顶闪光灯直闪", en: "On-camera flash firing" },
+      { cn: "慢快门导致的运动模糊", en: "Motion blur from slow shutter speed" },
+      { cn: "明显的胶片颗粒感", en: "Noticeable film grain" },
+      { cn: "自然光线柔和", en: "Soft natural lighting" },
+      { cn: "高对比度戏剧光影", en: "High contrast dramatic lighting" },
+      { cn: "轻微镜头眩光", en: "Slight lens flare" },
+      { cn: "浅景深背景虚化", en: "Shallow depth of field, background blur" },
+      { cn: "暗角效果", en: "Vignette effect" }
+    ]
+  },
+  physical_state: {
+    label: { cn: "身体状态", en: "Physical State" },
+    category: "character",
+    options: [
+      { cn: "健康健美的身材", en: "Healthy athletic build" },
+      { cn: "身材苗条紧致", en: "Slim and toned physique" },
+      { cn: "肌肉线条分明", en: "Defined muscle lines" },
+      { cn: "自然匀称的体型", en: "Natural balanced physique" },
+      { cn: "柔韧灵活的身体", en: "Flexible and agile body" },
+      { cn: "力量感十足的肌肉", en: "Powerful muscular build" }
+    ]
+  },
+  sweat_appearance: {
+    label: { cn: "汗水状态", en: "Sweat Appearance" },
+    category: "character",
+    options: [
+      { cn: "头发凌乱湿透，汗水明显", en: "Hair disheveled and damp with sweat" },
+      { cn: "皮肤微微出汗，光泽感", en: "Skin slightly sweaty, glossy look" },
+      { cn: "汗珠挂在额头和鼻尖", en: "Sweat beads on forehead and nose tip" },
+      { cn: "后背汗水浸湿衣物", en: "Back sweat soaking through clothes" },
+      { cn: "汗水顺着脸颊流下", en: "Sweat streaming down cheeks" },
+      { cn: "轻微运动出汗痕迹", en: "Light exercise sweat traces" }
+    ]
+  },
+  facial_expression: {
+    label: { cn: "面部表情", en: "Facial Expression" },
+    category: "character",
+    options: [
+      { cn: "脸颊泛红，眼神迷离", en: "Cheeks flushed red, dreamy and slightly unfocused eyes" },
+      { cn: "专注严肃的表情", en: "Focused and serious expression" },
+      { cn: "笑容自然灿烂", en: "Natural and bright smile" },
+      { cn: "咬牙坚持的神情", en: "Gritted teeth, determined look" },
+      { cn: "平静放松的面容", en: "Calm and relaxed face" },
+      { cn: "眼神坚定有力", en: "Firm and powerful gaze" },
+      { cn: "运动后的满足表情", en: "Post-exercise satisfied expression" },
+      { cn: "略带疲惫但充满成就感", en: "Slightly tired but accomplished look" }
+    ]
+  },
+  // ===== 微缩模型系列（新增） =====
+  miniature_character: {
+    label: { cn: "微缩人物角色", en: "Miniature Character" },
+    category: "character",
+    options: [
+      { cn: "消防员", en: "Firefighter" },
+      { cn: "短跑运动员", en: "Sprinter" },
+      { cn: "园丁", en: "Gardener" },
+      { cn: "厨师", en: "Chef" },
+      { cn: "建筑工人", en: "Construction Worker" },
+      { cn: "医生", en: "Doctor" },
+      { cn: "探险家", en: "Explorer" },
+      { cn: "骑士", en: "Knight" },
+      { cn: "忍者", en: "Ninja" },
+      { cn: "宇航员", en: "Astronaut" },
+      { cn: "警察", en: "Police Officer" },
+      { cn: "画家", en: "Painter" }
+    ]
+  },
+  giant_object: {
+    label: { cn: "巨型日常物品", en: "Giant Everyday Object" },
+    category: "item",
+    options: [
+      { cn: "燃烧的火柴棍", en: "Burning Matchstick" },
+      { cn: "CD唱片", en: "CD Disc" },
+      { cn: "咖啡杯", en: "Coffee Mug" },
+      { cn: "铅笔", en: "Pencil" },
+      { cn: "书本", en: "Book" },
+      { cn: "订书机", en: "Stapler" },
+      { cn: "回形针", en: "Paperclip" },
+      { cn: "骰子", en: "Dice" },
+      { cn: "台灯", en: "Desk Lamp" },
+      { cn: "闹钟", en: "Alarm Clock" },
+      { cn: "牙刷", en: "Toothbrush" },
+      { cn: "遥控器", en: "Remote Control" },
+      { cn: "橡皮擦", en: "Eraser" },
+      { cn: "网球", en: "Tennis Ball" },
+      { cn: "鸡蛋", en: "Egg" }
+    ]
+  },
+  miniature_action: {
+    label: { cn: "微缩动作", en: "Miniature Action" },
+    category: "action",
+    options: [
+      { cn: "攀爬巨型物体", en: "Climbing the giant object" },
+      { cn: "奋力推开", en: "Pushing with great effort" },
+      { cn: "高举过头", en: "Lifting overhead" },
+      { cn: "跳跃躲避", en: "Jumping to dodge" },
+      { cn: "拉拽挣扎", en: "Pulling and struggling" },
+      { cn: "冲锋撞击", en: "Charging and colliding" },
+      { cn: "支撑抵抗", en: "Bracing and resisting" },
+      { cn: "滑下奔跑", en: "Sliding down and running" },
+      { cn: "跨越障碍", en: "Leaping over obstacle" },
+      { cn: "紧抱不放", en: "Holding on tight" },
+      { cn: "挥拳攻击", en: "Punching" },
+      { cn: "蜷缩防御", en: "Crouching defensively" }
+    ]
+  },
+  // ==================== Pop Mart Plush Toys Template ====================
+  plush_expression: {
+    label: { cn: "毛绒玩具表情", en: "Plush Toy Expression" },
+    category: "character",
+    options: [
+      { cn: "眨眼俏皮表情", en: "winking with playful expression" },
+      { cn: "张嘴大笑表情", en: "laughing out loud with open mouth" },
+      { cn: "惊讶表情", en: "shocked face" },
+      { cn: "困倦表情", en: "sleepy face" },
+      { cn: "暴躁表情", en: "grumpy face" },
+      { cn: "吐舌头表情", en: "tongue sticking out" },
+      { cn: "调皮微笑", en: "playful smirks" },
+      { cn: "无辜大眼表情", en: "innocent big eyes" },
+      { cn: "害羞脸红表情", en: "shy blushing face" },
+      { cn: "呆萌茫然表情", en: "dazed confused expression" }
+    ]
+  },
+  cute_accessory: {
+    label: { cn: "可爱配饰", en: "Cute Accessory" },
+    category: "item",
+    options: [
+      { cn: "针织帽", en: "beanie hats" },
+      { cn: "耳机", en: "headphones" },
+      { cn: "派对锥形帽", en: "party cone hats" },
+      { cn: "唐朝传统帽子", en: "traditional Tang dynasty hats" },
+      { cn: "滑雪镜", en: "ski goggles" },
+      { cn: " funky star-shaped glasses", en: "funky star-shaped glasses" },
+      { cn: "厚围巾", en: "thick scarves" },
+      { cn: "蝴蝶结", en: "bow ties" },
+      { cn: "手持幸运币", en: "holding small lucky coins" },
+      { cn: "小皇冠", en: "small crowns" },
+      { cn: "蝴蝶结发夹", en: "bow hair clips" },
+      { cn: "小铃铛项圈", en: "small bell collar" }
+    ]
+  },
+  festive_archway: {
+    label: { cn: "节日拱门场景", en: "Festive Archway Scene" },
+    category: "location",
+    options: [
+      { cn: "中国传统拱门", en: "traditional Chinese archway" },
+      { cn: "春节红灯笼拱门", en: "Chinese New Year red lantern archway" },
+      { cn: "金色装饰拱门", en: "golden decorative archway" },
+      { cn: "樱花拱门", en: "cherry blossom archway" },
+      { cn: "彩灯装饰拱门", en: "festive light decorated archway" },
+      { cn: "复古雕花拱门", en: "vintage carved archway" },
+      { cn: "现代简约拱门", en: "modern minimalist archway" },
+      { cn: "童话糖果拱门", en: "fairytale candy archway" }
+    ]
+  },
+  // ==================== 3D Isometric Diorama Template ====================
+  exhibition_type: {
+    label: { cn: "展览类型", en: "Exhibition Type" },
+    category: "location",
+    options: [
+      { cn: "现代艺术展览", en: "modern art exhibition" },
+      { cn: "产品设计展", en: "product design showcase" },
+      { cn: "博物馆收藏展", en: "museum collection display" },
+      { cn: "科技创新展", en: "technology innovation exhibition" },
+      { cn: "时尚珠宝展", en: "fashion jewelry exhibition" },
+      { cn: "古董文物展", en: "antique artifacts exhibition" },
+      { cn: "玩具收藏展", en: "toy collection display" },
+      { cn: "植物园艺展", en: "botanical garden exhibition" },
+      { cn: "摄影作品展", en: "photography portfolio show" },
+      { cn: "概念设计展", en: "concept design exhibition" }
+    ]
+  },
+  display_objects: {
+    label: { cn: "展示物体", en: "Display Objects" },
+    category: "item",
+    options: [
+      { cn: "抽象雕塑和装置艺术", en: "abstract sculptures and installation art" },
+      { cn: "电子产品原型和设备", en: "electronic product prototypes and gadgets" },
+      { cn: "古代文物和历史遗物", en: "ancient artifacts and historical relics" },
+      { cn: "未来科技设备和机器人", en: "futuristic tech devices and robots" },
+      { cn: "精致珠宝和宝石", en: "exquisite jewelry and gemstones" },
+      { cn: "限量版玩具和手办", en: "limited edition toys and figurines" },
+      { cn: "多肉植物和盆景", en: "succulent plants and bonsai" },
+      { cn: "装裱照片和艺术品", en: "framed photos and artwork" },
+      { cn: "概念汽车和交通工具", en: "concept cars and vehicles" },
+      { cn: "家具和家居设计", en: "furniture and home decor" }
+    ]
+  },
+  pod_structure: {
+    label: { cn: "展台结构", en: "Pod Structure" },
+    category: "location",
+    options: [
+      { cn: "玻璃立方体展台", en: "glass cube pod" },
+      { cn: "开放式圆形平台", en: "open circular platform" },
+      { cn: "悬浮展示台", en: "floating display podium" },
+      { cn: "多层阶梯展架", en: "multi-tiered stepped display" },
+      { cn: "嵌入式壁龛展示", en: "recessed niche display" },
+      { cn: "透明圆柱体展柜", en: "transparent cylindrical showcase" },
+      { cn: "L型转角展台", en: "L-shaped corner podium" },
+      { cn: "模块化组合展架", en: "modular interconnected display units" },
+      { cn: "旋转展示台", en: "rotating turntable display" },
+      { cn: "嵌入式地面展示窗", en: "recessed floor showcase window" }
+    ]
+  },
+  // ==================== Chinese Traditional Bridal Portrait Template ====================
+  bridal_hair_decoration: {
+    label: { cn: "新娘发饰", en: "Bridal Hair Decoration" },
+    category: "item",
+    options: [
+      { cn: "红色纸剪花和蝴蝶装饰", en: "red paper-cut flowers and butterflies" },
+      { cn: "金色凤冠和珍珠流苏", en: "golden phoenix coronet with pearl tassels" },
+      { cn: "红色绒花装饰", en: "red velvet flower ornaments" },
+      { cn: "传统银饰发簪", en: "traditional silver hairpins" },
+      { cn: "玉石发钗和红花", en: "jade hairpin with red flowers" },
+      { cn: "珍珠发网和小巧皇冠", en: "pearl hair net with small crown" },
+      { cn: "红色绸带和铃铛", en: "red silk ribbons with bells" },
+      { cn: "梅花纸剪装饰", en: "plum blossom paper-cut decorations" },
+      { cn: "金色步摇晃动发饰", en: "golden buyao swaying hair ornament" },
+      { cn: "绣花发带和玉簪", en: "embroidered headband with jade hairpin" }
+    ]
+  },
+  traditional_bridal_attire: {
+    label: { cn: "传统新娘服饰", en: "Traditional Bridal Attire" },
+    category: "item",
+    options: [
+      { cn: "红色缎面旗袍", en: "red satin cheongsam" },
+      { cn: "红色绣花裙褂", en: "red embroidered wedding gown" },
+      { cn: "传统凤冠霞帔", en: "traditional phoenix coronet and robe" },
+      { cn: "红色汉服婚服", en: "red Hanfu wedding dress" },
+      { cn: "金色刺绣旗袍", en: "gold-embroidered cheongsam" },
+      { cn: "红色龙凤呈祥褂", en: "red dragon-phoenix auspicious gown" },
+      { cn: "锦缎旗袍配披肩", en: "brocade cheongsam with shawl" },
+      { cn: "传统大红喜服", en: "traditional grand red wedding attire" },
+      { cn: "红色蕾丝边旗袍", en: "red lace-trimmed cheongsam" },
+      { cn: "苏绣旗袍礼服", en: "Suzhou embroidery cheongsam gown" }
+    ]
+  },
+  bridal_jewelry: {
+    label: { cn: "新娘首饰", en: "Bridal Jewelry" },
+    category: "item",
+    options: [
+      { cn: "白色珍珠首饰和小珍珠耳环", en: "white pearl jewelry and small pearl earrings" },
+      { cn: "黄金项链和耳环套装", en: "gold necklace and earrings set" },
+      { cn: "玉石手镯和吊坠", en: "jade bracelet and pendant" },
+      { cn: "红宝石项链和耳饰", en: "ruby necklace and ear ornaments" },
+      { cn: "传统银饰手镯和项链", en: "traditional silver bracelet and necklace" },
+      { cn: "珍珠项链和钻石耳钉", en: "pearl necklace and diamond studs" },
+      { cn: "翡翠耳环和项链", en: "emerald earrings and necklace" },
+      { cn: "黄金凤形胸针", en: "golden phoenix-shaped brooch" },
+      { cn: "珍珠发饰和项链套装", en: "pearl hair ornaments and necklace set" },
+      { cn: "红珊瑚手串和耳坠", en: "red coral bracelet and drop earrings" }
+    ]
+  },
+  // ==================== Premium Food Advertising Template ====================
+  premium_food_subject: {
+    label: { cn: "高端食品主体", en: "Premium Food Subject" },
+    category: "item",
+    options: [
+      { cn: "手工巧克力球", en: "handcrafted chocolate truffles" },
+      { cn: "新鲜浆果塔", en: "fresh berry tartlets" },
+      { cn: "精致马卡龙", en: "delicate macarons" },
+      { cn: "日式和果子", en: "Japanese wagashi sweets" },
+      { cn: "手工冰淇淋球", en: "artisanal ice cream scoops" },
+      { cn: "精致法式糕点", en: "elegant French pastries" },
+      { cn: "新鲜寿司拼盘", en: "fresh sushi platter" },
+      { cn: "手工意面卷", en: "handmade pasta bundles" },
+      { cn: "精致杯子蛋糕", en: "gourmet cupcakes" },
+      { cn: "新鲜牛油果片", en: "fresh avocado slices" },
+      { cn: "手工奶酪球", en: "artisanal cheese balls" },
+      { cn: "精致水果塔", en: "elegant fruit tarts" }
+    ]
+  },
+  ingredient_bits: {
+    label: { cn: "配料碎屑装饰", en: "Ingredient Bits" },
+    category: "item",
+    options: [
+      { cn: "可可粉和金箔碎屑", en: "cocoa powder and gold flakes" },
+      { cn: "新鲜薄荷叶和柠檬皮屑", en: "fresh mint leaves and lemon zest" },
+      { cn: "烤坚果碎和海盐", en: "toasted nut crumbs and sea salt" },
+      { cn: "芝麻和葱花碎", en: "sesame seeds and scallion bits" },
+      { cn: "抹茶粉和红豆碎", en: "matcha powder and red bean bits" },
+      { cn: "香草籽和糖粉", en: "vanilla bean specks and powdered sugar" },
+      { cn: "辣椒粉和青柠碎", en: "chili powder and lime zest" },
+      { cn: "罗勒叶和帕尔马干酪碎", en: "basil leaves and parmesan crisps" },
+      { cn: "肉桂粉和橙皮屑", en: "cinnamon powder and orange zest" },
+      { cn: "椰丝和芒果碎", en: "shredded coconut and mango bits" },
+      { cn: "新鲜香草和橄榄油飞溅", en: "fresh herbs and olive oil splashes" },
+      { cn: "食用花卉和花粉", en: "edible flowers and pollen" }
+    ]
+  },
+  // ==================== Forbidden City Phoenix Portrait Template ====================
+  imperial_palace_scene: {
+    label: { cn: "皇家宫殿场景", en: "Imperial Palace Scene" },
+    category: "location",
+    options: [
+      { cn: "紫禁城雪夜，飞雪飘零", en: "Forbidden City snow night with falling snowflakes" },
+      { cn: "颐和园黄昏，夕阳余晖", en: "Summer Palace at dusk with golden sunset" },
+      { cn: "天坛清晨，薄雾缭绕", en: "Temple of Heaven at dawn with misty atmosphere" },
+      { cn: "故宫午门，春节灯火", en: "Forbidden City Meridian Gate with festival lights" },
+      { cn: "圆明园遗址，月光洒落", en: "Old Summer Palace ruins under moonlight" },
+      { cn: "北海公园白塔，冬雪纷飞", en: "Beihai Park White Pagoda in winter snow" },
+      { cn: "天安门城楼，黎明曙光", en: "Tiananmen Gate at dawn break" },
+      { cn: "雍和宫，香火缭绕", en: "Yonghe Temple with incense smoke rising" },
+      { cn: "沈阳故宫，秋叶飘落", en: "Shenyang Imperial Palace with autumn leaves" },
+      { cn: "承德避暑山庄，夏日荷花", en: "Chengde Mountain Resort with summer lotus" }
+    ]
+  },
+  phoenix_crown: {
+    label: { cn: "凤冠发饰", en: "Phoenix Crown" },
+    category: "item",
+    options: [
+      { cn: "华丽繁复的金凤冠", en: "ornate golden phoenix crown" },
+      { cn: "珍珠点缀的凤冠", en: "pearl-embellished phoenix crown" },
+      { cn: "红宝石凤凰发钗", en: "ruby phoenix hairpin" },
+      { cn: "翡翠流苏凤冠", en: "jade tassel phoenix crown" },
+      { cn: "金龙戏珠发饰", en: "golden dragon playing with pearl hairpiece" },
+      { cn: "彩凤朝阳头饰", en: "colorful phoenix facing sun headpiece" },
+      { cn: "宝石镶嵌的凤冠", en: "gemstone-encrusted phoenix crown" },
+      { cn: "金丝编织的凤簪", en: "gold-woven phoenix hairpin" },
+      { cn: "珊瑚与珍珠凤冠", en: "coral and pearl phoenix crown" },
+      { cn: "传统步摇发饰", en: "traditional buyao swaying hair ornament" }
+    ]
+  },
+  flowing_garment: {
+    label: { cn: "流动华服", en: "Flowing Garment" },
+    category: "item",
+    options: [
+      { cn: "流动的红橙色丝绸华服", en: "flowing red-orange silk robes" },
+      { cn: "飘逸的紫色纱衣", en: "flowing purple silk gauze" },
+      { cn: "金色刺绣锦缎长袍", en: "gold-embroidered brocade robes" },
+      { cn: "红色霞帔凤冠霞帔", en: "red xiapei royal cape" },
+      { cn: "白色汉服仙气飘飘", en: "white Hanfu with ethereal vibe" },
+      { cn: "蓝色渐变云纹华服", en: "blue gradient cloud-pattern robes" },
+      { cn: "粉色樱花主题长裙", en: "pink cherry blossom themed gown" },
+      { cn: "绿色翡翠质感丝绸", en: "green jade-like silk robes" },
+      { cn: "黑色绣金龙纹长袍", en: "black dragon-embroidered robes" },
+      { cn: "彩色羽衣霓裳", en: "colorful feather rainbow gown" }
+    ]
+  },
+  festive_props: {
+    label: { cn: "节日道具", en: "Festive Props" },
+    category: "item",
+    options: [
+      { cn: "口中叼着中式红包，手中拿着展开的春节祝福", en: "holding red envelope in mouth and unfolded spring festival blessing in hand" },
+      { cn: "手持灯笼，提着福字挂件", en: "holding lantern with Fu character ornament" },
+      { cn: "拿着春联，提着鞭炮串", en: "holding spring couplet and firecracker string" },
+      { cn: "捧着元宝托盘，拿着金算盘", en: "holding gold ingot tray and golden abacus" },
+      { cn: "手提花灯，拿着梅花枝", en: "carrying flower lantern and plum blossom branch" },
+      { cn: "拿着福字牌，手捧如意", en: "holding Fu character plaque and jade ruyi scepter" },
+      { cn: "手持红包袋，提着中国结", en: "holding red envelope bag and Chinese knot" },
+      { cn: "拿着糖葫芦，提着饺子篮", en: "holding candied hawthorn and dumpling basket" },
+      { cn: "手捧酒杯，拿着梅花扇", en: "holding wine cup and plum blossom fan" },
+      { cn: "手持鞭炮，拿着福字窗花", en: "holding firecrackers and Fu character paper cutting" }
     ]
   }
 };
@@ -992,11 +1586,60 @@ export const INITIAL_DEFAULTS = {
   beauty_items: { cn: "彩妆：口红（带切面）、眼影盘、粉饼、腮红刷", en: "Makeup: Lipstick (cut), eyeshadow palette, compact, blush brush" },
   digital_items: { cn: "手机拆解：手机壳、屏幕内容、摄像头模组、主板组件", en: "Phone: Case, screen content, camera module, motherboard" },
   luxury_hobby_items: { cn: "珠宝：项链、耳环、戒指（宝石带色散效果）", en: "Jewelry: Necklace, earrings, ring (gemstone dispersion)" },
+  underwater_color: { cn: "深青色透明水下", en: "deep teal transparent underwater" },
+  creatures: { cn: "许多银色小鱼", en: "many small silver fish" },
   city_name: { cn: "京都", en: "Kyoto" },
   art_tool: { cn: "毛笔", en: "Ink Brush" },
   dominant_colors: { cn: "传统的京都红与古朴的墨黑色", en: "Traditional Kyoto red and antique ink black" },
   background_color_clean: { cn: "纯白", en: "Pure White" },
   city_glimpse_subtitle: { cn: "古韵悠长的千年古都", en: "The thousand-year-old ancient capital" },
   action_status: { cn: "玩PS5", en: "playing PS5" },
-  draw_style: { cn: "手绘漫画风格", en: "Hand-drawn Manga Style" }
+  draw_style: { cn: "手绘漫画风格", en: "Hand-drawn Manga Style" },
+  hair_style: { cn: "短发，柔和凌乱的深色头发", en: "Short, softly tousled dark hair" },
+  accessory_glasses: { cn: "戴着有轻微镜面反射的眼镜", en: "wearing glasses with mild lens reflections" },
+  // 新年海报默认值
+  clothing_style_chinese: { cn: "古典红色汉服", en: "Classical red Hanfu" },
+  clothing_color_traditional: { cn: "暗红色", en: "Dark Red" },
+  year_number: { cn: "2026", en: "2026" },
+  greeting_new_year: { cn: "马到成功", en: "Immediate Success" },
+  background_color_festive: { cn: "红色背景", en: "Red background" },
+  character_heroic: { cn: "文艺青年", en: "Artistic Youth" },
+  // 可爱动态姿势默认值
+  room_style_cute: { cn: "可爱粉色房间，粉彩床和墙壁，原创动物玩偶，妖精灯光，可爱海报，毛绒地毯", en: "Cute pink room, pastel pink bed and walls, original cute animal plushies, fairy lights, cute posters, fluffy rug" },
+  cute_outfit: { cn: "黑色紧身吊带连衣裙，长度到臀部，无袖，细肩带", en: "Black tight camisole dress, hip-length, sleeveless, thin straps" },
+  cute_pose_dynamic: { cn: "向前走时回望，从正上方自信俏皮地俯视，迷人微笑", en: "Walking forward while looking back, confidently and playfully looking down from directly above, charming smile" },
+
+  // 健身自拍场景默认值
+  fitness_location: { cn: "繁忙的健身房，镜子和器械随处可见", en: "Busy gym with mirrors and equipment visible" },
+  fitness_pose: { cn: "半蹲姿势，侧身对镜子", en: "Half-squat pose, turned sideways to mirror" },
+  fitness_clothing: { cn: "运动裙，紧身贴身", en: "Sports skirt, tight and form-fitting" },
+  selfie_style: { cn: "原始真实的镜子自拍", en: "Raw, authentic mirror selfie" },
+  photo_effect: { cn: "机顶闪光灯直闪", en: "On-camera flash firing" },
+  physical_state: { cn: "健康健美的身材", en: "Healthy athletic build" },
+  sweat_appearance: { cn: "头发凌乱湿透，汗水明显", en: "Hair disheveled and damp with sweat" },
+  facial_expression: { cn: "脸颊泛红，眼神迷离", en: "Cheeks flushed red, dreamy and slightly unfocused eyes" },
+  // 微缩模型系列默认值
+  miniature_character: { cn: "消防员", en: "Firefighter" },
+  giant_object: { cn: "燃烧的火柴棍", en: "Burning Matchstick" },
+  // Pop Mart 毛绒玩具默认值
+  plush_expression: { cn: "眨眼俏皮表情", en: "winking with playful expression" },
+  cute_accessory: { cn: "针织帽", en: "beanie hats" },
+  festive_archway: { cn: "中国传统拱门", en: "traditional Chinese archway" },
+  // 3D等距透视展台默认值
+  exhibition_type: { cn: "现代艺术展览", en: "modern art exhibition" },
+  display_objects: { cn: "抽象雕塑和装置艺术", en: "abstract sculptures and installation art" },
+  pod_structure: { cn: "玻璃立方体展台", en: "glass cube pod" },
+  // 中国传统新娘肖像默认值
+  bridal_hair_decoration: { cn: "红色纸剪花和蝴蝶装饰", en: "red paper-cut flowers and butterflies" },
+  traditional_bridal_attire: { cn: "红色缎面旗袍", en: "red satin cheongsam" },
+  bridal_jewelry: { cn: "白色珍珠首饰和小珍珠耳环", en: "white pearl jewelry and small pearl earrings" },
+  // 高端食品广告默认值
+  premium_food_subject: { cn: "手工巧克力球", en: "handcrafted chocolate truffles" },
+  ingredient_bits: { cn: "可可粉和金箔碎屑", en: "cocoa powder and gold flakes" },
+  // 紫禁城雪夜人形凤凰默认值
+  imperial_palace_scene: { cn: "紫禁城雪夜", en: "Forbidden City snow night" },
+  phoenix_crown: { cn: "华丽繁复的金凤冠", en: "ornate golden phoenix crown" },
+  flowing_garment: { cn: "流动的红橙色丝绸华服", en: "flowing red-orange silk robes" },
+  festive_props: { cn: "口中叼着中式红包，手中拿着展开的春节祝福", en: "holding red envelope in mouth and unfolded spring festival blessing in hand" }
 };
+
