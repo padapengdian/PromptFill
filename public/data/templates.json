@@ -1,5 +1,5 @@
 {
-  "version": "0.8.5",
+  "version": "0.8.6",
   "config": [
     {
       "id": "tpl_default",
@@ -1579,7 +1579,8 @@
       },
       "tags": [
         "产品",
-        "创意"
+        "创意",
+        "建筑"
       ],
       "language": [
         "cn",
@@ -1687,6 +1688,104 @@
         "人物",
         "摄影",
         "节日",
+        "创意"
+      ],
+      "language": [
+        "cn",
+        "en"
+      ]
+    },
+    {
+      "id": "tpl_interior_rendering",
+      "name": {
+        "cn": "室内设计真实渲染",
+        "en": "Interior Design Rendering"
+      },
+      "content": {
+        "cn": "### 室内设计真实渲染\n\n保持原图视角和墙体结构，生成室内 {{room_type}} 真实渲染图。进行合理的室内家具布置与材质搭配，为室内天花板、墙面、地板分别赋予材质，整体呈现 {{interior_design_style}}。房间内外均进行真实感渲染。\n\n包括 {{furniture_set}}，材质质感逼真，{{interior_lighting}}。整体画面呈现出专业建筑摄影的光线效果，具备 {{render_quality}} 的图像细节。\n\n**材质细节**:\n- 天花板：{{ceiling_material}}\n- 墙面：{{wall_material}}\n- 地板：{{floor_material}}",
+        "en": "### Interior Design Photorealistic Rendering\n\nMaintaining the original perspective and wall structure, generate a realistic interior rendering of {{room_type}}. Perform reasonable interior furniture layout and material matching, assigning materials to the ceiling, walls, and floor respectively, presenting an overall {{interior_design_style}}. Both interior and exterior are rendered with realism.\n\nIncluding {{furniture_set}}, with realistic material textures and {{interior_lighting}}. The overall image presents professional architectural photography lighting effects, with {{render_quality}} image details.\n\n**Material Details**:\n- Ceiling: {{ceiling_material}}\n- Walls: {{wall_material}}\n- Floor: {{floor_material}}"
+      },
+      "imageUrl": "https://s3.bmp.ovh/imgs/2026/01/18/df7ed03d64db5339.jpg",
+      "author": "tanshilong",
+      "selections": {
+        "room_type": {
+          "cn": "客厅",
+          "en": "Living Room"
+        },
+        "interior_design_style": {
+          "cn": "现代轻奢风格",
+          "en": "Modern Light Luxury Style"
+        },
+        "furniture_set": {
+          "cn": "沙发、地毯、茶几、电视",
+          "en": "Sofa, rug, coffee table, TV"
+        },
+        "ceiling_material": {
+          "cn": "白色乳胶漆平顶",
+          "en": "White latex flat ceiling"
+        },
+        "wall_material": {
+          "cn": "白色乳胶漆墙面",
+          "en": "White latex paint wall"
+        },
+        "floor_material": {
+          "cn": "浅灰色大理石地砖",
+          "en": "Light gray marble tile"
+        },
+        "interior_lighting": {
+          "cn": "自然光线",
+          "en": "Natural lighting"
+        },
+        "render_quality": {
+          "cn": "4K超高清分辨率",
+          "en": "4K Ultra HD resolution"
+        }
+      },
+      "tags": [
+        "建筑",
+        "创意"
+      ],
+      "language": [
+        "cn",
+        "en"
+      ]
+    },
+    {
+      "id": "tpl_isometric_interior_scene",
+      "name": {
+        "cn": "等距视角室内场景",
+        "en": "Isometric Interior Scene"
+      },
+      "content": {
+        "cn": "### 等距视角室内场景\n\n基于设计需求，创作一张isometric视角（等距轴测视角）的{{room_type}}室内场景图像，无任何透视效果，保持视角和相机位置的一致性。包括建筑的主体部分保持一致。\n\n**房间状态**: {{room_condition}}\n\n**设计风格**: {{interior_design_style}}\n\n**材质细节**:\n- 地面：{{floor_material}}\n- 墙面：{{wall_material}}\n\n**技术要求**: 使用3D建模的材质质感和建模软件常用的渲染效果，包括材质纹理效果、AO效果以及描边效果（根据房间状态选择是否使用）。白色背景，Blender渲染质感。",
+        "en": "### Isometric Interior Scene\n\nBased on design requirements, create an isometric perspective (orthographic axonometric view) {{room_type}} interior scene image with no perspective effects, maintaining consistency in viewing angle and camera position. The main architectural elements remain consistent.\n\n**Room Condition**: {{room_condition}}\n\n**Design Style**: {{interior_design_style}}\n\n**Material Details**:\n- Floor: {{floor_material}}\n- Walls: {{wall_material}}\n\n**Technical Requirements**: Use 3D modeling material textures and common rendering software effects, including material texture effects, AO effects, and outline effects (selected based on room condition). White background, Blender rendering quality."
+      },
+      "imageUrl": "https://s3.bmp.ovh/imgs/2026/01/19/b04fd355944cfb21.jpg",
+      "author": "@tanshilong",
+      "selections": {
+        "room_type": {
+          "cn": "客厅",
+          "en": "Living Room"
+        },
+        "room_condition": {
+          "cn": "精致装修，高档材料的质感与细节",
+          "en": "Exquisitely decorated, high-end materials with refined details"
+        },
+        "interior_design_style": {
+          "cn": "现代简约风格",
+          "en": "Modern Minimalist Style"
+        },
+        "floor_material": {
+          "cn": "浅灰色岩板地面",
+          "en": "Light gray sintered stone floor"
+        },
+        "wall_material": {
+          "cn": "暖白色墙面与装饰画",
+          "en": "Warm white walls with decorative art"
+        }
+      },
+      "tags": [
+        "建筑",
         "创意"
       ],
       "language": [

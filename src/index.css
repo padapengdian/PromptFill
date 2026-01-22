@@ -354,48 +354,64 @@ body {
 /* Text Processing Animation for Smart Split */
 .text-processing-mask {
   position: relative;
-  pointer-events: none !important;
-  user-select: none !important;
+  /* 移除 pointer-events: none，允许某些交互，或者由 overlay 处理 */
 }
 
 .text-processing-mask::after {
-  content: "";
-  position: absolute;
-  inset: 0;
+  display: none !important;
+}
+
+/* Core text shimmer animation */
+/* 我们只针对具体的文字元素应用渐变，移除 pre 和 textarea 等容器元素 */
+.text-processing-mask :is(span, h1, h2, h3, p, li, strong):not(.smart-split-loading-overlay *):not([data-export-pill="true"]) {
   background: linear-gradient(
     90deg,
-    rgba(150, 150, 150, 0.1) 25%,
-    rgba(200, 200, 200, 0.3) 50%,
-    rgba(150, 150, 150, 0.1) 75%
+    #71717a 0%,
+    #d4d4d8 25%,
+    #71717a 50%,
+    #d4d4d8 75%,
+    #71717a 100%
   );
   background-size: 200% 100%;
-  animation: skeleton-loading 2s infinite linear;
-  z-index: 50;
-  border-radius: inherit;
-  pointer-events: none;
+  -webkit-background-clip: text !important;
+  -moz-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  animation: skeleton-loading 5s infinite linear;
+  filter: none !important;
+  transition: all 0.4s ease;
+  opacity: 1;
 }
 
-.text-processing-mask .premium-button-inner,
-.text-processing-mask span,
-.text-processing-mask h1,
-.text-processing-mask h2,
-.text-processing-mask h3,
-.text-processing-mask p,
-.text-processing-mask li,
-.text-processing-mask textarea,
-.text-processing-mask pre {
-  filter: grayscale(1) contrast(0.5) opacity(0.4) !important;
-  transition: filter 0.5s ease;
-}
-
-/* Dark mode specific for text processing */
-.dark .text-processing-mask::after {
+.dark .text-processing-mask :is(span, h1, h2, h3, p, li, strong):not(.smart-split-loading-overlay *):not([data-export-pill="true"]) {
   background: linear-gradient(
     90deg,
-    rgba(50, 50, 50, 0.1) 25%,
-    rgba(100, 100, 100, 0.2) 50%,
-    rgba(50, 50, 50, 0.1) 75%
+    #52525b 0%,
+    #e4e4e7 25%,
+    #52525b 50%,
+    #e4e4e7 75%,
+    #52525b 100%
   );
+  background-size: 200% 100%;
+}
+
+/* Variable pills loading effect - 更加轻量 */
+.text-processing-mask [data-export-pill="true"] {
+  filter: grayscale(1) opacity(0.7) !important;
+  transition: all 0.4s ease;
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(0.98); opacity: 0.5; }
+}
+
+/* 确保加载覆盖层本身没有任何背景色 */
+.smart-split-loading-overlay {
+  background: transparent !important;
+  backdrop-filter: none !important;
 }
 
 /* Premium Button Styles */

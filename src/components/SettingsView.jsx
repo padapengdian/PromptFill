@@ -36,6 +36,16 @@ export const SettingsView = ({
   
   const updateLogs = language === 'cn' ? [
     { 
+      version: 'V0.8.1', 
+      date: '2026年1月22日', 
+      time: '10:13 PM',
+      title: '自定义词条双语支持',
+      type: 'UPDATE',
+      content: [
+        '✨ 自定义词条双语支持：现在可以在添加或修改自定义选项时，分别输入中文和英文内容。'
+      ]
+    },
+    { 
       version: 'V0.8.0', 
       date: '2026年1月17日', 
       time: '10:00 AM',
@@ -211,6 +221,16 @@ export const SettingsView = ({
       ]
     }
   ] : [
+    { 
+      version: 'V0.8.1', 
+      date: 'Jan 22, 2026', 
+      time: '10:13 PM',
+      title: 'Bilingual Support for Custom Terms',
+      type: 'UPDATE',
+      content: [
+        '✨ Bilingual Support: Separately input CN and EN content when adding or editing custom options.'
+      ]
+    },
     { 
       version: 'V0.8.0', 
       date: 'Jan 17, 2026', 
@@ -437,7 +457,7 @@ export const SettingsView = ({
           </h1>
           <div className="flex items-center gap-3 mt-1">
             <span className={`text-[9px] font-black tracking-[0.1em] uppercase ${isDarkMode ? 'text-gray-600' : 'text-gray-500'}`}>
-              System V0.8.0
+              System V0.8.1
             </span>
             <div className={`w-1 h-1 rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}`} />
             <span className="text-[9px] font-black text-orange-500/80 tracking-[0.1em] uppercase">

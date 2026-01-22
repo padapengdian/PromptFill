@@ -65,7 +65,7 @@ export const useShareFunctions = (
     // 修正：在 Tauri 环境下强制使用官网域名作为分享基准
     // 使用更健壮的检测方式
     const isTauri = !!(window.__TAURI_INTERNALS__ || window.__TAURI_IPC__ || window.location.protocol === 'tauri:');
-    const base = PUBLIC_SHARE_URL || (isTauri ? 'https://www.aipromptfill.com' : (window.location.origin + window.location.pathname));
+    const base = PUBLIC_SHARE_URL || (isTauri ? 'https://aipromptfill.com' : (window.location.origin + window.location.pathname));
 
     if (!compressed) return base;
 
@@ -422,7 +422,7 @@ export const useShareFunctions = (
       }
       
       const isTauri = !!(window.__TAURI_INTERNALS__ || window.__TAURI_IPC__ || window.location.protocol === 'tauri:');
-      const base = PUBLIC_SHARE_URL || (isTauri ? 'https://www.aipromptfill.com' : (window.location.origin + window.location.pathname));
+      const base = PUBLIC_SHARE_URL || (isTauri ? 'https://aipromptfill.com' : (window.location.origin + window.location.pathname));
       const fullUrl = `${base}${base.endsWith('/') ? '' : '/'}#/share?share=${finalShareData}`;
 
       const success = await copyToClipboard(fullUrl);
@@ -478,7 +478,7 @@ export const useShareFunctions = (
   const currentShareUrl = useMemo(() => {
     if (!activeTemplate || !prefetchedShortCode) return null;
     
-    const base = 'https://www.aipromptfill.com';
+    const base = 'https://aipromptfill.com';
     return `${base}${base.endsWith('/') ? '' : '/'}#/share?share=${prefetchedShortCode}`;
   }, [activeTemplate, prefetchedShortCode]);
 

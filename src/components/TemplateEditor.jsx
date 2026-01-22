@@ -335,34 +335,37 @@ export const TemplateEditor = React.memo(({
                   </div>
                 </div>
 
-                {/* Visual Editor */}
-                <div className={`flex-1 relative overflow-hidden ${isSmartSplitLoading ? 'text-processing-mask' : ''}`}>
-                  <VisualEditor
-                    ref={textareaRef}
-                    value={getLocalized(activeTemplate?.content, templateLanguage)}
-                    onChange={(e) => {
-                      const newText = e.target.value;
-                      if (typeof activeTemplate.content === 'object') {
-                        updateActiveTemplateContent({
-                          ...activeTemplate.content,
-                          [templateLanguage]: newText
-                        });
-                      } else {
-                        updateActiveTemplateContent(newText);
-                      }
-                    }}
-                    banks={banks}
-                    categories={categories}
-                    isDarkMode={isDarkMode}
-                    activeTemplate={activeTemplate}
-                    language={language}
-                    t={t}
-                  />
+                {/* Visual Editor Area Container */}
+                <div className="flex-1 relative overflow-hidden">
+                  {/* Content with Shimmer Effect */}
+                  <div className={`w-full h-full ${isSmartSplitLoading ? 'text-processing-mask' : ''}`}>
+                    <VisualEditor
+                      ref={textareaRef}
+                      value={getLocalized(activeTemplate?.content, templateLanguage)}
+                      onChange={(e) => {
+                        const newText = e.target.value;
+                        if (typeof activeTemplate.content === 'object') {
+                          updateActiveTemplateContent({
+                            ...activeTemplate.content,
+                            [templateLanguage]: newText
+                          });
+                        } else {
+                          updateActiveTemplateContent(newText);
+                        }
+                      }}
+                      banks={banks}
+                      categories={categories}
+                      isDarkMode={isDarkMode}
+                      activeTemplate={activeTemplate}
+                      language={language}
+                      t={t}
+                    />
+                  </div>
 
-                  {/* Loading Indicator for Smart Split */}
+                  {/* Loading Indicator Popup (Independent of Mask) */}
                   {isSmartSplitLoading && (
-                    <div className="absolute inset-0 z-[60] flex flex-col items-center justify-center pointer-events-none">
-                      <div className={`flex flex-col items-center gap-3 p-6 rounded-3xl backdrop-blur-md ${isDarkMode ? 'bg-black/40' : 'bg-white/40 shadow-xl'}`}>
+                    <div className="absolute inset-0 z-[60] flex flex-col items-center justify-center pointer-events-none smart-split-loading-overlay">
+                      <div className={`flex flex-col items-center gap-3 p-6 rounded-3xl backdrop-blur-md ${isDarkMode ? 'bg-black/60' : 'bg-white/80 shadow-2xl'}`}>
                         <div className="w-10 h-10 border-4 border-orange-500/20 border-t-orange-500 rounded-full animate-spin" />
                         <span className={`text-sm font-black tracking-widest ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                           {language === 'cn' ? '正在智能分析...' : 'Analyzing...'}
@@ -374,73 +377,76 @@ export const TemplateEditor = React.memo(({
               </div>
             ) : (
               /* 预览模式 */
-              <div className={`flex-1 relative overflow-hidden flex flex-col ${isSmartSplitLoading ? 'text-processing-mask' : ''}`}>
-                <TemplatePreview
-                  activeTemplate={activeTemplate}
-                  banks={banks}
-                  defaults={defaults}
-                  categories={categories}
-                  activePopover={activePopover}
-                  setActivePopover={setActivePopover}
-                  handleSelect={handleSelect}
-                  handleAddCustomAndSelect={handleAddCustomAndSelect}
-                  popoverRef={popoverRef}
-                  t={t}
-                  displayTag={(tag) => {
-                    const tagLabels = {
-                      '创意': { cn: '创意', en: 'Creative' },
-                      '人物': { cn: '人物', en: 'Character' },
-                      '场景': { cn: '场景', en: 'Scene' },
-                      '风格': { cn: '风格', en: 'Style' },
-                      '物品': { cn: '物品', en: 'Object' },
-                    };
-                    return getLocalized(tagLabels[tag] || tag, language);
-                  }}
-                  TAG_STYLES={TAG_STYLES}
-                  setZoomedImage={setZoomedImage}
-                  fileInputRef={fileInputRef}
-                  setShowImageUrlInput={setShowImageUrlInput}
-                  handleResetImage={handleResetImage}
-                  handleDeleteImage={handleDeleteImage}
-                  language={templateLanguage}
-                  setLanguage={setTemplateLanguage}
-                  TEMPLATE_TAGS={TEMPLATE_TAGS}
-                  handleUpdateTemplateTags={handleUpdateTemplateTags}
-                  editingTemplateTags={editingTemplateTags}
-                  setEditingTemplateTags={setEditingTemplateTags}
-                  setImageUpdateMode={setImageUpdateMode}
-                  setCurrentImageEditIndex={setCurrentImageEditIndex}
-                  editingTemplateNameId={editingTemplateNameId}
-                  tempTemplateName={tempTemplateName}
-                  setTempTemplateName={setTempTemplateName}
-                  saveTemplateName={saveTemplateName}
-                  startRenamingTemplate={startRenamingTemplate}
-                  setEditingTemplateNameId={setEditingTemplateNameId}
-                  tempTemplateAuthor={tempTemplateAuthor}
-                  setTempTemplateAuthor={setTempTemplateAuthor}
-                  INITIAL_TEMPLATES_CONFIG={INITIAL_TEMPLATES_CONFIG}
-                  isDarkMode={isDarkMode}
-                  isEditing={isEditing}
-                  setIsInsertModalOpen={setIsInsertModalOpen}
-                  historyPast={historyPast}
-                  historyFuture={historyFuture}
-                  handleUndo={handleUndo}
-                  handleRedo={handleRedo}
-                  cursorInVariable={cursorInVariable}
-                  currentGroupId={currentGroupId}
-                  handleSetGroup={handleSetGroup}
-                  handleRemoveGroup={handleRemoveGroup}
-                  updateActiveTemplateContent={updateActiveTemplateContent}
-                  textareaRef={textareaRef}
-                  templateLanguage={templateLanguage}
-                  onGenerateAITerms={onGenerateAITerms}  // 传递 AI 生成回调
-                  handleShareLink={handleShareLink} // 传递分享回调
-                />
+              <div className="flex-1 relative overflow-hidden flex flex-col">
+                {/* Content Area with Shimmer Effect */}
+                <div className={`flex-1 overflow-hidden flex flex-col ${isSmartSplitLoading ? 'text-processing-mask' : ''}`}>
+                  <TemplatePreview
+                    activeTemplate={activeTemplate}
+                    banks={banks}
+                    defaults={defaults}
+                    categories={categories}
+                    activePopover={activePopover}
+                    setActivePopover={setActivePopover}
+                    handleSelect={handleSelect}
+                    handleAddCustomAndSelect={handleAddCustomAndSelect}
+                    popoverRef={popoverRef}
+                    t={t}
+                    displayTag={(tag) => {
+                      const tagLabels = {
+                        '创意': { cn: '创意', en: 'Creative' },
+                        '人物': { cn: '人物', en: 'Character' },
+                        '场景': { cn: '场景', en: 'Scene' },
+                        '风格': { cn: '风格', en: 'Style' },
+                        '物品': { cn: '物品', en: 'Object' },
+                      };
+                      return getLocalized(tagLabels[tag] || tag, language);
+                    }}
+                    TAG_STYLES={TAG_STYLES}
+                    setZoomedImage={setZoomedImage}
+                    fileInputRef={fileInputRef}
+                    setShowImageUrlInput={setShowImageUrlInput}
+                    handleResetImage={handleResetImage}
+                    handleDeleteImage={handleDeleteImage}
+                    language={templateLanguage}
+                    setLanguage={setTemplateLanguage}
+                    TEMPLATE_TAGS={TEMPLATE_TAGS}
+                    handleUpdateTemplateTags={handleUpdateTemplateTags}
+                    editingTemplateTags={editingTemplateTags}
+                    setEditingTemplateTags={setEditingTemplateTags}
+                    setImageUpdateMode={setImageUpdateMode}
+                    setCurrentImageEditIndex={setCurrentImageEditIndex}
+                    editingTemplateNameId={editingTemplateNameId}
+                    tempTemplateName={tempTemplateName}
+                    setTempTemplateName={setTempTemplateName}
+                    saveTemplateName={saveTemplateName}
+                    startRenamingTemplate={startRenamingTemplate}
+                    setEditingTemplateNameId={setEditingTemplateNameId}
+                    tempTemplateAuthor={tempTemplateAuthor}
+                    setTempTemplateAuthor={setTempTemplateAuthor}
+                    INITIAL_TEMPLATES_CONFIG={INITIAL_TEMPLATES_CONFIG}
+                    isDarkMode={isDarkMode}
+                    isEditing={isEditing}
+                    setIsInsertModalOpen={setIsInsertModalOpen}
+                    historyPast={historyPast}
+                    historyFuture={historyFuture}
+                    handleUndo={handleUndo}
+                    handleRedo={handleRedo}
+                    cursorInVariable={cursorInVariable}
+                    currentGroupId={currentGroupId}
+                    handleSetGroup={handleSetGroup}
+                    handleRemoveGroup={handleRemoveGroup}
+                    updateActiveTemplateContent={updateActiveTemplateContent}
+                    textareaRef={textareaRef}
+                    templateLanguage={templateLanguage}
+                    onGenerateAITerms={onGenerateAITerms}  // 传递 AI 生成回调
+                    handleShareLink={handleShareLink} // 传递分享回调
+                  />
+                </div>
 
-                {/* Loading Indicator for Smart Split (Preview Mode) */}
+                {/* Loading Indicator Popup (Independent of Mask) */}
                 {isSmartSplitLoading && (
-                  <div className="absolute inset-0 z-[60] flex flex-col items-center justify-center pointer-events-none">
-                    <div className={`flex flex-col items-center gap-3 p-6 rounded-3xl backdrop-blur-md ${isDarkMode ? 'bg-black/40' : 'bg-white/40 shadow-xl'}`}>
+                  <div className="absolute inset-0 z-[60] flex flex-col items-center justify-center pointer-events-none smart-split-loading-overlay">
+                    <div className={`flex flex-col items-center gap-3 p-6 rounded-3xl backdrop-blur-md ${isDarkMode ? 'bg-black/60' : 'bg-white/80 shadow-2xl'}`}>
                       <div className="w-10 h-10 border-4 border-orange-500/20 border-t-orange-500 rounded-full animate-spin" />
                       <div className="flex flex-col items-center">
                         <span className={`text-sm font-black tracking-widest ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>

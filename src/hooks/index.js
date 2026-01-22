@@ -12,3 +12,4 @@ export { useEditorHistory } from './useEditorHistory';
 export { useLinkageGroups, parseVariableName } from './useLinkageGroups';
 export { useShareFunctions } from './useShareFunctions';
 export { useTemplateManagement } from './useTemplateManagement';
+export { useServiceWorker } from './useServiceWorker';

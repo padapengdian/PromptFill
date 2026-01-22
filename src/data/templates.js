@@ -32,13 +32,13 @@
 /**
  * 模板系统版本号，每次更新 templates.js 或 banks.js 时请更新此版本号
  */
-export const SYSTEM_DATA_VERSION = "0.8.5";
+export const SYSTEM_DATA_VERSION = "0.8.6";
 
 /**
  * 分享功能正式环境域名（扫码导入需使用公网可访问地址）
  * 留空则自动使用当前访问地址
  */
-export const PUBLIC_SHARE_URL = ""; 
+export const PUBLIC_SHARE_URL = "https://aipromptfill.com"; 
 
 export const TEMPLATE_BRAND_CONCEPT_OBJECT = {
   cn: `### 品牌概念单品 (Brand Concept Object)
@@ -1483,6 +1483,60 @@ In {{imperial_palace_scene}}, a "human phoenix" embodies the soul of the palace.
 The composition creates a strong visual resonance between the ornate headdress and flowing robes with the magnificent architecture behind. The backlight amidst falling snow greatly enhances the mythical atmosphere, creating a dreamlike artistic conception that transcends time and space with magnificence and solemnity.`
 };
 
+export const TEMPLATE_INTERIOR_RENDERING = {
+  cn: `### 室内设计真实渲染
+
+保持原图视角和墙体结构，生成室内 {{room_type}} 真实渲染图。进行合理的室内家具布置与材质搭配，为室内天花板、墙面、地板分别赋予材质，整体呈现 {{interior_design_style}}。房间内外均进行真实感渲染。
+
+包括 {{furniture_set}}，材质质感逼真，{{interior_lighting}}。整体画面呈现出专业建筑摄影的光线效果，具备 {{render_quality}} 的图像细节。
+
+**材质细节**:
+- 天花板：{{ceiling_material}}
+- 墙面：{{wall_material}}
+- 地板：{{floor_material}}`,
+
+  en: `### Interior Design Photorealistic Rendering
+
+Maintaining the original perspective and wall structure, generate a realistic interior rendering of {{room_type}}. Perform reasonable interior furniture layout and material matching, assigning materials to the ceiling, walls, and floor respectively, presenting an overall {{interior_design_style}}. Both interior and exterior are rendered with realism.
+
+Including {{furniture_set}}, with realistic material textures and {{interior_lighting}}. The overall image presents professional architectural photography lighting effects, with {{render_quality}} image details.
+
+**Material Details**:
+- Ceiling: {{ceiling_material}}
+- Walls: {{wall_material}}
+- Floor: {{floor_material}}`
+};
+
+export const TEMPLATE_ISOMETRIC_INTERIOR_SCENE = {
+  cn: `### 等距视角室内场景
+
+基于设计需求，创作一张isometric视角（等距轴测视角）的{{room_type}}室内场景图像，无任何透视效果，保持视角和相机位置的一致性。包括建筑的主体部分保持一致。
+
+**房间状态**: {{room_condition}}
+
+**设计风格**: {{interior_design_style}}
+
+**材质细节**:
+- 地面：{{floor_material}}
+- 墙面：{{wall_material}}
+
+**技术要求**: 使用3D建模的材质质感和建模软件常用的渲染效果，包括材质纹理效果、AO效果以及描边效果（根据房间状态选择是否使用）。白色背景，Blender渲染质感。`,
+
+  en: `### Isometric Interior Scene
+
+Based on design requirements, create an isometric perspective (orthographic axonometric view) {{room_type}} interior scene image with no perspective effects, maintaining consistency in viewing angle and camera position. The main architectural elements remain consistent.
+
+**Room Condition**: {{room_condition}}
+
+**Design Style**: {{interior_design_style}}
+
+**Material Details**:
+- Floor: {{floor_material}}
+- Walls: {{wall_material}}
+
+**Technical Requirements**: Use 3D modeling material textures and common rendering software effects, including material texture effects, AO effects, and outline effects (selected based on room condition). White background, Blender rendering quality.`
+};
+
 /**
  * 可用的模板标签
  */
@@ -2087,7 +2141,7 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "display_objects": { cn: "抽象雕塑和装置艺术", en: "abstract sculptures and installation art" },
       "pod_structure": { cn: "玻璃立方体展台", en: "glass cube pod" }
     },
-    tags: ["产品", "创意"],
+    tags: ["产品", "创意","建筑"],
     language: ["cn", "en"]
   },
   {
@@ -2130,6 +2184,41 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "festive_props": { cn: "口中叼着中式红包，手中拿着展开的春节祝福", en: "holding red envelope in mouth and unfolded spring festival blessing in hand" }
     },
     tags: ["人物", "摄影", "节日", "创意"],
+    language: ["cn", "en"]
+  },
+  {
+    id: "tpl_interior_rendering",
+    name: { cn: "室内设计真实渲染", en: "Interior Design Rendering" },
+    content: TEMPLATE_INTERIOR_RENDERING,
+    imageUrl: "https://s3.bmp.ovh/imgs/2026/01/18/df7ed03d64db5339.jpg",
+    author: "tanshilong",
+    selections: {
+      "room_type": { cn: "客厅", en: "Living Room" },
+      "interior_design_style": { cn: "现代轻奢风格", en: "Modern Light Luxury Style" },
+      "furniture_set": { cn: "沙发、地毯、茶几、电视", en: "Sofa, rug, coffee table, TV" },
+      "ceiling_material": { cn: "白色乳胶漆平顶", en: "White latex flat ceiling" },
+      "wall_material": { cn: "白色乳胶漆墙面", en: "White latex paint wall" },
+      "floor_material": { cn: "浅灰色大理石地砖", en: "Light gray marble tile" },
+      "interior_lighting": { cn: "自然光线", en: "Natural lighting" },
+      "render_quality": { cn: "4K超高清分辨率", en: "4K Ultra HD resolution" }
+    },
+    tags: ["建筑", "创意"],
+    language: ["cn", "en"]
+  },
+  {
+    id: "tpl_isometric_interior_scene",
+    name: { cn: "等距视角室内场景", en: "Isometric Interior Scene" },
+    content: TEMPLATE_ISOMETRIC_INTERIOR_SCENE,
+    imageUrl: "https://s3.bmp.ovh/imgs/2026/01/19/b04fd355944cfb21.jpg",
+    author: "@tanshilong",
+    selections: {
+      "room_type": { cn: "客厅", en: "Living Room" },
+      "room_condition": { cn: "精致装修，高档材料的质感与细节", en: "Exquisitely decorated, high-end materials with refined details" },
+      "interior_design_style": { cn: "现代简约风格", en: "Modern Minimalist Style" },
+      "floor_material": { cn: "浅灰色岩板地面", en: "Light gray sintered stone floor" },
+      "wall_material": { cn: "暖白色墙面与装饰画", en: "Warm white walls with decorative art" }
+    },
+    tags: ["建筑", "创意"],
     language: ["cn", "en"]
   }
 ];

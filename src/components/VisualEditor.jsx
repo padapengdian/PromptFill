@@ -62,7 +62,11 @@ export const VisualEditor = React.forwardRef(({
         
         // Style needs to match font metrics exactly, so avoid padding/border that adds width
         return (
-          <span key={i} className={`${isDarkMode ? (style.bg.replace('bg-', 'bg-') + '/20 ' + style.text.replace('text-', 'text-')) : (style.bg + ' ' + style.text)} font-bold rounded-sm`}>
+          <span 
+            key={i} 
+            data-export-pill="true"
+            className={`${isDarkMode ? (style.bg.replace('bg-', 'bg-') + '/20 ' + style.text.replace('text-', 'text-')) : (style.bg + ' ' + style.text)} font-bold rounded-sm`}
+          >
             {part}
           </span>
         );

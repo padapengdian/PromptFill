@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { GithubIcon } from './icons/GithubIcon';
 import { HomeIcon } from './icons/HomeIcon';
 import { ListIcon } from './icons/ListIcon';
@@ -9,7 +9,9 @@ import { SettingsIcon } from './icons/SettingsIcon';
 import { SunDimIcon } from './icons/SunDimIcon';
 import { SunMoonIcon } from './icons/SunMoonIcon';
 import { MoonIcon } from './icons/MoonIcon';
+// import { CoffeeIcon } from './icons/CoffeeIcon';
 import { Tooltip } from './Tooltip';
+// import SponsorModal from './modals/SponsorModal';
 
 /**
  * Sidebar 组件 - 通用侧边导航栏
@@ -36,6 +38,7 @@ export const Sidebar = ({
   setThemeMode,
   t
 }) => {
+  // const [isSponsorModalOpen, setIsSponsorModalOpen] = useState(false);
   // 统一的容器样式
   const containerStyle = isDarkMode ? {
     width: '62px',
@@ -175,16 +178,36 @@ export const Sidebar = ({
         </Tooltip>
         
         <Tooltip content="Github" isDarkMode={isDarkMode}>
-          <a 
-            href="https://github.com/TanShilongMario/PromptFill/" 
-            target="_blank" 
+          <a
+            href="https://github.com/TanShilongMario/PromptFill/"
+            target="_blank"
             rel="noopener noreferrer"
             className={`p-2 transition-colors ${isDarkMode ? 'text-[#8E9196]' : 'text-[#6B7280]'} hover:text-[#F97316]`}
           >
             <GithubIcon size={24} />
           </a>
         </Tooltip>
+
+        {/* 捐赠按钮 - 暂时隐藏
+        <Tooltip content={language === 'cn' ? '请我喝杯奶茶' : 'Buy me a bubble tea'} isDarkMode={isDarkMode}>
+          <button
+            onClick={() => setIsSponsorModalOpen(true)}
+            className={`p-2 transition-colors ${isDarkMode ? 'text-[#8E9196]' : 'text-[#6B7280]'} hover:text-orange-500`}
+          >
+            <CoffeeIcon size={24} />
+          </button>
+        </Tooltip>
+        */}
       </div>
+
+      {/* 打赏弹窗 - 暂时隐藏
+      <SponsorModal
+        isOpen={isSponsorModalOpen}
+        onClose={() => setIsSponsorModalOpen(false)}
+        isDarkMode={isDarkMode}
+        language={language}
+      />
+      */}
     </aside>
   );
 };
