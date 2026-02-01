@@ -115,8 +115,15 @@ const BankGroup = ({ bankKey, bank, onInsert, onDeleteOption, onAddOption, onUpd
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [isEditingCategory, setIsEditingCategory] = useState(false);
     const [editingOptionIdx, setEditingOptionIdx] = useState(null);
-    const [tempOptionVal, setTempOptionVal] = useState("");
+    const [editOptionPrimary, setEditOptionPrimary] = useState("");
+    const [editOptionSecondary, setEditOptionSecondary] = useState("");
+    const [newOptionPrimary, setNewOptionPrimary] = useState("");
+    const [newOptionSecondary, setNewOptionSecondary] = useState("");
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+    // 获取另一种语言
+    const getOtherLanguage = (currentLang) => currentLang === 'cn' ? 'en' : 'cn';
+    const otherLanguage = getOtherLanguage(language);
 
     // 如果有搜索词，且搜索词匹配到了词库名称或选项，则默认展开
     React.useEffect(() => {
@@ -148,6 +155,67 @@ const BankGroup = ({ bankKey, bank, onInsert, onDeleteOption, onAddOption, onUpd
         if (bankLabel.includes(query) || bankKey.toLowerCase().includes(query)) return true;
         return getLocalized(opt, language).toLowerCase().includes(query);
     });
+
+    // 处理双语添加选项
+    const handleAddBilingualOption = () => {
+        const primary = newOptionPrimary.trim();
+        const secondary = newOptionSecondary.trim();
+
+        if (!primary && !secondary) return;
+
+        // 如果两个输入框都有值，创建双语对象
+        if (primary && secondary) {
+            const bilingualOption = {
+                [language]: primary,
+                [otherLanguage]: secondary
+            };
+            onAddOption(bankKey, bilingualOption);
+        } else {
+            // 只有其中一个有值，创建双语对象（确保切换语言时行为符合预期）
+            // 如果用户填了 Primary (当前语言)，Secondary 为空
+            // 或者用户只填了 Secondary (另一种语言)，Primary 为空
+            const val = primary || secondary;
+            
+            // 为了保持“只有一个语言，切换语言时显示相同内容”
+            // 如果只有一个值，我们存为字符串，这样 getLocalized 会直接返回它
+            onAddOption(bankKey, val);
+        }
+
+        // 清空输入框
+        setNewOptionPrimary("");
+        setNewOptionSecondary("");
+    };
+
+    // 处理双语编辑保存
+    const handleUpdateBilingualOption = (oldOpt) => {
+        const primary = editOptionPrimary.trim();
+        const secondary = editOptionSecondary.trim();
+
+        if (!primary && !secondary) {
+            setEditingOptionIdx(null);
+            return;
+        }
+
+        let newOpt;
+        if (primary && secondary) {
+            newOpt = {
+                [language]: primary,
+                [otherLanguage]: secondary
+            };
+        } else {
+            newOpt = primary || secondary;
+        }
+
+        onUpdateOption(bankKey, oldOpt, newOpt);
+        setEditingOptionIdx(null);
+    };
+
+    // 当语言切换时，清空输入框
+    React.useEffect(() => {
+        setNewOptionPrimary("");
+        setNewOptionSecondary("");
+        setEditingOptionIdx(null);
+    }, [language]);
 
     return (
         <div 
@@ -185,6 +253,7 @@ const BankGroup = ({ bankKey, bank, onInsert, onDeleteOption, onAddOption, onUpd
                     } border-box`,
                     border: '2px solid transparent',
                     boxSizing: 'border-box',
+                    boxShadow: isDarkMode ? '0 4px 12px rgba(0,0,0,0.3)' : '0 4px 12px rgba(0,0,0,0.05)'
                 }}
             >
                 <div 
@@ -260,90 +329,163 @@ const BankGroup = ({ bankKey, bank, onInsert, onDeleteOption, onAddOption, onUpd
                             </div>
                         )}
 
-                        <div className="flex flex-col gap-1.5 mb-4">
+                        <div className="flex flex-col gap-1.5 mb-4 max-h-[300px] overflow-y-auto custom-scrollbar pr-1">
                             {filteredOptions.map((opt, idx) => {
                                 const isEditing = editingOptionIdx === idx;
                                 const optLabel = getLocalized(opt, language);
 
                                 return (
-                                    <div key={idx} className={`group/opt flex items-center justify-between gap-2 px-3.5 py-2 rounded-xl text-[14px] font-semibold transition-all duration-200 ${isDarkMode ? 'bg-transparent hover:bg-white/5 text-gray-400 hover:text-gray-200' : 'bg-transparent hover:bg-white/60 text-gray-700 hover:text-gray-900'} ${isEditing ? (isDarkMode ? 'bg-white/5 ring-1 ring-orange-500/50' : 'bg-white ring-1 ring-orange-500/30 shadow-sm') : ''}`}>
-                                        {isEditing ? (
-                                            <input
-                                                autoFocus
-                                                type="text"
-                                                value={tempOptionVal}
-                                                onChange={(e) => setTempOptionVal(e.target.value)}
-                                                onBlur={() => {
-                                                    if (tempOptionVal.trim() && tempOptionVal !== optLabel) {
-                                                        onUpdateOption(bankKey, opt, tempOptionVal.trim());
-                                                    }
-                                                    setEditingOptionIdx(null);
-                                                }}
-                                                onKeyDown={(e) => {
-                                                    if (e.key === 'Enter') {
-                                                        if (tempOptionVal.trim() && tempOptionVal !== optLabel) {
-                                                            onUpdateOption(bankKey, opt, tempOptionVal.trim());
-                                                        }
-                                                        setEditingOptionIdx(null);
-                                                    } else if (e.key === 'Escape') {
-                                                        setEditingOptionIdx(null);
-                                                    }
-                                                }}
-                                                className={`flex-1 bg-transparent border-none outline-none py-1 text-[14px] font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                                            />
-                                        ) : (
-                                            <span className="truncate select-text flex-1 py-1" title={optLabel}>{optLabel}</span>
-                                        )}
-                                        
-                                        <div className="flex items-center gap-1">
-                                            {!isEditing && (
-                                                <button 
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setEditingOptionIdx(idx);
-                                                        setTempOptionVal(optLabel);
-                                                    }}
-                                                    className="opacity-0 group-hover/opt:opacity-100 text-gray-400 hover:text-orange-500 p-1.5 rounded-lg transition-all flex-shrink-0"
-                                                    title={t('edit')}
-                                                >
-                                                    <Pencil size={13} />
-                                                </button>
+                                    <div key={idx} className={`group/opt flex flex-col gap-0 px-3.5 py-2 rounded-xl text-[14px] font-semibold transition-all duration-200 ${isDarkMode ? 'bg-transparent hover:bg-white/5 text-gray-400 hover:text-gray-200' : 'bg-transparent hover:bg-white/60 text-gray-700 hover:text-gray-900'} ${isEditing ? (isDarkMode ? 'bg-black/20 ring-1 ring-orange-500/50 shadow-inner' : 'bg-black/5 ring-1 ring-orange-500/30 shadow-sm') : ''}`}>
+                                        <div className="flex items-center justify-between gap-2">
+                                            {isEditing ? (
+                                                <div className="flex-1 flex flex-col gap-0">
+                                                    <div className="relative">
+                                                        <input
+                                                            autoFocus
+                                                            type="text"
+                                                            value={editOptionPrimary}
+                                                            onChange={(e) => setEditOptionPrimary(e.target.value)}
+                                                            placeholder={language === 'cn' ? '中文内容' : 'English Content'}
+                                                            className={`w-full bg-transparent border-none outline-none py-1.5 text-[14px] font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                                                            onKeyDown={(e) => {
+                                                                if (e.key === 'Enter') {
+                                                                    const nextEditInput = e.currentTarget.parentElement.parentElement.querySelector('input[data-edit-secondary="true"]');
+                                                                    nextEditInput?.focus();
+                                                                } else if (e.key === 'Escape') {
+                                                                    setEditingOptionIdx(null);
+                                                                }
+                                                            }}
+                                                        />
+                                                        <span className="absolute right-0 top-1.5 text-[8px] font-black opacity-20 uppercase pointer-events-none">{language}</span>
+                                                    </div>
+                                                    <div className={`h-[1px] w-full ${isDarkMode ? 'bg-white/5' : 'bg-black/5'}`}></div>
+                                                    <div className="relative">
+                                                        <input
+                                                            data-edit-secondary="true"
+                                                            type="text"
+                                                            value={editOptionSecondary}
+                                                            onChange={(e) => setEditOptionSecondary(e.target.value)}
+                                                            placeholder={language === 'cn' ? '英文内容' : '中文内容'}
+                                                            className={`w-full bg-transparent border-none outline-none py-1.5 text-[13px] font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
+                                                            onKeyDown={(e) => {
+                                                                if (e.key === 'Enter') {
+                                                                    handleUpdateBilingualOption(opt);
+                                                                } else if (e.key === 'Escape') {
+                                                                    setEditingOptionIdx(null);
+                                                                }
+                                                            }}
+                                                        />
+                                                        <span className="absolute right-0 top-1.5 text-[8px] font-black opacity-20 uppercase pointer-events-none">{otherLanguage}</span>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <span className="truncate select-text flex-1 py-1" title={optLabel}>{optLabel}</span>
                                             )}
-                                            <button 
-                                                onClick={() => onDeleteOption(bankKey, opt)}
-                                                className="opacity-0 group-hover/opt:opacity-100 text-gray-400 hover:text-red-500 p-1.5 rounded-lg transition-all flex-shrink-0"
-                                                title={t('delete')}
-                                            >
-                                                <X size={14} />
-                                            </button>
+                                            
+                                            <div className="flex items-center gap-1 self-center">
+                                                {isEditing ? (
+                                                    <button 
+                                                        onClick={() => handleUpdateBilingualOption(opt)}
+                                                        className="text-orange-500 hover:bg-orange-500/10 p-1.5 rounded-lg transition-all flex-shrink-0"
+                                                        title={t('confirm')}
+                                                    >
+                                                        <Check size={14} strokeWidth={3} />
+                                                    </button>
+                                                ) : (
+                                                    <button 
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setEditingOptionIdx(idx);
+                                                            // 初始化编辑值
+                                                            if (typeof opt === 'object') {
+                                                                setEditOptionPrimary(opt[language] || "");
+                                                                setEditOptionSecondary(opt[otherLanguage] || "");
+                                                            } else {
+                                                                setEditOptionPrimary(opt || "");
+                                                                setEditOptionSecondary("");
+                                                            }
+                                                        }}
+                                                        className="opacity-0 group-hover/opt:opacity-100 text-gray-400 hover:text-orange-500 p-1.5 rounded-lg transition-all flex-shrink-0"
+                                                        title={t('edit')}
+                                                    >
+                                                        <Pencil size={13} />
+                                                    </button>
+                                                )}
+                                                <button 
+                                                    onClick={() => isEditing ? setEditingOptionIdx(null) : onDeleteOption(bankKey, opt)}
+                                                    className={`${!isEditing ? 'opacity-0 group-hover/opt:opacity-100' : ''} text-gray-400 hover:text-red-500 p-1.5 rounded-lg transition-all flex-shrink-0`}
+                                                    title={isEditing ? t('cancel') : t('delete')}
+                                                >
+                                                    <X size={14} />
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 );
                             })}
                         </div>
 
-                        <div className="flex gap-2">
-                            <input
-                                type="text"
-                                placeholder={t('add_option_placeholder')}
-                                className={`flex-1 px-4 py-2.5 text-[14px] font-medium border-none rounded-xl focus:ring-4 focus:ring-orange-500/10 transition-all outline-none ${isDarkMode ? 'bg-white/5 text-gray-200 placeholder:text-gray-500' : 'bg-white/50 text-gray-700 placeholder:text-gray-400'}`}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        onAddOption(bankKey, e.target.value);
-                                        e.target.value = '';
-                                    }
-                                }}
-                            />
-                            <button 
-                                className={`p-2.5 rounded-xl transition-all active:scale-95 group/addbtn ${isDarkMode ? 'bg-white/5 text-gray-500 hover:bg-white/10 hover:text-orange-400' : 'bg-white/50 text-gray-500 hover:bg-white hover:text-orange-600'}`}
-                                onClick={(e) => {
-                                    const input = e.currentTarget.previousSibling;
-                                    onAddOption(bankKey, input.value);
-                                    input.value = '';
-                                }}
-                            >
-                                <Plus size={18} className="group-hover/addbtn:scale-110 transition-transform" />
-                            </button>
+                        {/* 双语新增选项区域 - 优化后符合图片设计 */}
+                        <div className="mt-2 pl-1 pr-1 pb-1 flex items-stretch gap-3">
+                            <div className={`flex-1 rounded-2xl overflow-hidden border transition-all duration-300 ${isDarkMode ? 'bg-black/20 border-white/5 focus-within:border-orange-500/50 shadow-inner' : 'bg-black/5 border-gray-200/40 focus-within:border-orange-300 shadow-sm'}`}>
+                                {/* 第一语言输入框 */}
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        placeholder={language === 'cn' ? '新增选项' : 'Add Option'}
+                                        value={newOptionPrimary}
+                                        onChange={(e) => setNewOptionPrimary(e.target.value)}
+                                        className={`w-full px-4 pt-3 pb-2 text-[14px] font-bold border-none outline-none transition-colors ${isDarkMode ? 'bg-transparent text-gray-200 placeholder:text-gray-600' : 'bg-transparent text-gray-800 placeholder:text-gray-500'}`}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                const nextInput = e.currentTarget.parentElement.parentElement.querySelector('input[data-secondary="true"]');
+                                                nextInput?.focus();
+                                            }
+                                        }}
+                                    />
+                                    {/* 语言标签提示 */}
+                                    <span className={`absolute right-3 top-3 text-[9px] font-black uppercase tracking-tighter opacity-30 pointer-events-none ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                                        {language.toUpperCase()}
+                                    </span>
+                                </div>
+
+                                {/* 分隔线 */}
+                                <div className={`h-[1px] mx-4 ${isDarkMode ? 'bg-white/5' : 'bg-gray-200/30'}`}></div>
+
+                                {/* 第二语言输入框（可选） */}
+                                <div className="relative">
+                                    <input
+                                        data-secondary="true"
+                                        type="text"
+                                        value={newOptionSecondary}
+                                        onChange={(e) => setNewOptionSecondary(e.target.value)}
+                                        placeholder={language === 'cn' ? 'Add Option' : '新增选项'}
+                                        className={`w-full px-4 pt-2 pb-3 text-[13px] font-medium border-none outline-none transition-colors ${isDarkMode ? 'bg-transparent text-gray-400 placeholder:text-gray-700' : 'bg-transparent text-gray-500 placeholder:text-gray-400'}`}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                handleAddBilingualOption();
+                                            }
+                                        }}
+                                    />
+                                    {/* 语言标签提示 */}
+                                    <span className={`absolute right-3 top-2.5 text-[9px] font-black uppercase tracking-tighter opacity-30 pointer-events-none ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                                        {otherLanguage.toUpperCase()}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* 添加按钮 - 高度与左侧对齐 */}
+                            <div className="flex flex-col">
+                                <PremiumButton
+                                    onClick={handleAddBilingualOption}
+                                    disabled={!newOptionPrimary.trim() && !newOptionSecondary.trim()}
+                                    icon={Plus}
+                                    iconSize={18}
+                                    isDarkMode={isDarkMode}
+                                    className="!h-full !w-12 !p-0 !rounded-2xl flex-shrink-0 shadow-lg"
+                                    title={t('add_option')}
+                                />
+                            </div>
                         </div>
                     </div>
                 )}

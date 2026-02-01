@@ -36,7 +36,8 @@ export const Variable = ({
   templateContext = "", // 新增：模版全文内容
 }) => {
   const [isAdding, setIsAdding] = useState(false);
-  const [customVal, setCustomVal] = useState("");
+  const [newOptionPrimary, setNewOptionPrimary] = useState("");
+  const [newOptionSecondary, setNewOptionSecondary] = useState("");
   const [isHovered, setIsHovered] = useState(false);
   const [alignRight, setAlignRight] = useState(false);
   const [alignTop, setAlignTop] = useState(false);
@@ -112,7 +113,8 @@ export const Variable = ({
 
     if (!isOpen) {
       setIsAdding(false);
-      setCustomVal("");
+      setNewOptionPrimary("");
+      setNewOptionSecondary("");
       setVisibleAiTermsCount(aiTerms.length); 
     } else {
       updatePosition();
@@ -207,12 +209,29 @@ export const Variable = ({
   }
 
   const handleAddSubmit = () => {
-    if (customVal.trim()) {
-      onAddCustom(customVal.trim());
-      setCustomVal("");
-      setIsAdding(false);
+    const primary = newOptionPrimary.trim();
+    const secondary = newOptionSecondary.trim();
+
+    if (!primary && !secondary) return;
+
+    if (primary && secondary) {
+      // 双语模式
+      onAddCustom({
+        [language]: primary,
+        [otherLanguage]: secondary
+      });
+    } else {
+      // 单语模式，直接传字符串
+      onAddCustom(primary || secondary);
     }
+
+    setNewOptionPrimary("");
+    setNewOptionSecondary("");
+    setIsAdding(false);
   };
+
+  // 获取另一种语言
+  const otherLanguage = language === 'cn' ? 'en' : 'cn';
 
   const isSelected = (opt) => {
     if (!currentVal) return false;
@@ -403,23 +422,76 @@ export const Variable = ({
       {/* 3. 底部：添加自定义选项 */}
       <div className={`px-4 pt-1 pb-4`}>
         {isAdding ? (
-          <div className="flex gap-2 animate-in slide-in-from-bottom-2 duration-200">
-            <input
-              autoFocus
-              type="text"
-              value={customVal}
-              onChange={(e) => setCustomVal(e.target.value)}
-              placeholder={t('add_option_placeholder')}
-              className={`flex-1 min-w-0 px-4 py-2.5 text-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white' : 'border-gray-200 bg-white shadow-sm'}`}
-              onKeyDown={(e) => e.key === 'Enter' && handleAddSubmit()}
-            />
-            <button
-              onClick={handleAddSubmit}
-              disabled={!customVal.trim()}
-              className={`px-5 py-2.5 rounded-xl text-xs font-bold disabled:opacity-50 transition-all shadow-lg ${isDarkMode ? 'bg-orange-600 text-white hover:bg-orange-700' : 'bg-gray-900 text-white hover:bg-gray-800'}`}
-            >
-              {t('confirm')}
-            </button>
+          <div className="flex items-stretch gap-3 animate-in slide-in-from-bottom-2 duration-200">
+            <div className={`flex-1 rounded-2xl overflow-hidden border transition-all duration-300 ${isDarkMode ? 'bg-black/20 border-white/5 focus-within:border-orange-500/50 shadow-inner' : 'bg-black/5 border-gray-200/40 focus-within:border-orange-300 shadow-sm'}`}>
+                {/* 第一语言输入框 */}
+                <div className="relative">
+                    <input
+                        autoFocus
+                        type="text"
+                        placeholder="新增选项"
+                        value={newOptionPrimary}
+                        onChange={(e) => setNewOptionPrimary(e.target.value)}
+                        className={`w-full px-4 pt-3 pb-2 text-[14px] font-bold border-none outline-none transition-colors ${isDarkMode ? 'bg-transparent text-gray-200 placeholder:text-gray-600' : 'bg-transparent text-gray-800 placeholder:text-gray-500'}`}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                const nextInput = e.currentTarget.parentElement.parentElement.querySelector('input[data-secondary="true"]');
+                                nextInput?.focus();
+                            }
+                        }}
+                    />
+                    {/* 语言标签提示 */}
+                    <span className={`absolute right-3 top-3 text-[9px] font-black uppercase tracking-tighter opacity-30 pointer-events-none ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                        {language.toUpperCase()}
+                    </span>
+                </div>
+
+                {/* 分隔线 */}
+                <div className={`h-[1px] mx-4 ${isDarkMode ? 'bg-white/5' : 'bg-gray-200/30'}`}></div>
+
+                {/* 第二语言输入框（可选） */}
+                <div className="relative">
+                    <input
+                        data-secondary="true"
+                        type="text"
+                        value={newOptionSecondary}
+                        onChange={(e) => setNewOptionSecondary(e.target.value)}
+                        placeholder="Add Option"
+                        className={`w-full px-4 pt-2 pb-3 text-[13px] font-medium border-none outline-none transition-colors ${isDarkMode ? 'bg-transparent text-gray-400 placeholder:text-gray-700' : 'bg-transparent text-gray-500 placeholder:text-gray-400'}`}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                handleAddSubmit();
+                            }
+                        }}
+                    />
+                    {/* 语言标签提示 */}
+                    <span className={`absolute right-3 top-2.5 text-[9px] font-black uppercase tracking-tighter opacity-30 pointer-events-none ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                        {otherLanguage.toUpperCase()}
+                    </span>
+                </div>
+            </div>
+
+            {/* 添加按钮 - 使用 PremiumButton 样式 */}
+            <div className="flex flex-col">
+                <button
+                    onClick={handleAddSubmit}
+                    disabled={!newOptionPrimary.trim() && !newOptionSecondary.trim()}
+                    className={`
+                        premium-button-outer h-full w-12 p-1 rounded-2xl transition-all duration-300 shadow-lg
+                        ${(!newOptionPrimary.trim() && !newOptionSecondary.trim()) ? 'opacity-50 grayscale cursor-not-allowed' : 'hover:scale-105 active:scale-95'}
+                        ${isDarkMode ? 'dark' : 'light'}
+                    `}
+                >
+                    <div className={`premium-button-inner h-full w-full rounded-[12px] flex items-center justify-center ${isDarkMode ? 'dark text-gray-400' : 'light text-gray-600'}`}>
+                        <Plus 
+                            size={18} 
+                            strokeWidth={3} 
+                            style={{ width: '18px', height: '18px' }}
+                            className={`flex-shrink-0 ${(!newOptionPrimary.trim() && !newOptionSecondary.trim()) ? 'opacity-20' : 'opacity-100'}`} 
+                        />
+                    </div>
+                </button>
+            </div>
           </div>
         ) : (
           <button

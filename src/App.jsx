@@ -20,7 +20,7 @@ import { mergeTemplatesWithSystem, mergeBanksWithSystem } from './utils/merge';
 import { generateAITerms, polishAndSplitPrompt } from './utils/aiService';  // AI 服务
 
 // ====== 导入自定义 Hooks ======
-import { useStickyState, useAsyncStickyState, useEditorHistory, useLinkageGroups, useShareFunctions, useTemplateManagement } from './hooks';
+import { useStickyState, useAsyncStickyState, useEditorHistory, useLinkageGroups, useShareFunctions, useTemplateManagement, useServiceWorker } from './hooks';
 
 // ====== 导入 UI 组件 ======
 import { Variable, VisualEditor, PremiumButton, EditorToolbar, Lightbox, TemplatePreview, TemplateEditor, TemplatesSidebar, BanksSidebar, InsertVariableModal, AddBankModal, DiscoveryView, MobileSettingsView, SettingsView, Sidebar, TagSidebar } from './components';
@@ -40,7 +40,7 @@ import { DataUpdateNotice, AppUpdateNotice } from './components/notifications';
 
 const App = () => {
   // 当前应用代码版本 (必须与 package.json 和 version.json 一致)
-  const APP_VERSION = "0.8.0";
+  const APP_VERSION = "0.8.1";
 
   // 临时功能：瀑布流样式管理
   const [masonryStyleKey, setMasonryStyleKey] = useState('poster');
@@ -228,7 +228,10 @@ const App = () => {
   };
   
   const [updateNoticeType, setUpdateNoticeType] = useState(null); // 'app' | 'data' | null
-  
+
+  // Service Worker - 图片缓存
+  const sw = useServiceWorker();
+
   // ====== 智能多源数据同步逻辑 ======
   const DATA_SOURCES = {
     cloud: "http://data.tanshilong.com/data", // 宝塔后端 (最高优先级)
@@ -511,7 +514,10 @@ const App = () => {
 
   // ====== Bank 相关函数（需要在 Hook 之前定义）======
   const handleAddOption = React.useCallback((key, newOption) => {
-    if (!newOption.trim()) return;
+    // 兼容对象格式和字符串格式
+    const isValid = typeof newOption === 'string' ? newOption.trim() : (newOption && (newOption.cn || newOption.en));
+    if (!isValid) return;
+
     setBanks(prev => ({
       ...prev,
       [key]: {
@@ -522,7 +528,9 @@ const App = () => {
   }, [setBanks]);
 
   const handleUpdateOption = React.useCallback((key, oldOption, newOption) => {
-    if (!newOption.trim()) return;
+    const isValid = typeof newOption === 'string' ? newOption.trim() : (newOption && (newOption.cn || newOption.en));
+    if (!isValid) return;
+
     setBanks(prev => ({
       ...prev,
       [key]: {
@@ -1911,13 +1919,13 @@ const App = () => {
     setIsExporting(true);
     
     // --- 新增：尝试获取短链接并预处理二维码 ---
-    let displayUrl = window.location.origin + window.location.pathname;
-    // 确保 displayUrl 不会以双斜杠结尾，且至少有一个基础值
-    if (!displayUrl || displayUrl === 'null' || displayUrl === 'undefined') {
-        displayUrl = "https://www.aipromptfill.com";
+    // 导出长图时，水印链接优先使用正式域名，避免显示 localhost
+    let displayUrl = PUBLIC_SHARE_URL || (window.location.origin + window.location.pathname);
+    if (!displayUrl || displayUrl.includes('localhost') || displayUrl.includes('127.0.0.1')) {
+        displayUrl = "https://aipromptfill.com";
     }
     
-    let qrContentUrl = "https://www.aipromptfill.com"; // 默认官网地址
+    let qrContentUrl = "https://aipromptfill.com"; // 默认官网地址
     let qrBase64 = "/QRCode.png";
     
     try {
@@ -1935,7 +1943,7 @@ const App = () => {
         } else if (compressed) {
             // 未获取到短码（长链接情况），文字显示长链接，但二维码指向官网
             displayUrl = `${normalizedBase}/#/share?share=${compressed}`;
-            qrContentUrl = "https://www.aipromptfill.com";
+            qrContentUrl = "https://aipromptfill.com";
         }
         
         // 生成二维码 Base64 (避免跨域问题)

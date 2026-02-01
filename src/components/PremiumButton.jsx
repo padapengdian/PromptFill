@@ -45,7 +45,8 @@ export const PremiumButton = ({
           <Icon 
             ref={iconRef}
             size={iconSize} 
-            className={active ? 'text-white' : (isDarkMode ? 'text-gray-400' : 'text-gray-600')} 
+            style={{ width: `${iconSize}px`, height: `${iconSize}px` }}
+            className={`flex-shrink-0 ${active ? 'text-white' : (isDarkMode ? 'text-gray-400' : 'text-gray-600')}`} 
           />
         )}
         {children && <span className={active ? 'text-white' : (isDarkMode ? 'text-gray-400' : 'text-gray-600')}>{children}</span>}
